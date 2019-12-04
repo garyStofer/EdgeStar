@@ -1,0 +1,2 @@
+# EdgeStar
+SSU cubesat project
