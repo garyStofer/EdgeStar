@@ -9,7 +9,7 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -35,8 +35,8 @@
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -60,7 +60,7 @@
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -197,16 +197,23 @@
 <wire x1="63.5" y1="82.5" x2="51.5" y2="82.5" width="0.0762" layer="21"/>
 <wire x1="65.5" y1="64" x2="65.5" y2="82.5" width="0.0762" layer="21"/>
 <wire x1="65.5" y1="82.5" x2="71.5" y2="82.5" width="0.0762" layer="21"/>
-<wire x1="8.89" y1="47.625" x2="28.575" y2="47.625" width="0.1524" layer="21"/>
+<wire x1="11.43" y1="47.625" x2="28.575" y2="47.625" width="0.1524" layer="21"/>
 <wire x1="28.575" y1="47.625" x2="29.21" y2="48.26" width="0.1524" layer="21"/>
 <wire x1="29.21" y1="48.26" x2="29.21" y2="66.675" width="0.1524" layer="21"/>
 <wire x1="29.21" y1="66.675" x2="28.575" y2="67.31" width="0.1524" layer="21"/>
 <wire x1="28.575" y1="67.31" x2="9.525" y2="67.31" width="0.1524" layer="21"/>
-<wire x1="9.525" y1="67.31" x2="8.89" y2="66.675" width="0.1524" layer="21"/>
-<wire x1="8.89" y1="66.675" x2="8.89" y2="47.625" width="0.1524" layer="21"/>
+<wire x1="9.525" y1="67.31" x2="11.43" y2="66.675" width="0.1524" layer="21"/>
+<wire x1="11.43" y1="66.675" x2="11.43" y2="47.625" width="0.1524" layer="21"/>
 <text x="35.56" y="55.88" size="1.778" layer="21" font="vector" rot="R90">SRAM</text>
 <text x="45.72" y="17.78" size="1.016" layer="25">IC2</text>
 <text x="53.34" y="17.78" size="1.016" layer="25">IC1</text>
+<wire x1="50.8" y1="53.34" x2="48.26" y2="55.88" width="0.1524" layer="51"/>
+<wire x1="48.26" y1="55.88" x2="48.26" y2="73.66" width="0.1524" layer="51"/>
+<wire x1="48.26" y1="73.66" x2="20.32" y2="73.66" width="0.1524" layer="51"/>
+<wire x1="20.32" y1="73.66" x2="20.32" y2="75.565" width="0.1524" layer="51"/>
+<wire x1="20.32" y1="75.565" x2="19.685" y2="76.2" width="0.1524" layer="51"/>
+<rectangle x1="50.8" y1="54.61" x2="55.245" y2="56.515" layer="51"/>
+<rectangle x1="29.845" y1="-1.905" x2="33.02" y2="1.27" layer="51"/>
 </plain>
 <libraries>
 <library name="LearningByMaking2">
@@ -5207,6 +5214,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="56.025" y="77.82" size="1.016" layer="27" rot="R270"/>
 </element>
 <element name="JP6" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" value="CAMERA1-HEADER" x="57" y="40" smashed="yes" rot="R90">
+<attribute name="DIGIKEY" value="SAM10018-ND" x="57" y="40" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="57.8662" y="34.2162" size="1.27" layer="25" ratio="10" rot="R180"/>
 </element>
 <element name="JP7" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" value="9DOF" x="51" y="12" smashed="yes" rot="R270">

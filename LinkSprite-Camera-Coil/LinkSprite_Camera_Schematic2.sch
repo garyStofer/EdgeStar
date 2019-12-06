@@ -17572,7 +17572,9 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="DIGI-KEY" value="23LC1024-I/P-ND"/>
 </part>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" value="CAM-POLOLU 3.3V"/>
-<part name="JP6" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" value="CAMERA1-HEADER"/>
+<part name="JP6" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" value="CAMERA1-HEADER">
+<attribute name="DIGIKEY" value="SAM10018-ND"/>
+</part>
 <part name="JP7" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" value="9DOF"/>
 <part name="JP8" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X7" device="" value="SD-CARD1"/>
 <part name="JP9" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-2X3" device=""/>
@@ -17613,8 +17615,8 @@ Source: AVX .. aphvc.pdf</description>
 <plain>
 <text x="-10.16" y="129.54" size="1.778" layer="230">App-Board</text>
 <text x="-2.54" y="162.56" size="1.778" layer="95">SRAM CHIP</text>
-<text x="172.72" y="198.12" size="1.778" layer="91" rot="R180">Zcoil</text>
-<text x="172.72" y="162.56" size="1.778" layer="91" rot="R180">Xcoil</text>
+<text x="167.64" y="198.12" size="1.778" layer="91" rot="R180">Zcoil</text>
+<text x="165.1" y="162.56" size="1.778" layer="91" rot="R180">Xcoil</text>
 <text x="111.76" y="127" size="2.54" layer="94">Edge Pins 2</text>
 <text x="233.68" y="124.46" size="2.54" layer="94">Sun Sensor Analog In</text>
 <text x="127" y="83.82" size="2.54" layer="94">9DOF Board</text>
@@ -17625,13 +17627,20 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="-38.1" y1="213.36" x2="-38.1" y2="63.5" width="0.1524" layer="97"/>
 <wire x1="-38.1" y1="63.5" x2="294.64" y2="63.5" width="0.1524" layer="97"/>
 <text x="287.02" y="68.58" size="3.81" layer="91" font="vector">2</text>
-<text x="190.5" y="132.08" size="1.27" layer="91" font="vector">Whats the intent with Coil1-Pololu and Coil2-Pololu being shorted together </text>
 <text x="-25.4" y="208.28" size="1.27" layer="91" font="vector">Many Library device models are incorrect</text>
 <text x="-25.4" y="134.62" size="1.27" layer="91" font="vector">SRAM chip is not using a device,instead it's mounted in two rows of pinheaders</text>
 <text x="154.94" y="139.7" size="1.27" layer="96" font="vector">LB1848MC_H-BRIDGE</text>
 <text x="154.94" y="177.8" size="1.27" layer="96" font="vector">LB1848MC_H-BRIDGE</text>
 <text x="15.24" y="170.18" size="1.27" layer="96" font="vector">Sparkfun SD card holder</text>
 <text x="142.24" y="73.66" size="1.27" layer="96" font="vector">Sparkfun 9DOF (obsolete )</text>
+<text x="166.624" y="169.164" size="1.778" layer="97">Remove R3 ,R8, jumper from JP14 pin1 to R8/L8148 junction </text>
+<text x="155.448" y="196.596" size="1.778" layer="97">IC1</text>
+<text x="155.194" y="161.29" size="1.778" layer="97">IC2</text>
+<rectangle x1="182.88" y1="172.72" x2="193.04" y2="177.8" layer="97"/>
+<rectangle x1="218.44" y1="172.72" x2="226.06" y2="177.8" layer="97"/>
+<wire x1="180.34" y1="175.26" x2="180.34" y2="167.64" width="0.1524" layer="97"/>
+<wire x1="180.34" y1="167.64" x2="231.14" y2="167.64" width="0.1524" layer="97"/>
+<wire x1="231.14" y1="167.64" x2="231.14" y2="175.26" width="0.1524" layer="97"/>
 </plain>
 <instances>
 <instance part="U$1" gate="G$1" x="-2.54" y="96.52" smashed="yes"/>
@@ -17719,11 +17728,11 @@ Source: AVX .. aphvc.pdf</description>
 <instance part="U$5" gate="G$1" x="121.92" y="187.96" smashed="yes" rot="R180"/>
 <instance part="U$6" gate="G$1" x="121.92" y="152.4" smashed="yes" rot="R180"/>
 <instance part="R4" gate="G$1" x="139.7" y="182.88" smashed="yes">
-<attribute name="NAME" x="135.89" y="184.3786" size="1.778" layer="95"/>
+<attribute name="NAME" x="135.89" y="176.7586" size="1.778" layer="95"/>
 <attribute name="VALUE" x="135.89" y="179.578" size="1.778" layer="96"/>
 </instance>
 <instance part="R5" gate="G$1" x="139.7" y="147.32" smashed="yes">
-<attribute name="NAME" x="135.89" y="148.8186" size="1.778" layer="95"/>
+<attribute name="NAME" x="135.89" y="141.1986" size="1.778" layer="95"/>
 <attribute name="VALUE" x="135.89" y="144.018" size="1.778" layer="96"/>
 </instance>
 <instance part="C1" gate="G$1" x="185.42" y="193.04" smashed="yes" rot="R180">
@@ -17755,6 +17764,7 @@ Source: AVX .. aphvc.pdf</description>
 <instance part="JP6" gate="A" x="86.36" y="149.86" smashed="yes">
 <attribute name="NAME" x="80.01" y="158.115" size="1.778" layer="95"/>
 <attribute name="VALUE" x="69.85" y="142.24" size="1.778" layer="96"/>
+<attribute name="DIGIKEY" x="86.36" y="149.86" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="JP7" gate="A" x="139.7" y="71.12" smashed="yes">
 <attribute name="NAME" x="133.35" y="79.375" size="1.778" layer="95"/>
@@ -17813,8 +17823,8 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="DIGI-KEY" x="73.66" y="187.96" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="R3" gate="G$1" x="220.98" y="175.26" smashed="yes" rot="R180">
-<attribute name="NAME" x="219.71" y="173.7614" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="224.79" y="178.562" size="1.778" layer="96" rot="R180"/>
+<attribute name="NAME" x="217.17" y="173.7614" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="228.092" y="174.498" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="R7" gate="G$1" x="81.28" y="76.2" smashed="yes">
 <attribute name="NAME" x="77.47" y="77.6986" size="1.778" layer="95"/>
@@ -17828,8 +17838,8 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="VALUE" x="67.183" y="67.564" size="1.778" layer="96" rot="R180" align="top-right"/>
 </instance>
 <instance part="R8" gate="G$1" x="187.96" y="175.26" smashed="yes">
-<attribute name="NAME" x="184.15" y="176.7586" size="1.778" layer="95"/>
-<attribute name="VALUE" x="184.15" y="171.958" size="1.778" layer="96"/>
+<attribute name="NAME" x="184.15" y="179.2986" size="1.778" layer="95"/>
+<attribute name="VALUE" x="194.31" y="171.958" size="1.778" layer="96"/>
 </instance>
 <instance part="R9" gate="G$1" x="190.5" y="139.7" smashed="yes">
 <attribute name="NAME" x="186.69" y="141.1986" size="1.778" layer="95"/>
@@ -18528,7 +18538,7 @@ Source: AVX .. aphvc.pdf</description>
 <segment>
 <pinref part="IC1" gate="G$1" pin="OUT3"/>
 <wire x1="149.86" y1="185.42" x2="127" y2="185.42" width="0.1524" layer="91"/>
-<label x="137.16" y="187.96" size="1.778" layer="95" rot="R180"/>
+<label x="142.24" y="187.96" size="1.778" layer="95" rot="R180"/>
 <pinref part="U$5" gate="G$1" pin="OUT2"/>
 </segment>
 <segment>
@@ -18609,10 +18619,12 @@ Source: AVX .. aphvc.pdf</description>
 <net name="N$1" class="0">
 <segment>
 <pinref part="JP14" gate="A" pin="1"/>
-<wire x1="226.06" y1="175.26" x2="238.76" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="175.26" x2="231.14" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="231.14" y1="175.26" x2="238.76" y2="175.26" width="0.1524" layer="91"/>
 <wire x1="238.76" y1="175.26" x2="238.76" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="238.76" y1="167.64" x2="246.38" y2="167.64" width="0.1524" layer="91"/>
 <pinref part="R3" gate="G$1" pin="1"/>
+<junction x="231.14" y="175.26"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -18635,6 +18647,7 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="177.8" y1="182.88" x2="180.34" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="180.34" y1="182.88" x2="180.34" y2="175.26" width="0.1524" layer="91"/>
 <wire x1="180.34" y1="175.26" x2="182.88" y2="175.26" width="0.1524" layer="91"/>
+<junction x="180.34" y="175.26"/>
 </segment>
 </net>
 <net name="N$9" class="0">

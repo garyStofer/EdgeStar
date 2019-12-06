@@ -11201,6 +11201,7 @@ See also HELP HOLE,</description>
 <text x="71.12" y="91.44" size="1.778" layer="97">TMP36GRT obsolete part - No more available, but have qty 16 on hand.
 Replace with trough hole when re-layout brd (11-29-2019)</text>
 <text x="142.24" y="132.08" size="1.778" layer="97">9DOF long pcb is obsolete,Garrett has old stock on hand</text>
+<text x="242.57" y="21.59" size="2.54" layer="97">Radio Board</text>
 </plain>
 <instances>
 <instance part="U$1" gate="G$1" x="60.96" y="175.26" smashed="yes"/>
@@ -11251,11 +11252,10 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <attribute name="LAST_DATE_TIME" x="229.87" y="6.35" size="2.286" layer="94"/>
 <attribute name="SHEET" x="240.665" y="1.27" size="2.54" layer="94"/>
 <attribute name="AUTHOR" x="229.87" y="11.43" size="2.54" layer="94"/>
-<attribute name="SHEET_NAME" x="172.72" y="1.27" size="2.54" layer="94"/>
 </instance>
-<instance part="M1" gate="G$1" x="189.14" y="32.18" smashed="yes">
-<attribute name="NAME" x="189.14" y="49.96" size="1.778" layer="95"/>
-<attribute name="VALUE" x="189.14" y="29.64" size="1.778" layer="96"/>
+<instance part="M1" gate="G$1" x="176.44" y="32.18" smashed="yes">
+<attribute name="NAME" x="176.44" y="49.96" size="1.778" layer="95"/>
+<attribute name="VALUE" x="176.44" y="29.64" size="1.778" layer="96"/>
 </instance>
 <instance part="D2" gate="G$1" x="205.34" y="69.74" smashed="yes" rot="R180">
 <attribute name="NAME" x="202.8" y="69.2574" size="1.778" layer="95" rot="R180"/>
@@ -11332,7 +11332,7 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <attribute name="VALUE" x="188.54" y="166.02" size="1.778" layer="96"/>
 </instance>
 <instance part="X1" gate="G$1" x="19.11" y="44.73" smashed="yes" rot="R180">
-<attribute name="NAME" x="19.11" y="33.3" size="1.778" layer="95" rot="R180"/>
+<attribute name="NAME" x="29.27" y="35.84" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="8.95" y="52.35" size="1.778" layer="96" rot="R270"/>
 <attribute name="NOTLOADED" x="19.11" y="44.73" size="1.778" layer="96" rot="R180" display="off"/>
 </instance>
@@ -11340,9 +11340,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <attribute name="NAME" x="133.6" y="37.125" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="133.6" y="70.78" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="M2" gate="G$1" x="235.14" y="32.18" smashed="yes">
-<attribute name="NAME" x="235.14" y="49.96" size="1.778" layer="95"/>
-<attribute name="VALUE" x="235.14" y="29.64" size="1.778" layer="96"/>
+<instance part="M2" gate="G$1" x="222.44" y="32.18" smashed="yes">
+<attribute name="NAME" x="222.44" y="49.96" size="1.778" layer="95"/>
+<attribute name="VALUE" x="222.44" y="29.64" size="1.778" layer="96"/>
 </instance>
 <instance part="T1" gate="G$1" x="252" y="124.5" smashed="yes">
 <attribute name="NAME" x="241.84" y="132.12" size="1.778" layer="95"/>
@@ -11357,12 +11357,12 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <attribute name="VALUE" x="152.302" y="183.19" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="R12" gate="G$1" x="149" y="164" smashed="yes" rot="R90">
-<attribute name="NAME" x="147.5014" y="160.19" size="1.778" layer="95" rot="R90"/>
+<attribute name="NAME" x="142.4214" y="160.19" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="152.302" y="160.19" size="1.778" layer="96" rot="R90"/>
 <attribute name="NOTLOADED" x="149" y="164" size="1.778" layer="96" rot="R90" display="off"/>
 </instance>
 <instance part="R10" gate="G$1" x="254.5" y="109" smashed="yes" rot="R90">
-<attribute name="NAME" x="253.0014" y="105.19" size="1.778" layer="95" rot="R90"/>
+<attribute name="NAME" x="247.9214" y="107.73" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="257.802" y="105.19" size="1.778" layer="96" rot="R90"/>
 <attribute name="NOTLOADED" x="254.5" y="109" size="1.778" layer="96" rot="R90" display="off"/>
 </instance>
@@ -11389,9 +11389,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="85.93" y="35.98" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<wire x1="209.46" y1="34.72" x2="212" y2="34.72" width="0.1524" layer="91"/>
+<wire x1="196.76" y1="34.72" x2="199.3" y2="34.72" width="0.1524" layer="91"/>
 <pinref part="M1" gate="G$1" pin="GND"/>
-<label x="212" y="34.72" size="1.27" layer="95" xref="yes"/>
+<label x="199.3" y="34.72" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
 <wire x1="246.38" y1="175.26" x2="248.92" y2="175.26" width="0.1524" layer="91"/>
@@ -11465,9 +11465,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="139" y="65.75" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<wire x1="255.46" y1="34.72" x2="258" y2="34.72" width="0.1524" layer="91"/>
+<wire x1="242.76" y1="34.72" x2="245.3" y2="34.72" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="GND"/>
-<label x="258" y="34.72" size="1.27" layer="95" xref="yes"/>
+<label x="245.3" y="34.72" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
 <wire x1="254.5" y1="103.92" x2="254.5" y2="97.76" width="0.1524" layer="91"/>
@@ -11791,9 +11791,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <junction x="151.94" y="173.64"/>
 </segment>
 <segment>
-<wire x1="209.46" y1="44.88" x2="212" y2="44.88" width="0.1524" layer="91"/>
+<wire x1="196.76" y1="44.88" x2="199.3" y2="44.88" width="0.1524" layer="91"/>
 <pinref part="M1" gate="G$1" pin="1WIRE"/>
-<label x="212" y="44.88" size="1.27" layer="95" xref="yes"/>
+<label x="199.3" y="44.88" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
 <pinref part="X1" gate="G$1" pin="3"/>
@@ -11801,9 +11801,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="29.27" y="44.73" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="255.46" y1="44.88" x2="258" y2="44.88" width="0.1524" layer="91"/>
+<wire x1="242.76" y1="44.88" x2="245.3" y2="44.88" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="1WIRE"/>
-<label x="258" y="44.88" size="1.27" layer="95" xref="yes"/>
+<label x="245.3" y="44.88" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="DP8" class="0">
@@ -11911,14 +11911,14 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="149" y="154.5" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
-<wire x1="209.46" y1="42.34" x2="212" y2="42.34" width="0.1524" layer="91"/>
+<wire x1="196.76" y1="42.34" x2="199.3" y2="42.34" width="0.1524" layer="91"/>
 <pinref part="M1" gate="G$1" pin="VCC"/>
-<label x="212" y="42.34" size="1.27" layer="95" xref="yes"/>
+<label x="199.3" y="42.34" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<wire x1="255.46" y1="42.34" x2="258" y2="42.34" width="0.1524" layer="91"/>
+<wire x1="242.76" y1="42.34" x2="245.3" y2="42.34" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="VCC"/>
-<label x="258" y="42.34" size="1.27" layer="95" xref="yes"/>
+<label x="245.3" y="42.34" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="RAIL_SHDN" class="0">
@@ -12055,9 +12055,9 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="138.75" y="40.25" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<wire x1="209.46" y1="39.8" x2="212" y2="39.8" width="0.1524" layer="91"/>
+<wire x1="196.76" y1="39.8" x2="199.3" y2="39.8" width="0.1524" layer="91"/>
 <pinref part="M1" gate="G$1" pin="EXT_VCC"/>
-<label x="212" y="39.8" size="1.27" layer="95" xref="yes"/>
+<label x="199.3" y="39.8" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="CURRENT" class="0">
@@ -12080,8 +12080,8 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <label x="29.27" y="49.81" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="255.46" y1="37.26" x2="258" y2="37.26" width="0.1524" layer="91"/>
-<label x="258" y="37.26" size="1.27" layer="95" xref="yes"/>
+<wire x1="242.76" y1="37.26" x2="245.3" y2="37.26" width="0.1524" layer="91"/>
+<label x="245.3" y="37.26" size="1.27" layer="95" xref="yes"/>
 <pinref part="M2" gate="G$1" pin="BATT_LEVEL"/>
 </segment>
 </net>
@@ -12091,7 +12091,6 @@ Replace with trough hole when re-layout brd (11-29-2019)</text>
 <description>Radio</description>
 <plain>
 <text x="116.84" y="154.94" size="6.4516" layer="97">RADIO</text>
-<text x="228.6" y="10.16" size="6.4516" layer="249">umami</text>
 <text x="147.32" y="142.24" size="1.778" layer="97">Digikey A97593-ND is similar to what's on sample board </text>
 <text x="147.32" y="144.78" size="1.778" layer="97">SMA : cant find prior order with thius part on it</text>
 </plain>

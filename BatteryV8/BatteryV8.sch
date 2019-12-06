@@ -20516,7 +20516,7 @@ part number 2062-2P from STA</description>
 <text x="213.36" y="134.62" size="1.4224" layer="117" align="bottom-center">uP Reset Supervisor</text>
 <rectangle x1="53.34" y1="58.42" x2="81.28" y2="71.12" layer="117"/>
 <text x="149.86" y="68.58" size="1.4224" layer="117">Battery solder pads are too narrow for battery -- Potential for short on + </text>
-<text x="149.86" y="73.66" size="1.4224" layer="117">Pins of C5 interfere with 3.3V regulator</text>
+<text x="149.86" y="73.66" size="1.4224" layer="97">Pins of C5 interfere with 5V regulator</text>
 <text x="149.86" y="66.04" size="1.4224" layer="117">Add revision info to PCB</text>
 <text x="149.86" y="63.5" size="1.4224" layer="117">Footpringt for C4,C5 incorrect</text>
 <text x="203.2" y="129.54" size="1.4224" layer="117">VTH- = 2.9V,VTH+=3.03V
@@ -20644,7 +20644,7 @@ Out =High when VCC&lt;= VTH-</text>
 <attribute name="NAME" x="2.54" y="155.702" size="1.778" layer="95"/>
 </instance>
 <instance part="C2" gate="G$1" x="132.08" y="96.52" smashed="yes">
-<attribute name="NAME" x="128.016" y="92.075" size="1.778" layer="95"/>
+<attribute name="NAME" x="125.476" y="89.535" size="1.778" layer="95"/>
 <attribute name="VALUE" x="133.096" y="92.329" size="1.778" layer="96"/>
 </instance>
 <instance part="Q1" gate="G$1" x="238.76" y="104.14" smashed="yes" rot="MR180">
@@ -20725,12 +20725,12 @@ Out =High when VCC&lt;= VTH-</text>
 <attribute name="VALUE" x="158.5976" y="142.0114" size="1.778" layer="96" rot="MR0" align="top-right"/>
 </instance>
 <instance part="R12" gate="G$1" x="157.48" y="127" smashed="yes" rot="MR270">
-<attribute name="NAME" x="158.5976" y="129.7686" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
-<attribute name="VALUE" x="159.1056" y="128.8034" size="1.778" layer="96" rot="MR0" align="top-right"/>
+<attribute name="NAME" x="150.2156" y="129.7686" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
+<attribute name="VALUE" x="150.9776" y="128.5494" size="1.778" layer="96" rot="MR0" align="top-right"/>
 </instance>
 <instance part="+3V6" gate="G$1" x="157.48" y="157.48" smashed="yes"/>
 <instance part="X1" gate="G$1" x="66.04" y="66.04" smashed="yes" rot="R270">
-<attribute name="NAME" x="77.47" y="68.58" size="1.778" layer="95" rot="R270"/>
+<attribute name="NAME" x="82.55" y="63.5" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="58.42" y="55.88" size="1.778" layer="96"/>
 </instance>
 <instance part="GND" gate="1" x="15.24" y="71.12" smashed="yes">
@@ -20761,11 +20761,11 @@ Out =High when VCC&lt;= VTH-</text>
 </instance>
 <instance part="GND10" gate="1" x="58.42" y="109.22" smashed="yes"/>
 <instance part="R5" gate="G$1" x="233.68" y="177.8" smashed="yes">
-<attribute name="NAME" x="229.87" y="179.2986" size="1.778" layer="95"/>
+<attribute name="NAME" x="232.41" y="181.8386" size="1.778" layer="95"/>
 <attribute name="VALUE" x="229.87" y="174.498" size="1.778" layer="96"/>
 </instance>
 <instance part="D1" gate="1" x="223.52" y="177.8" smashed="yes">
-<attribute name="NAME" x="221.742" y="179.705" size="1.778" layer="95"/>
+<attribute name="NAME" x="221.742" y="182.245" size="1.778" layer="95"/>
 <attribute name="VALUE" x="221.742" y="174.371" size="1.778" layer="96"/>
 </instance>
 <instance part="GND11" gate="1" x="215.9" y="177.8" smashed="yes" rot="R270"/>
@@ -20801,7 +20801,7 @@ Out =High when VCC&lt;= VTH-</text>
 <attribute name="DIGIKEY" x="162.56" y="104.14" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="D3" gate="1" x="132.08" y="111.76" smashed="yes">
-<attribute name="NAME" x="132.334" y="113.665" size="1.778" layer="95"/>
+<attribute name="NAME" x="129.794" y="116.205" size="1.778" layer="95"/>
 <attribute name="VALUE" x="129.794" y="108.331" size="1.778" layer="96"/>
 <attribute name="DIGIKEY" x="132.08" y="111.76" size="1.778" layer="96" display="off"/>
 </instance>
@@ -20852,8 +20852,8 @@ Out =High when VCC&lt;= VTH-</text>
 <attribute name="VALUE" x="229.7176" y="157.2514" size="1.778" layer="96" rot="MR0" align="top-right"/>
 </instance>
 <instance part="R15" gate="G$1" x="198.12" y="139.7" smashed="yes" rot="MR270">
-<attribute name="NAME" x="199.2376" y="142.4686" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
-<attribute name="VALUE" x="199.2376" y="142.0114" size="1.778" layer="96" rot="MR0" align="top-right"/>
+<attribute name="NAME" x="201.2696" y="142.7226" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
+<attribute name="VALUE" x="201.2696" y="141.7574" size="1.778" layer="96" rot="MR0" align="top-right"/>
 </instance>
 <instance part="C5" gate="G$1" x="190.5" y="142.24" smashed="yes">
 <attribute name="NAME" x="189.865" y="143.256" size="1.778" layer="95" rot="R90"/>
@@ -20866,8 +20866,8 @@ Out =High when VCC&lt;= VTH-</text>
 <attribute name="VALUE" x="193.802" y="161.29" size="1.778" layer="96" rot="MR270"/>
 </instance>
 <instance part="R17" gate="G$1" x="198.12" y="154.94" smashed="yes" rot="MR270">
-<attribute name="NAME" x="199.2376" y="157.7086" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
-<attribute name="VALUE" x="199.2376" y="157.2514" size="1.778" layer="96" rot="MR0" align="top-right"/>
+<attribute name="NAME" x="201.7776" y="157.7086" size="1.778" layer="95" rot="MR0" align="bottom-right"/>
+<attribute name="VALUE" x="201.7776" y="157.2514" size="1.778" layer="96" rot="MR0" align="top-right"/>
 </instance>
 <instance part="J1" gate="G$1" x="134.62" y="144.78" smashed="yes" rot="R270">
 <attribute name="VALUE" x="129.794" y="147.32" size="1.778" layer="96" font="vector" rot="R270"/>
