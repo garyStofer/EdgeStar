@@ -1,0 +1,38 @@
+
+0.) How does INA138 + schmitt circuit work? function descrition needed 
+		Would not a few simple Cmos 555 do the same work with less and smaller more reliable components. 
+
+1.) What is JP1 used for? can it be replaced with inline test points ? (confusing with J1)
+2.) What does J1 connect to ?  (confusing with JP1, consider rename), 	 What connects to H16
+3.) Why are there multiple switches inline with battery instead of just one . (H20 to H21, & H18 to H17) Others ?
+		can the required switches be placed on the edge of the battery board directly so that no external wires are needed?
+4.) Reduce size of holes for external wires to not use screws and solder terminals. make strain relieve for wires or use connector with strain relieve.
+5.) Give meaningful names to holes for switches etc .. better move switches onto edge of board eliminating wires.
+6.) Only one connection out of the board for the main Power VCC rail ? ??????????
+7.) Use library element from uStar.lib for the holes that go trough all boards.
+8.) the signals not used on this board that come through the bolt pattern from the ustar board like "wire", "bus" and "vdd" 
+		should be isoltaed, not tied together! Only signal GND should be tied among and the rest of the pcb's gnd
+9.) Are connectors for "Supercap 1-3" still used ? Can they be removed? is this where the solar panels go?	 
+
+10.)	Remove X1
+11.) Remove C2
+12.) Remove D3
+13.) Remove R12
+14.) Remove D5,R15,R17
+15.) Remove D1,R5
+16.) verify C5 == 10 uf -- wrong  footprint, pins interfere with 5V regulator
+17.) footprint C4,C5 incorrect
+18.) Place R12 whrere C2 used to be
+19.) change all SMD to same size (805), reduce values of components 
+20.) add bypass capacitors for Smitt trigger 
+21.) Is Q1 trough Q3 apropriately sized ? especially Q1 -- maybe a resistor in the drain ??
+22.) R14 is not needed for chosen push/pull output voltage supervisor 
+23.) landing pattern for battery is too narrow and goes too far under battery -- consider slots for battery solder tabs.
+24.) 3 pin header labeled Safecircuitpower is actually a Pololu 5V boost regulator, use pololu library element not just 3 pin header. -- not a good idea to have a vreg permanently on battery.
+		Could the monitor circuit run directly of the battery saving the power drain from the reg? or be connectecd after the voltage monitor fet Q3 ??
+25.) Tracework for power rails too thin !
+
+26.) Voltage rating 5.5V on C1 and c3 too close to nominal volatge 5V
+ 
+27.) Capacitor C4 100uf electret, leakage is affected by temperatur and age of component --potentially unstable in working environment
+

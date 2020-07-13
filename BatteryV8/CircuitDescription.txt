@@ -1,0 +1,132 @@
+Circuit description for uStar battery board as of 7-4-2020
+--------------------------------------------
+
+Overview
+
+The purpose of the circuit is to monitor the state of the battery charge and to disconnect the power supply from the consumers 
+when the charge is nearly depleted in order for the solar cells to bring the charge up to nominal before normal function resumes.
+
+The power source consists of 3 NIMH or NICD cells connected in series and connected through micro switches to the circuit. Before 
+the cube sat is released into orbit the switches are held open via the launch tube and spring closed as soon as the device is released.
+
+A boost regulator is permanently connected to the V-Battery net, boosting and stabilizing the nominal 3.6V battery voltage to 5V.  
+The 5V from the regulator is used as the reference and the VCC of the timing and disconnect circuit, but doesn't leave the board. 
+
+Two MOS-FET connected in series conduct the current from the battery to the off board consumers via round hole connection H14, JP1-2 and 
+USB connector pin4. Each FET is controlled by a circuit path that disables momentarily or for a long time the connection of the power source 
+to the consumers. 
+
+The lower part of the circuit disables the consumers for about two hours if the battery voltage falls  below a certain voltage for a certain time.
+The upper part disables the consumers momentarily only.
+
+A sub circuit attempts to provide a suicide mechanism for the uP to disconnect itself from power. It can't function as designed.
+
+
+Detailed Description
+
+The general logic behind this circuit escapes me. Looking at the schematic I doubt that it performs the function as intended. 
+
+Current path from Battery to consumers is through the following parts:
+
+	Ground: H3,H5,H7,H8,H21, micro switch - H22 - Battery minus
+	Plus:   Battery plus, H17 - micro switch - H18 - Q3 - Q1 - H14,Jp1-2,USB-4
+	
+	Note: Q3,Q1 form a logic AND, doubling the on resistance, Q1,Q3 undersized for current, Trace work undersized for current.
+		  Solar cells presumably connected to pins/holes labeled "Super-caps", but no reverse flow diodes present leading to discharge 
+		  of battery while stored. 
+	
+	
+
+Momentary power Disconnect: 
+
+	IC1, Q3 and C5,R16 form a circuit that disconnects the consumer (uP and all) if the battery voltage drops below 2.9V for a fraction of a second 
+	 then keeps the power disconnected until the battery voltage rises above 3.03V. This disconnect time will be very 
+	short, since as soon as the consumers are disconnected, the battery voltage will rise and the device will re-enable the consumers again. 
+	This will lead to a slow oscillation of the power bus between on and off.
+	TC of C5,R16 is 5.6sec, but change required is only from 3.03V down to 2,9V to trigger disconnect.
+	
+	IC1 is a uP voltage monitor chip that is meant to be connected to the reset or an other interrupt line on the uP, so that it can determine 
+	a low voltage situation. Most uP however have a "brownout" circuit built in these days that would be used instead. 
+	IC1 is not meant to be used as a battery monitor as it doesn't have a hysteresis that is matched to the battery chemistry to function as such. 
+	
+	
+Long term timing of consumers for battery charge up (revised after change of SMITT trigger logic)
+
+	The circuit comprised of C4,R6,R7, IC:SAFE, SMITT1,2,3, Q1 and Pololu 5V boost regulator.
+	
+	The intent here is to disable the consumers if it has been detected that the battery voltage 
+	has been low in order for the solar cells to have enough time to recharge the batteries  without 
+	ending up in a power bus oscillation. 
+	
+	Upon initial connect of the a battery thats is charged the load gets turned on for ~12 seconds, followed by a long (2-4hr) period of disconnect
+	until the load is reconnected and normal operation starts.   
+	
+Step by Step description.	
+	
+	IC "SAFE" is a high side current monitor device that is used in a simple voltage comparator mode. It flips it's output  LOW when 
+	V-Battery is below 3.26V ( 1.09V/cell) for >~12 seconds. SMITT1 inverts that signal. 
+	
+	R1-C1-R18 makes a RC network with a TC of 10S for charge and TC 91 min for discharge. Similarly R3,C3,R4 makes a RC network with 
+	TC=10sec for charge and TC=141 minutes for discharge. Calculated times are going to be incorrect because of the unknown leakage in the
+	super capacitors and the electron re-emergence ( battery effect) and the uncertainty of the thresholds
+	of the smitt trigger inputs  makes calculating the actual times a futile exercise. The times mentioned below are measured from 
+	an actual circuit.
+	
+	
+	When the device initially is connected to a charged battery all capacitors are discharged. 	IC "SAFE" detects a 
+	low battery condition for ~19 seconds while C4 is being charged up via R6. During this time it's output is held low. Smitt1 inverts this to a 
+	high which through D8 and R1 starts charging up C1. After 6 seconds of initial turn on the voltage has risen above the Vt+ on Smitt3 and it's 
+	output switches from low to high. This starts the charge up of C3 through D2 and R3. After an other 6 seconds the voltage on C3 has now risen above Vt+ 
+	of Smitt and its output changes from low to high. Now at T+12 seconds the FET Q1 is controlled to open, disconnecting the load from the battery. 
+	
+	Meanwhile at T+12s, the input on IC "SAFE" still has not risen enough to indicate that the battery is fully charged and therefore SMITT1 keeps charging C1 for
+	7 more seconds to reach 4.2V.
+	
+	When IC "SAFE" at T+19sec recognizes the battery is at nominal voltage it flips it's output low and SMITT1 stops charging C1. SMITT3 still sees the high
+	on it's input and keeps charging C3 while C1 now starts the slow discharge through R18 (measured at 50 minutes). When the voltage on C1 finally falls under Vt- SMITT3 flips
+	and stops charging C3, leading the way for it's slow discharge as well. C3 was charged up to 4.9V and it will have to discharge down to Vt- of SMITT2 before 
+	it's output flips and re-enables the load again. This discharge time was measured at 105 minutes.
+	
+	A similar sequence arises when the circuit actually detects a low voltage condition at V-Battery of less than 3.26V (delayed by C4). 
+	While the condition exists SMITT1 starts charging up C1. When SMITT3 sees Vt+ after about 6 seconds it flips it's output high and starts charging C3, 
+	which in turn, after an other 6 seconds, flips SMITT2 disconnecting the load.  After the load is disconnected IC "SAFE", not having any hysteresis, will
+	detect good voltage and stop C1 from being charged any further. This leaves C1 at a lower voltage compared to the initial case above and
+	subsequently it's discharge time is less and the total load lock out time is less.  
+		
+Power consumption:
+	While the circuit consumes about 2.5ma continuously while in its monitoring state it has come to light that it consumes a considerable amount of power 
+	while timing the lockout of the load during the 2.5Hrs.  Starting out at 2.5ma the current consumption linearly rises to 46 ma during the first timing phase
+	of 50 minutes, then drops momentarily to 5ms to linearly rise to 46 ma again during the second timing phase of ~105 minutes. 
+
+	
+H16-Q2 - Shutdown.
+
+This circuit can not work as intended. First Q2 and Pololu-5V  would experience current overload if Q2 was switched on when C3 was discharged.
+
+
+Shortcomings:
+
+Using SuperCaps for timing of long periods is problematic. Not only do super caps vary their value from one device to the next, but with every conceivable 
+environmental change and age as well. Making a repeatable circuit around timing derived from electret or super caps is virtually impossible without individual
+selecting of components per each board. 
+
+The use of components not intended for the purpose, such as the current monitor and Voltage supervisor is not a good practise.
+
+The power consumption during the load lockout time in the smitt triggers is roughly 1/3 of the the charge budget. Even the quiescent power consumption of 2.2 ma
+during normal operation is exceptionally high. 
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+ 	
+	
+	
+	
+	
+	
