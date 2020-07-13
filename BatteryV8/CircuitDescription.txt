@@ -85,8 +85,14 @@ Step by Step description.
 	When IC "SAFE" at T+19sec recognizes the battery is at nominal voltage it flips it's output low and SMITT1 stops charging C1. SMITT3 still sees the high
 	on it's input and keeps charging C3 while C1 now starts the slow discharge through R18 (measured at 50 minutes). When the voltage on C1 finally falls under Vt- SMITT3 flips
 	and stops charging C3, leading the way for it's slow discharge as well. C3 was charged up to 4.9V and it will have to discharge down to Vt- of SMITT2 before 
-	it's output flips and re-enables the load again. This discharge time was measured at 105 minutes.
+	it's output flips and re-enables the load again. This discharge time was measured at 105 minutes. 
 	
+	The total lock out time of the board analysed came to 2Hrs and 35 min, (50 + 105). These times are consitent with the calculations of the RC time 
+	constants found on the board, considering the unknown value of the cacaitor leackage. The time will vary greatly with temperatur and to a lesser degree
+	with the actual voltage of the battery. It will also vary greatly with the actual SMITT trigger devices soldered as the thresholds on these have a wide
+	margin from unit to unit. 
+
+
 	A similar sequence arises when the circuit actually detects a low voltage condition at V-Battery of less than 3.26V (delayed by C4). 
 	While the condition exists SMITT1 starts charging up C1. When SMITT3 sees Vt+ after about 6 seconds it flips it's output high and starts charging C3, 
 	which in turn, after an other 6 seconds, flips SMITT2 disconnecting the load.  After the load is disconnected IC "SAFE", not having any hysteresis, will
