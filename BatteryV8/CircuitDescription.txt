@@ -39,20 +39,31 @@ Current path from Battery to consumers is through the following parts:
 
 Momentary power Disconnect: 
 
-	IC1, Q3 and C5,R16 form a circuit that disconnects the consumer (uP and all) if the battery voltage drops below 2.9V for a fraction of a second 
-	 then keeps the power disconnected until the battery voltage rises above 3.03V. This disconnect time will be very 
+	IC1, Q3 and C5,R16 form a circuit that disconnects the consumer (uP and all) if the battery voltage drops below 2.9V* (theorry, see below) 
+	for a fraction of a second, then keeps the power disconnected until the battery voltage rises above 3.03V*. This disconnect time will be 
 	short, since as soon as the consumers are disconnected, the battery voltage will rise and the device will re-enable the consumers again. 
 	This will lead to a slow oscillation of the power bus between on and off.
-	TC of C5,R16 is 5.6sec, but change required is only from 3.03V down to 2,9V to trigger disconnect.
+	TC of C5,R16 is 5.6sec, but change required is only from 3.03V* down to 2.9V* to trigger disconnect.
 	
-	IC1 is a uP voltage monitor chip that is meant to be connected to the reset or an other interrupt line on the uP, so that it can determine 
+ 	IC1 is a uP voltage monitor chip that is meant to be connected to the reset or an other interrupt line on the uP, so that it can determine 
 	a low voltage situation. Most uP however have a "brownout" circuit built in these days that would be used instead. 
 	IC1 is not meant to be used as a battery monitor as it doesn't have a hysteresis that is matched to the battery chemistry to function as such. 
+
+*)	IC1 is used in a non standard configuration in this circuit. It's VCC line is not directly connected to VCC, but through a rather high value (560K) 
+	resistor. Due to that resistance and the leakage current in C5 in addition to the operating current requirement of IC1 the theoretical
+	switching thresholds as mentioned above are not in effect in this case. 
+
+	As measured, the low threshold of the actual circuit is at 3.35 V and the high threshold at 3.45 V. This means that the shut down of the load is 
+	done through the IC1 3.35V thresholdinstead of at 3.26V by the timed lockout. Since the IC1 disconnect voltage is higher than the timed lockout voltage
+	it is likely that the powerbus oscillates between 3.35V and 3.45 V when decaying and only goes into timed lockout when it has further decayd beyond
+	the 3.26V of the timing circuit threshold. 
 	
 	
 Long term timing of consumers for battery charge up (revised after change of SMITT trigger logic)
 
-	The circuit comprised of C4,R6,R7, IC:SAFE, SMITT1,2,3, Q1 and Pololu 5V boost regulator.
+	The circuit comprised of C4,R6,R7, IC:SAFE, SMITT1,2,3, Q1 and Pololu 5V boost regulator. The Pololu regulator is essential in the circuit as it provides
+	the power and reference for it. It starts operating at 2.3V, below that it's output is at or near zero. Current consumption before it starts to operate 
+	is minimal.
 	
 	The intent here is to disable the consumers if it has been detected that the battery voltage 
 	has been low in order for the solar cells to have enough time to recharge the batteries  without 
