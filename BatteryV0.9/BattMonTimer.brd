@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="0.25" altunitdist="mm" altunit="mm"/>
@@ -23,17 +23,17 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -47,9 +47,9 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -59,7 +59,7 @@
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tPadExt" color="7" fill="1" visible="no" active="no"/>
 <layer number="54" name="bPadExt" color="1" fill="1" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -159,6 +159,7 @@
 <layer number="255" name="routoute" color="7" fill="1" visible="no" active="yes"/>
 </layers>
 <board>
+<fusionsync huburn="a.YnVzaW5lc3M6Z21haWw5NTI4Mzg" projecturn="a.YnVzaW5lc3M6Z21haWw5NTI4MzgjMjAyMDEyMTAzNjE1NTAxMDE" f3durn="urn:adsk.wipprod:dm.lineage:uJTTGrnQS_WLAX9_R_gfSQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="e121b71f-a970-41fc-a991-128d59ca2401" lastsyncedrevisionid="e121b71f-a970-41fc-a991-128d59ca2401" lastboardhashguid="78142ff3-68cb-2594-efc7-b18f34f21426" lastpushedtime="2020-12-11T03:09:07Z" linktopcb3d="true"/>
 <plain>
 <wire x1="0" y1="85" x2="0" y2="3" width="0" layer="20" locked="yes"/>
 <wire x1="0" y1="3" x2="3" y2="0" width="0" layer="20" curve="90" locked="yes"/>
@@ -1410,7 +1411,7 @@ Based on the following sources:
 <description>Generated from &lt;b&gt;BattMonTimer.sch&lt;/b&gt;&lt;p&gt;
 by exp-lbrs.ulp</description>
 <packages>
-<package name="AA-BATT">
+<package name="AA-BATT" urn="urn:adsk.eagle:footprint:25337292/1">
 <wire x1="-24.765" y1="-3.175" x2="-24.13" y2="-3.81" width="0.254" layer="21"/>
 <wire x1="-24.13" y1="-3.81" x2="-23.495" y2="-3.81" width="0.254" layer="21"/>
 <wire x1="-23.495" y1="-3.81" x2="-23.495" y2="-6.985" width="0.254" layer="21"/>
@@ -1436,7 +1437,7 @@ by exp-lbrs.ulp</description>
 <text x="-15.875" y="-0.635" size="2.54" layer="25">&gt;NAME</text>
 <text x="3.175" y="-0.635" size="2.54" layer="27">&gt;VALUE</text>
 </package>
-<package name="SMA">
+<package name="SMA" urn="urn:adsk.eagle:footprint:25337288/1">
 <description>&lt;b&gt;SMA&lt;/b&gt; CASE 403D-02&lt;p&gt;
 Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="-2.25" y1="1.825" x2="2.25" y2="1.825" width="0.254" layer="21"/>
@@ -1476,33 +1477,26 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
 <text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="SOT23-5">
-<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;</description>
-<wire x1="1.4224" y1="0.8104" x2="1.4224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="-0.8104" x2="-1.4224" y2="-0.8104" width="0.1524" layer="51"/>
-<wire x1="-1.4224" y1="-0.8104" x2="-1.4224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.8104" x2="1.4224" y2="0.8104" width="0.1524" layer="51"/>
-<wire x1="-0.5224" y1="0.8104" x2="0.5224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-0.4276" y1="-0.8104" x2="-0.5224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="0.5224" y1="-0.8104" x2="0.4276" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.3276" y1="-0.8104" x2="-1.4224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="-0.8104" x2="1.3276" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.3276" y1="0.8104" x2="1.4224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.8104" x2="-1.3276" y2="0.8104" width="0.1524" layer="21"/>
-<rectangle x1="-1.2" y1="-1.5" x2="-0.7" y2="-0.85" layer="51"/>
-<rectangle x1="-0.25" y1="-1.5" x2="0.25" y2="-0.85" layer="51"/>
-<rectangle x1="0.7" y1="-1.5" x2="1.2" y2="-0.85" layer="51"/>
-<rectangle x1="0.7" y1="0.85" x2="1.2" y2="1.5" layer="51"/>
-<rectangle x1="-1.2" y1="0.85" x2="-0.7" y2="1.5" layer="51"/>
-<smd name="1" x="-0.95" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="2" x="0" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="3" x="0.95" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="4" x="0.95" y="1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="5" x="-0.95" y="1.3001" dx="0.55" dy="1.2" layer="1"/>
-<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<package name="SOT23-5" urn="urn:adsk.eagle:footprint:25262990/1">
+<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;, 5 lead</description>
+<wire x1="-1.544" y1="0.713" x2="1.544" y2="0.713" width="0.1524" layer="21"/>
+<wire x1="1.544" y1="0.713" x2="1.544" y2="-0.712" width="0.1524" layer="21"/>
+<wire x1="1.544" y1="-0.712" x2="-1.544" y2="-0.712" width="0.1524" layer="21"/>
+<wire x1="-1.544" y1="-0.712" x2="-1.544" y2="0.713" width="0.1524" layer="21"/>
+<rectangle x1="-1.1875" y1="0.7126" x2="-0.7125" y2="1.5439" layer="51"/>
+<rectangle x1="0.7125" y1="0.7126" x2="1.1875" y2="1.5439" layer="51"/>
+<rectangle x1="-1.1875" y1="-1.5437" x2="-0.7125" y2="-0.7124" layer="51"/>
+<rectangle x1="-0.2375" y1="-1.5437" x2="0.2375" y2="-0.7124" layer="51"/>
+<rectangle x1="0.7125" y1="-1.5437" x2="1.1875" y2="-0.7124" layer="51"/>
+<smd name="1" x="-0.95" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="2" x="0" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="3" x="0.95" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="4" x="0.95" y="1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="5" x="-0.95" y="1.306" dx="0.6" dy="1.2" layer="1"/>
+<text x="-1.778" y="-1.778" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="3.048" y="-1.778" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
 </package>
-<package name="SO16">
+<package name="SO16" urn="urn:adsk.eagle:footprint:25337286/1">
 <description>&lt;b&gt;Small Outline package&lt;/b&gt; 150 mil</description>
 <wire x1="4.699" y1="1.9558" x2="-4.699" y2="1.9558" width="0.1524" layer="21"/>
 <wire x1="4.699" y1="-1.9558" x2="5.08" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
@@ -1590,7 +1584,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="-1.95" y="2.6" size="1.27" layer="25">&gt;NAME</text>
 <text x="-1.95" y="-3.9" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="SO08">
+<package name="SO08" urn="urn:adsk.eagle:footprint:25337287/1">
 <description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
 <wire x1="2.159" y1="1.9558" x2="-2.159" y2="1.9558" width="0.1524" layer="21"/>
 <wire x1="2.159" y1="-1.9558" x2="2.54" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
@@ -1623,7 +1617,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="3.937" y="-2.032" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
 <text x="-2.921" y="-1.905" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
 </package>
-<package name="SOT-23F_TOS-M">
+<package name="SOT-23F_TOS-M" urn="urn:adsk.eagle:footprint:25337314/1">
 <wire x1="-1.4478" y1="-0.9144" x2="-1.1938" y2="-0.9144" width="0.1524" layer="51"/>
 <wire x1="0.6858" y1="-0.9144" x2="1.4478" y2="-0.9144" width="0.1524" layer="51"/>
 <wire x1="0.254" y1="0.9144" x2="-1.4478" y2="0.9144" width="0.1524" layer="51"/>
@@ -1660,7 +1654,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="2.0828" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <text x="2.0574" y="0.635" size="1.27" layer="25" ratio="6" rot="SR0">&gt;Name</text>
 </package>
-<package name="1X02">
+<package name="1X02" urn="urn:adsk.eagle:footprint:25337293/1">
 <description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
 <wire x1="-1.905" y1="1.27" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
 <wire x1="-0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
@@ -1684,7 +1678,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="-2.6162" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="TO92-INLINE">
+<package name="TO92-INLINE" urn="urn:adsk.eagle:footprint:25296050/1">
 <description>TO92 inline pins</description>
 <wire x1="-2.095" y1="-1.651" x2="2.095" y2="-1.651" width="0.127" layer="21"/>
 <wire x1="-2.413" y1="1.1359" x2="2.413" y2="1.1359" width="0.127" layer="21" curve="-129.583"/>
@@ -1705,7 +1699,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="-2.54" y="3.048" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-2.54" y="-3.302" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
-<package name="4X8MOUNT">
+<package name="4X8MOUNT" urn="urn:adsk.eagle:footprint:25262989/1">
 <description>This is the screw hole pattern for the cubsat family PCBs.  Studs connect the individual boards vertically. Two elements ,rotated 180deg fromeach other are used for a full size board 88x88 mm, or a single one for a 1/2 size brd.
 Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm grid,whereas the components and the rest of the layout are on the standard 50/5 mil grid.  When creating a new board with this mount first place the mount on a board with mm grid by lining up the reference point with 0/0 , reposctively 88/88 of the new board, then switch the board grid back to mil before placing comopnents.</description>
 <circle x="49" y="4" radius="3.75" width="0" layer="42"/>
@@ -1721,14 +1715,14 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <circle x="48.958" y="3.948" radius="3.75" width="0" layer="41"/>
 <circle x="84.01" y="39" radius="3.75" width="0" layer="41"/>
 <rectangle x1="0" y1="0" x2="88" y2="44" layer="199" rot="R180"/>
-<pad name="P$1" x="84" y="4" drill="3" diameter="5.85" shape="square" rot="R180"/>
+<pad name="P$1" x="84" y="4" drill="3" diameter="5.85" shape="square" rot="R180" thermals="no"/>
 <pad name="P$2" x="83.9975" y="39" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$3" x="4" y="30" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$4" x="49" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$5" x="39" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$6" x="30" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$7" x="4" y="39" drill="3" diameter="5.85" rot="R180"/>
-<pad name="P$8" x="4" y="4" drill="3" diameter="5.85" shape="square" rot="R180"/>
+<pad name="P$8" x="4" y="4" drill="3" diameter="5.85" shape="square" rot="R180" thermals="no"/>
 </package>
 <package name="MOLEX2PIN">
 <description>molex 2 pin header with schroud and lock , pn 070543001</description>
@@ -1775,6 +1769,64 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <text x="-1.903" y="-1.701" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 </package>
 </packages>
+<packages3d>
+<package3d name="SOT23-5" urn="urn:adsk.eagle:package:25263039/2" type="model">
+<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;, 5 lead</description>
+<packageinstances>
+<packageinstance name="SOT23-5"/>
+</packageinstances>
+</package3d>
+<package3d name="TO92-INLINE" urn="urn:adsk.eagle:package:25296052/2" type="model">
+<description>TO92 inline pins</description>
+<packageinstances>
+<packageinstance name="TO92-INLINE"/>
+</packageinstances>
+</package3d>
+<package3d name="4X8MOUNT" urn="urn:adsk.eagle:package:25263038/3" type="empty">
+<description>This is the screw hole pattern for the cubsat family PCBs.  Studs connect the individual boards vertically. Two elements ,rotated 180deg fromeach other are used for a full size board 88x88 mm, or a single one for a 1/2 size brd.
+Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm grid,whereas the components and the rest of the layout are on the standard 50/5 mil grid.  When creating a new board with this mount first place the mount on a board with mm grid by lining up the reference point with 0/0 , reposctively 88/88 of the new board, then switch the board grid back to mil before placing comopnents.</description>
+<packageinstances>
+<packageinstance name="4X8MOUNT"/>
+</packageinstances>
+</package3d>
+<package3d name="SMA" urn="urn:adsk.eagle:package:25337328/2" type="model">
+<description>&lt;b&gt;SMA&lt;/b&gt; CASE 403D-02&lt;p&gt;
+Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
+<packageinstances>
+<packageinstance name="SMA"/>
+</packageinstances>
+</package3d>
+<package3d name="SO16" urn="urn:adsk.eagle:package:25337326/3" type="model">
+<description>&lt;b&gt;Small Outline package&lt;/b&gt; 150 mil</description>
+<packageinstances>
+<packageinstance name="SO16"/>
+</packageinstances>
+</package3d>
+<package3d name="SO08" urn="urn:adsk.eagle:package:25337327/2" type="model">
+<description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
+<packageinstances>
+<packageinstance name="SO08"/>
+</packageinstances>
+</package3d>
+<package3d name="1X02" urn="urn:adsk.eagle:package:25337333/2" type="model">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<packageinstances>
+<packageinstance name="1X02"/>
+</packageinstances>
+</package3d>
+<package3d name="AA-BATT" urn="urn:adsk.eagle:package:25337332/3" type="model">
+<packageinstances>
+<packageinstance name="AA-BATT"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT-23F_TOS-M" urn="urn:adsk.eagle:package:25337323/2" type="model">
+<description>3-SOT23, 0.95 mm pitch, 2.40 mm span, 2.90 X 1.30 X 1.10 mm body
+&lt;p&gt;3-pin SOT23 package with 0.95 mm pitch, 2.40 mm span with body size 2.90 X 1.30 X 1.10 mm&lt;/p&gt;</description>
+<packageinstances>
+<packageinstance name="SOT-23F_TOS-M"/>
+</packageinstances>
+</package3d>
+</packages3d>
 </library>
 </libraries>
 <attributes>
@@ -1969,10 +2021,10 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="M1" library="BattMonTimer" package="4X8MOUNT" value="Mount" x="88" y="87.95" locked="yes" smashed="yes" rot="R180">
+<element name="M1" library="BattMonTimer" package="4X8MOUNT" package3d_urn="urn:adsk.eagle:package:25263038/3" value="Mount" x="88" y="87.95" locked="yes" smashed="yes" rot="R180">
 <attribute name="NO_PN" value="Hole pattern template" x="88" y="87.95" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="M2" library="BattMonTimer" package="4X8MOUNT" value="Mount" x="0" y="0" locked="yes" smashed="yes">
+<element name="M2" library="BattMonTimer" package="4X8MOUNT" package3d_urn="urn:adsk.eagle:package:25263038/3" value="Mount" x="0" y="0" locked="yes" smashed="yes">
 <attribute name="NO_PN" value="Hole pattern template" x="0" y="0" size="1.778" layer="27" display="off"/>
 </element>
 <element name="SOL3" library="BattMonTimer" package="MOLEX2PIN" value="MOLEX2PINHDR" x="63.81816875" y="6.0325" smashed="yes" rot="R180">
@@ -2007,52 +2059,52 @@ design rules under a new name.</description>
 <attribute name="DIGIKEY" value="0705430002" x="73.6594" y="6.352296875" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="72.8174" y="9.289296875" size="1.016" layer="25" ratio="10" rot="R180"/>
 </element>
-<element name="D7" library="BattMonTimer" package="SMA" value="MURA220T3G" x="57.149696875" y="5.0808875" smashed="yes" rot="R270">
+<element name="D7" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="57.149696875" y="5.0808875" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="57.149696875" y="5.0808875" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="53.561696875" y="6.0528875" size="1.27" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="9" x="57.149696875" y="5.0808875" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="53.649696875" y="7.8308875" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="D8" library="BattMonTimer" package="SMA" value="MURA220T3G" x="17.462265625" y="77.151684375" smashed="yes" rot="R90">
+<element name="D8" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="17.462265625" y="77.151684375" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="17.462265625" y="77.151684375" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="15.462265625" y="74.401684375" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="POPULARITY" value="9" x="17.462265625" y="77.151684375" size="1.778" layer="27" rot="R90" display="off"/>
 </element>
-<element name="D9" library="BattMonTimer" package="SMA" value="MURA220T3G" x="24.12805625" y="77.156065625" smashed="yes" rot="R90">
+<element name="D9" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="24.12805625" y="77.156065625" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="24.12805625" y="77.156065625" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="22.12805625" y="74.406065625" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="POPULARITY" value="9" x="24.12805625" y="77.156065625" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="27.62805625" y="74.406065625" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="D10" library="BattMonTimer" package="SMA" value="MURA220T3G" x="11.42876875" y="77.1542" smashed="yes" rot="R90">
+<element name="D10" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="11.42876875" y="77.1542" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="11.42876875" y="77.1542" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="9.42876875" y="74.4042" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="POPULARITY" value="9" x="11.42876875" y="77.1542" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="14.92876875" y="74.4042" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="D11" library="BattMonTimer" package="SMA" value="MURA220T3G" x="11.42958125" y="11.429925" smashed="yes" rot="R270">
+<element name="D11" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="11.42958125" y="11.429925" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="11.42958125" y="11.429925" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="13.42958125" y="14.179925" size="1.27" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="9" x="11.42958125" y="11.429925" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="7.92958125" y="14.179925" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="D12" library="BattMonTimer" package="SMA" value="MURA220T3G" x="19.05083125" y="11.42985625" smashed="yes" rot="R270">
+<element name="D12" library="BattMonTimer" package="SMA" package3d_urn="urn:adsk.eagle:package:25337328/2" value="MURA220T3G" x="19.05083125" y="11.42985625" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND" x="19.05083125" y="11.42985625" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="21.05083125" y="14.17985625" size="1.27" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="9" x="19.05083125" y="11.42985625" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="15.55083125" y="14.17985625" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="B3" library="BattMonTimer" package="AA-BATT" value="AA-BATT" x="57.523" y="70.62" locked="yes" smashed="yes">
+<element name="B3" library="BattMonTimer" package="AA-BATT" package3d_urn="urn:adsk.eagle:package:25337332/3" value="AA-BATT" x="57.523" y="70.62" locked="yes" smashed="yes">
 <attribute name="DIGIKEY" value="SY115T-ND" x="57.523" y="70.62" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="41.648" y="69.985" locked="yes" size="2.54" layer="25"/>
 <attribute name="VALUE" x="60.698" y="69.985" locked="yes" size="2.54" layer="27"/>
 </element>
-<element name="B2" library="BattMonTimer" package="AA-BATT" value="AA-BATT" x="17.028" y="44.054" locked="yes" smashed="yes" rot="R90">
+<element name="B2" library="BattMonTimer" package="AA-BATT" package3d_urn="urn:adsk.eagle:package:25337332/3" value="AA-BATT" x="17.028" y="44.054" locked="yes" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="SY115T-ND" x="17.028" y="44.054" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="17.663" y="28.179" locked="yes" size="2.54" layer="25" rot="R90"/>
 <attribute name="VALUE" x="17.663" y="47.229" locked="yes" size="2.54" layer="27" rot="R90"/>
 </element>
-<element name="B1" library="BattMonTimer" package="AA-BATT" value="AA-BATT" x="57.547" y="17.383" locked="yes" smashed="yes" rot="R180">
+<element name="B1" library="BattMonTimer" package="AA-BATT" package3d_urn="urn:adsk.eagle:package:25337332/3" value="AA-BATT" x="57.547" y="17.383" locked="yes" smashed="yes" rot="R180">
 <attribute name="DIGIKEY" value="SY115T-ND" x="57.547" y="17.383" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="73.422" y="18.018" locked="yes" size="2.54" layer="25" rot="R180"/>
 <attribute name="VALUE" x="54.372" y="18.018" locked="yes" size="2.54" layer="27" rot="R180"/>
@@ -2119,7 +2171,7 @@ design rules under a new name.</description>
 <attribute name="POPULARITY" value="0" x="77.216" y="117.1575" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="65.151" y="54.2925" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="IC2" library="BattMonTimer" package="SOT23-5" value="TLV2211" x="53.467" y="53.9115" smashed="yes" rot="R270">
+<element name="IC2" library="BattMonTimer" package="SOT23-5" package3d_urn="urn:adsk.eagle:package:25263039/2" value="TLV2211" x="53.467" y="53.9115" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="296-10500-1-ND" x="53.467" y="53.9115" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="54.4195" y="53.467" size="0.8128" layer="25"/>
 <attribute name="VALUE" x="50.292" y="55.8165" size="1.27" layer="27" rot="R270"/>
@@ -2130,28 +2182,28 @@ design rules under a new name.</description>
 <attribute name="PRIORITY" value="" x="51.7935" y="40.924" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="50.0435" y="37.674" size="1.27" layer="27"/>
 </element>
-<element name="IC6" library="BattMonTimer" package="SO16" value="CD74HC4060" x="66.675" y="40.8305" smashed="yes" rot="R180">
+<element name="IC6" library="BattMonTimer" package="SO16" package3d_urn="urn:adsk.eagle:package:25337326/3" value="CD74HC4060" x="66.675" y="40.8305" smashed="yes" rot="R180">
 <attribute name="DIGIKEY" value="296-25999-1-ND" x="66.675" y="40.8305" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="70.358" y="40.0685" size="0.8128" layer="25" ratio="10" rot="R180"/>
 <attribute name="POPULARITY" value="0" x="28.575" y="45.9105" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="70.739" y="41.4655" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="QUICK" library="BattMonTimer" package="1X02" value="Quick Start" x="84.455" y="30.7975" smashed="yes" rot="R180">
+<element name="QUICK" library="BattMonTimer" package="1X02" package3d_urn="urn:adsk.eagle:package:25337333/2" value="Quick Start" x="84.455" y="30.7975" smashed="yes" rot="R180">
 <attribute name="NAME" x="86.2457" y="28.0162" size="0.8128" layer="25" ratio="10" rot="R180"/>
 <attribute name="NOTPOPULATED" value="Not loaded for flight" x="84.455" y="30.7975" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="86.995" y="33.9725" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="N1" library="BattMonTimer" package="SOT-23F_TOS-M" value="SSM3K345SOT23F-M" x="53.9115" y="47.625" smashed="yes" rot="R270">
+<element name="N1" library="BattMonTimer" package="SOT-23F_TOS-M" package3d_urn="urn:adsk.eagle:package:25337323/2" value="SSM3K345SOT23F-M" x="53.9115" y="47.625" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="SSM3K345RLFCT-ND" x="-5.7785" y="-10.795" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="53.2384" y="44.8945" size="0.8128" layer="25" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="53.2765" y="45.5422" size="1.27" layer="27" ratio="6" rot="SR270"/>
 </element>
-<element name="N4" library="BattMonTimer" package="SOT-23F_TOS-M" value="SSM3K345SOT23F-M" x="59.3725" y="40.9575" smashed="yes" rot="R90">
+<element name="N4" library="BattMonTimer" package="SOT-23F_TOS-M" package3d_urn="urn:adsk.eagle:package:25337323/2" value="SSM3K345SOT23F-M" x="59.3725" y="40.9575" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="SSM3K345RLFCT-ND" x="124.1425" y="75.2475" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="58.8899" y="42.8625" size="0.8128" layer="25" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="60.0075" y="43.0403" size="1.27" layer="27" ratio="6" rot="SR90"/>
 </element>
-<element name="P2" library="BattMonTimer" package="SOT-23F_TOS-M" value="SSM3J338RSOT-23F_TOS-M" x="72.3265" y="57.2135" smashed="yes">
+<element name="P2" library="BattMonTimer" package="SOT-23F_TOS-M" package3d_urn="urn:adsk.eagle:package:25337323/2" value="SSM3J338RSOT-23F_TOS-M" x="72.3265" y="57.2135" smashed="yes">
 <attribute name="DIGIKEY" value="SSM3J338RLFECT-ND" x="112.9665" y="2.6035" size="1.778" layer="27" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="SSM3J338R" x="112.9665" y="2.6035" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="75.0189" y="57.0865" size="0.8128" layer="25" ratio="6" rot="SR0"/>
@@ -2281,7 +2333,7 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="C" x="40.005" y="54.102" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="41.275" y="56.642" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="IC8" library="BattMonTimer" package="SO08" value="ICM7555SO08" x="66.04" y="49.53" smashed="yes" rot="R270">
+<element name="IC8" library="BattMonTimer" package="SO08" package3d_urn="urn:adsk.eagle:package:25337327/2" value="ICM7555SO08" x="66.04" y="49.53" smashed="yes" rot="R270">
 <attribute name="DIGIKEY" value="ICM7555CBAZ-TCT-ND" x="66.04" y="49.53" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="64.897" y="45.847" size="0.8128" layer="25" ratio="10"/>
 <attribute name="VALUE" x="64.008" y="45.593" size="1.27" layer="27" ratio="10"/>
@@ -2300,7 +2352,7 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="C" x="45.466" y="52.578" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="46.736" y="55.118" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="IC1" library="BattMonTimer" package="TO92-INLINE" value="TMP36GT9Z" x="9.525" y="59.055" smashed="yes" rot="R90">
+<element name="IC1" library="BattMonTimer" package="TO92-INLINE" package3d_urn="urn:adsk.eagle:package:25296052/2" value="TMP36GT9Z" x="9.525" y="59.055" smashed="yes" rot="R90">
 <attribute name="DIGIKEY" value="TMP36GT9Z-ND" x="9.525" y="59.055" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="6.477" y="56.515" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="12.827" y="56.515" size="1.27" layer="27" ratio="10" rot="R90"/>
@@ -2446,9 +2498,9 @@ design rules under a new name.</description>
 <wire x1="54.29" y1="56.7055" x2="53.721" y2="56.1365" width="0.254" layer="1"/>
 <wire x1="53.721" y1="56.1365" x2="53.721" y2="52.7075" width="0.254" layer="1"/>
 <wire x1="53.721" y1="52.7075" x2="54.61" y2="52.7075" width="0.254" layer="1"/>
-<wire x1="54.864" y1="52.9615" x2="54.7671" y2="52.9615" width="0.254" layer="1"/>
+<wire x1="54.864" y1="52.9615" x2="54.773" y2="52.9615" width="0.254" layer="1"/>
 <wire x1="54.61" y1="52.7075" x2="54.864" y2="52.9615" width="0.254" layer="1"/>
-<wire x1="54.7671" y1="52.9615" x2="54.29" y2="52.4844" width="0.254" layer="1"/>
+<wire x1="54.773" y1="52.9615" x2="54.29" y2="52.4844" width="0.254" layer="1"/>
 <wire x1="54.29" y1="52.4844" x2="54.29" y2="51.054" width="0.254" layer="1"/>
 </signal>
 <signal name="N$33">
@@ -2515,7 +2567,7 @@ design rules under a new name.</description>
 <wire x1="70.9905" y1="35.814" x2="70.9905" y2="37.5514" width="0.3048" layer="1"/>
 <wire x1="70.9905" y1="37.5514" x2="71.2851" y2="37.846" width="0.3048" layer="1"/>
 <wire x1="66.99" y1="53.2765" x2="69.9135" y2="53.2765" width="0.4064" layer="1"/>
-<wire x1="54.7671" y1="54.8615" x2="57.658" y2="54.8615" width="0.3048" layer="1"/>
+<wire x1="54.773" y1="54.8615" x2="57.658" y2="54.8615" width="0.3048" layer="1"/>
 <wire x1="57.658" y1="54.8615" x2="57.785" y2="54.9885" width="0.3048" layer="1"/>
 <wire x1="44.516" y1="46.355" x2="43.881" y2="46.99" width="0.3048" layer="1"/>
 <wire x1="43.881" y1="46.99" x2="43.119" y2="46.99" width="0.508" layer="1"/>
@@ -2562,7 +2614,7 @@ design rules under a new name.</description>
 <wire x1="46.4795" y1="56.8325" x2="50.104" y2="56.8325" width="0.4064" layer="1"/>
 <wire x1="49.9745" y1="56.703" x2="49.977" y2="56.7055" width="0.3048" layer="1"/>
 <wire x1="49.977" y1="56.7055" x2="52.39" y2="56.7055" width="0.3048" layer="1"/>
-<wire x1="52.1669" y1="54.8615" x2="52.39" y2="55.0846" width="0.3048" layer="1"/>
+<wire x1="52.161" y1="54.8615" x2="52.39" y2="55.0846" width="0.3048" layer="1"/>
 <wire x1="52.39" y1="55.0846" x2="52.39" y2="56.7055" width="0.3048" layer="1"/>
 </signal>
 <signal name="GND">
@@ -2576,7 +2628,7 @@ design rules under a new name.</description>
 <contactref element="C18" pad="2"/>
 <contactref element="R25" pad="1"/>
 <contactref element="N1" pad="2"/>
-<wire x1="52.1669" y1="53.9115" x2="50.8" y2="53.9115" width="0.4064" layer="1"/>
+<wire x1="52.161" y1="53.9115" x2="50.8" y2="53.9115" width="0.4064" layer="1"/>
 <wire x1="50.8" y1="53.9775" x2="49.9745" y2="54.803" width="0.3048" layer="1"/>
 <wire x1="50.8" y1="53.9115" x2="50.8" y2="53.9775" width="0.3048" layer="1"/>
 <contactref element="C19" pad="2"/>
@@ -2594,8 +2646,8 @@ design rules under a new name.</description>
 <contactref element="C2" pad="2"/>
 <contactref element="SOL3" pad="P$2"/>
 <contactref element="SOL2" pad="P$2"/>
-<contactref element="M1" pad="P$8" route="any" routetag="G$1.GND"/>
-<contactref element="M1" pad="P$1" route="any" routetag="G$1.GND"/>
+<contactref element="M1" pad="P$8"/>
+<contactref element="M1" pad="P$1"/>
 <contactref element="SW1" pad="P$3"/>
 <contactref element="SW1" pad="P$2"/>
 <contactref element="SOL5" pad="P$2"/>
@@ -2703,8 +2755,8 @@ design rules under a new name.</description>
 <vertex x="0" y="3"/>
 <vertex x="0" y="84.63" curve="-90"/>
 </polygon>
-<contactref element="M2" pad="P$1" route="any" routetag="G$1.GND"/>
-<contactref element="M2" pad="P$8" route="any" routetag="G$1.GND"/>
+<contactref element="M2" pad="P$1"/>
+<contactref element="M2" pad="P$8"/>
 <wire x1="71.49" y1="16.51" x2="84" y2="4" width="1.016" layer="16"/>
 <wire x1="26.67" y1="16.51" x2="71.49" y2="16.51" width="1.016" layer="16"/>
 <contactref element="IC1" pad="3"/>
@@ -2787,7 +2839,7 @@ design rules under a new name.</description>
 <wire x1="46.416" y1="48.387" x2="46.416" y2="50.546" width="0.4064" layer="1"/>
 <wire x1="46.416" y1="52.578" x2="46.416" y2="54.6735" width="0.4064" layer="1"/>
 <wire x1="46.416" y1="52.578" x2="46.416" y2="50.546" width="0.4064" layer="1"/>
-<wire x1="52.1669" y1="52.9615" x2="50.6705" y2="52.9615" width="0.3048" layer="1"/>
+<wire x1="52.161" y1="52.9615" x2="50.6705" y2="52.9615" width="0.3048" layer="1"/>
 <wire x1="50.6705" y1="52.9615" x2="50.419" y2="53.213" width="0.3048" layer="1"/>
 <wire x1="50.419" y1="53.213" x2="47.051" y2="53.213" width="0.3048" layer="1"/>
 <wire x1="47.051" y1="53.213" x2="46.416" y2="52.578" width="0.3048" layer="1"/>
@@ -2879,12 +2931,12 @@ design rules under a new name.</description>
 <wire x1="50.8" y1="60.96" x2="50.165" y2="60.96" width="0.4064" layer="16"/>
 <wire x1="50.165" y1="60.96" x2="50.165" y2="52.197" width="0.4064" layer="16"/>
 <via x="50.8" y="60.96" extent="1-16" drill="0.4"/>
-<wire x1="50.8" y1="60.96" x2="50.8" y2="66.59" width="0.508" layer="1"/>
 <wire x1="58" y1="83.95" x2="63.08" y2="83.95" width="0.8128" layer="1"/>
-<wire x1="64.77" y1="82.26" x2="63.08" y2="83.95" width="0.8128" layer="1"/>
-<wire x1="64.77" y1="82.26" x2="64.77" y2="73.62998125" width="0.8128" layer="1"/>
-<wire x1="64.77" y1="73.62998125" x2="58" y2="73.79" width="0.8128" layer="1"/>
-<wire x1="58" y1="73.79" x2="50.8" y2="66.59" width="0.8128" layer="1"/>
+<wire x1="66.04" y1="80.99" x2="63.08" y2="83.95" width="0.8128" layer="1"/>
+<wire x1="66.04" y1="80.99" x2="66.04" y2="73.62998125" width="0.8128" layer="1"/>
+<wire x1="66.04" y1="73.62998125" x2="64.80001875" y2="72.39" width="0.8128" layer="1"/>
+<wire x1="64.80001875" y1="72.39" x2="50.8" y2="72.39" width="0.8128" layer="1"/>
+<wire x1="50.8" y1="72.39" x2="50.8" y2="60.96" width="0.8128" layer="1"/>
 </signal>
 <signal name="N$43">
 <contactref element="IC8" pad="2"/>
@@ -2948,8 +3000,8 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$3">
 <contactref element="IC1" pad="1"/>
-<contactref element="M2" pad="P$4" route="any" routetag="G$1.3.3VBUS"/>
-<contactref element="M2" pad="P$7" route="any" routetag="G$1.3.3VBUS"/>
+<contactref element="M2" pad="P$4"/>
+<contactref element="M2" pad="P$7"/>
 <wire x1="9.525" y1="56.515" x2="10.2665" y2="56.34526875" width="0.4064" layer="1"/>
 <wire x1="10.2665" y1="56.34526875" x2="12.819" y2="54.491" width="0.4064" layer="1"/>
 <wire x1="12.819" y1="54.491" x2="12.819" y2="50.8" width="0.4064" layer="1"/>
@@ -2964,6 +3016,7 @@ design rules under a new name.</description>
 <wire x1="10.41" y1="52.07" x2="8.96" y2="52.07" width="0.254" layer="1"/>
 <wire x1="11.36" y1="51.12" x2="12.499" y2="51.12" width="0.254" layer="1"/>
 <wire x1="12.499" y1="51.12" x2="12.819" y2="50.8" width="0.254" layer="1"/>
+<wire x1="4" y1="39" x2="49" y2="4" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
 <contactref element="R1" pad="2"/>
@@ -3050,7 +3103,7 @@ design rules under a new name.</description>
 <mfgpreviewcolor name="silkscreencolor" color="0xFFFEFEFE"/>
 <mfgpreviewcolor name="backgroundcolor" color="0xFF282828"/>
 <mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
-<mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
+<mfgpreviewcolor name="substratecolor" color="0xFF00AA00"/>
 </mfgpreviewcolors>
 <errors>
 <approved hash="6,1,fd5eb353bd652201"/>
@@ -3079,6 +3132,11 @@ design rules under a new name.</description>
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
 with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports Fusion synchronisation.
+This feature will not be available in this version and saving
+the document will break the link to the Fusion PCB feature.
 </note>
 <note version="8.3" severity="warning">
 Since Version 8.3, EAGLE supports URNs for individual library
