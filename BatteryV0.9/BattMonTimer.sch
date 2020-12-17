@@ -8356,24 +8356,24 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="-2.75" y="2" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-2.75" y="-3.5" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
-<package name="SOT23">
-<description>&lt;B&gt;DIODE&lt;/B&gt;</description>
+<package name="SOT23" urn="urn:adsk.eagle:footprint:28476/1">
+<description>&lt;b&gt;SOT-23&lt;/b&gt;</description>
 <wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.6604" width="0.1524" layer="51"/>
 <wire x1="1.4224" y1="-0.6604" x2="-1.4224" y2="-0.6604" width="0.1524" layer="51"/>
 <wire x1="-1.4224" y1="-0.6604" x2="-1.4224" y2="0.6604" width="0.1524" layer="51"/>
 <wire x1="-1.4224" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="51"/>
-<wire x1="-1.4224" y1="-0.1524" x2="-1.4224" y2="0.6604" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.6604" x2="-0.8636" y2="0.6604" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.1524" width="0.1524" layer="21"/>
-<wire x1="0.8636" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="-1.4224" y1="-0.1854" x2="-1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="-1.4224" y1="0.6604" x2="-0.6576" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.1854" width="0.1524" layer="21"/>
+<wire x1="0.6326" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<smd name="3" x="0" y="1.1" dx="1" dy="1.4" layer="1"/>
+<smd name="2" x="0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
+<smd name="1" x="-0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
+<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
+<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 <rectangle x1="-0.2286" y1="0.7112" x2="0.2286" y2="1.2954" layer="51"/>
 <rectangle x1="0.7112" y1="-1.2954" x2="1.1684" y2="-0.7112" layer="51"/>
 <rectangle x1="-1.1684" y1="-1.2954" x2="-0.7112" y2="-0.7112" layer="51"/>
-<smd name="1" x="-0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
-<smd name="2" x="0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
-<smd name="3" x="0" y="1.1" dx="1" dy="1.4" layer="1"/>
-<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 <package name="SOT23-5" urn="urn:adsk.eagle:footprint:25262990/1">
 <description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;, 5 lead</description>
@@ -8851,6 +8851,12 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <package3d name="AA-BATT" urn="urn:adsk.eagle:package:25337332/3" type="model">
 <packageinstances>
 <packageinstance name="AA-BATT"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT23" urn="urn:adsk.eagle:package:28534/2" type="model">
+<description>SOT-23</description>
+<packageinstances>
+<packageinstance name="SOT23"/>
 </packageinstances>
 </package3d>
 <package3d name="SOT-23F_TOS-M" urn="urn:adsk.eagle:package:25337323/2" type="model">
@@ -9355,6 +9361,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="G$1" pin="A" pad="2"/>
 <connect gate="G$1" pin="C" pad="1"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:28534/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="LM4040D25FCT-ND" constant="no"/>
@@ -9992,7 +10001,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <attribute name="DIGIKEY" value="1276-1099-1-ND"/>
 </part>
 <part name="U$2" library="BattMonTimer" deviceset="8.5X14&quot;" device=""/>
-<part name="D14" library="BattMonTimer" deviceset="LM4040" device="" value="LM4040D2.5Volt"/>
+<part name="D14" library="BattMonTimer" deviceset="LM4040" device="" package3d_urn="urn:adsk.eagle:package:28534/2" value="LM4040D2.5Volt"/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.7k">
 <spice>

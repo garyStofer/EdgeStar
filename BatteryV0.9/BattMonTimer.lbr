@@ -148,7 +148,7 @@
 <description>Generated from &lt;b&gt;BattMonTimer.sch&lt;/b&gt;&lt;p&gt;
 by exp-lbrs.ulp</description>
 <packages>
-<package name="1X02">
+<package name="1X02" urn="urn:adsk.eagle:footprint:25337293/1">
 <description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
 <wire x1="-1.905" y1="1.27" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
 <wire x1="-0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
@@ -172,7 +172,7 @@ by exp-lbrs.ulp</description>
 <text x="-2.6162" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="AA-BATT">
+<package name="AA-BATT" urn="urn:adsk.eagle:footprint:25337292/1">
 <wire x1="-24.765" y1="-3.175" x2="-24.13" y2="-3.81" width="0.254" layer="21"/>
 <wire x1="-24.13" y1="-3.81" x2="-23.495" y2="-3.81" width="0.254" layer="21"/>
 <wire x1="-23.495" y1="-3.81" x2="-23.495" y2="-6.985" width="0.254" layer="21"/>
@@ -299,7 +299,7 @@ Source: http://focus.ti.com/lit/ds/symlink/sn74lvc2g53.pdf</description>
 <text x="-10.541" y="-2.921" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
 <text x="-7.493" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
-<package name="SMA">
+<package name="SMA" urn="urn:adsk.eagle:footprint:25337288/1">
 <description>&lt;b&gt;SMA&lt;/b&gt; CASE 403D-02&lt;p&gt;
 Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="-2.25" y1="1.825" x2="2.25" y2="1.825" width="0.254" layer="21"/>
@@ -320,7 +320,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="-2.75" y="2" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-2.75" y="-3.5" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
-<package name="SO08">
+<package name="SO08" urn="urn:adsk.eagle:footprint:25337287/1">
 <description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
 <wire x1="2.159" y1="1.9558" x2="-2.159" y2="1.9558" width="0.1524" layer="21"/>
 <wire x1="2.159" y1="-1.9558" x2="2.54" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
@@ -353,7 +353,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="3.937" y="-2.032" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
 <text x="-2.921" y="-1.905" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
 </package>
-<package name="SO16">
+<package name="SO16" urn="urn:adsk.eagle:footprint:25337286/1">
 <description>&lt;b&gt;Small Outline package&lt;/b&gt; 150 mil</description>
 <wire x1="4.699" y1="1.9558" x2="-4.699" y2="1.9558" width="0.1524" layer="21"/>
 <wire x1="4.699" y1="-1.9558" x2="5.08" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
@@ -476,7 +476,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="1.8288" y="-0.889" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <text x="1.8034" y="0.381" size="1.27" layer="25" ratio="6" rot="SR0">&gt;Name</text>
 </package>
-<package name="SOT-23F_TOS-M">
+<package name="SOT-23F_TOS-M" urn="urn:adsk.eagle:footprint:25337314/1">
 <wire x1="-1.4478" y1="-0.9144" x2="-1.1938" y2="-0.9144" width="0.1524" layer="51"/>
 <wire x1="0.6858" y1="-0.9144" x2="1.4478" y2="-0.9144" width="0.1524" layer="51"/>
 <wire x1="0.254" y1="0.9144" x2="-1.4478" y2="0.9144" width="0.1524" layer="51"/>
@@ -513,52 +513,45 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="2.0828" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <text x="2.0574" y="0.635" size="1.27" layer="25" ratio="6" rot="SR0">&gt;Name</text>
 </package>
-<package name="SOT23">
-<description>&lt;B&gt;DIODE&lt;/B&gt;</description>
+<package name="SOT23" urn="urn:adsk.eagle:footprint:28476/1">
+<description>&lt;b&gt;SOT-23&lt;/b&gt;</description>
 <wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.6604" width="0.1524" layer="51"/>
 <wire x1="1.4224" y1="-0.6604" x2="-1.4224" y2="-0.6604" width="0.1524" layer="51"/>
 <wire x1="-1.4224" y1="-0.6604" x2="-1.4224" y2="0.6604" width="0.1524" layer="51"/>
 <wire x1="-1.4224" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="51"/>
-<wire x1="-1.4224" y1="-0.1524" x2="-1.4224" y2="0.6604" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.6604" x2="-0.8636" y2="0.6604" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.1524" width="0.1524" layer="21"/>
-<wire x1="0.8636" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="-1.4224" y1="-0.1854" x2="-1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="-1.4224" y1="0.6604" x2="-0.6576" y2="0.6604" width="0.1524" layer="21"/>
+<wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.1854" width="0.1524" layer="21"/>
+<wire x1="0.6326" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="21"/>
+<smd name="3" x="0" y="1.1" dx="1" dy="1.4" layer="1"/>
+<smd name="2" x="0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
+<smd name="1" x="-0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
+<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
+<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 <rectangle x1="-0.2286" y1="0.7112" x2="0.2286" y2="1.2954" layer="51"/>
 <rectangle x1="0.7112" y1="-1.2954" x2="1.1684" y2="-0.7112" layer="51"/>
 <rectangle x1="-1.1684" y1="-1.2954" x2="-0.7112" y2="-0.7112" layer="51"/>
-<smd name="1" x="-0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
-<smd name="2" x="0.95" y="-1.1" dx="1" dy="1.4" layer="1"/>
-<smd name="3" x="0" y="1.1" dx="1" dy="1.4" layer="1"/>
-<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="SOT23-5">
-<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;</description>
-<wire x1="1.4224" y1="0.8104" x2="1.4224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="-0.8104" x2="-1.4224" y2="-0.8104" width="0.1524" layer="51"/>
-<wire x1="-1.4224" y1="-0.8104" x2="-1.4224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.8104" x2="1.4224" y2="0.8104" width="0.1524" layer="51"/>
-<wire x1="-0.5224" y1="0.8104" x2="0.5224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-0.4276" y1="-0.8104" x2="-0.5224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="0.5224" y1="-0.8104" x2="0.4276" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.3276" y1="-0.8104" x2="-1.4224" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.4224" y1="-0.8104" x2="1.3276" y2="-0.8104" width="0.1524" layer="21"/>
-<wire x1="1.3276" y1="0.8104" x2="1.4224" y2="0.8104" width="0.1524" layer="21"/>
-<wire x1="-1.4224" y1="0.8104" x2="-1.3276" y2="0.8104" width="0.1524" layer="21"/>
-<rectangle x1="-1.2" y1="-1.5" x2="-0.7" y2="-0.85" layer="51"/>
-<rectangle x1="-0.25" y1="-1.5" x2="0.25" y2="-0.85" layer="51"/>
-<rectangle x1="0.7" y1="-1.5" x2="1.2" y2="-0.85" layer="51"/>
-<rectangle x1="0.7" y1="0.85" x2="1.2" y2="1.5" layer="51"/>
-<rectangle x1="-1.2" y1="0.85" x2="-0.7" y2="1.5" layer="51"/>
-<smd name="1" x="-0.95" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="2" x="0" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="3" x="0.95" y="-1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="4" x="0.95" y="1.3001" dx="0.55" dy="1.2" layer="1"/>
-<smd name="5" x="-0.95" y="1.3001" dx="0.55" dy="1.2" layer="1"/>
-<text x="-1.905" y="1.905" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.905" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<package name="SOT23-5" urn="urn:adsk.eagle:footprint:25262990/1">
+<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;, 5 lead</description>
+<wire x1="-1.544" y1="0.713" x2="1.544" y2="0.713" width="0.1524" layer="21"/>
+<wire x1="1.544" y1="0.713" x2="1.544" y2="-0.712" width="0.1524" layer="21"/>
+<wire x1="1.544" y1="-0.712" x2="-1.544" y2="-0.712" width="0.1524" layer="21"/>
+<wire x1="-1.544" y1="-0.712" x2="-1.544" y2="0.713" width="0.1524" layer="21"/>
+<rectangle x1="-1.1875" y1="0.7126" x2="-0.7125" y2="1.5439" layer="51"/>
+<rectangle x1="0.7125" y1="0.7126" x2="1.1875" y2="1.5439" layer="51"/>
+<rectangle x1="-1.1875" y1="-1.5437" x2="-0.7125" y2="-0.7124" layer="51"/>
+<rectangle x1="-0.2375" y1="-1.5437" x2="0.2375" y2="-0.7124" layer="51"/>
+<rectangle x1="0.7125" y1="-1.5437" x2="1.1875" y2="-0.7124" layer="51"/>
+<smd name="1" x="-0.95" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="2" x="0" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="3" x="0.95" y="-1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="4" x="0.95" y="1.306" dx="0.6" dy="1.2" layer="1"/>
+<smd name="5" x="-0.95" y="1.306" dx="0.6" dy="1.2" layer="1"/>
+<text x="-1.778" y="-1.778" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="3.048" y="-1.778" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
 </package>
-<package name="4X8MOUNT">
+<package name="4X8MOUNT" urn="urn:adsk.eagle:footprint:25262989/1">
 <description>This is the screw hole pattern for the cubsat family PCBs.  Studs connect the individual boards vertically. Two elements ,rotated 180deg fromeach other are used for a full size board 88x88 mm, or a single one for a 1/2 size brd.
 Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm grid,whereas the components and the rest of the layout are on the standard 50/5 mil grid.  When creating a new board with this mount first place the mount on a board with mm grid by lining up the reference point with 0/0 , reposctively 88/88 of the new board, then switch the board grid back to mil before placing comopnents.</description>
 <circle x="49" y="4" radius="3.75" width="0" layer="42"/>
@@ -574,14 +567,14 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <circle x="48.958" y="3.948" radius="3.75" width="0" layer="41"/>
 <circle x="84.01" y="39" radius="3.75" width="0" layer="41"/>
 <rectangle x1="0" y1="0" x2="88" y2="44" layer="199" rot="R180"/>
-<pad name="P$1" x="84" y="4" drill="3" diameter="5.85" shape="square" rot="R180"/>
+<pad name="P$1" x="84" y="4" drill="3" diameter="5.85" shape="square" rot="R180" thermals="no"/>
 <pad name="P$2" x="83.9975" y="39" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$3" x="4" y="30" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$4" x="49" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$5" x="39" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$6" x="30" y="4" drill="3" diameter="5.85" rot="R180"/>
 <pad name="P$7" x="4" y="39" drill="3" diameter="5.85" rot="R180"/>
-<pad name="P$8" x="4" y="4" drill="3" diameter="5.85" shape="square" rot="R180"/>
+<pad name="P$8" x="4" y="4" drill="3" diameter="5.85" shape="square" rot="R180" thermals="no"/>
 </package>
 <package name="MOLEX2PIN">
 <description>molex 2 pin header with schroud and lock , pn 070543001</description>
@@ -612,7 +605,7 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <pad name="P$3" x="-2.54" y="1.27" drill="0.9" diameter="1.778" shape="octagon"/>
 <text x="-2.46" y="5.572" size="1.016" layer="25" ratio="10">&gt;NAME</text>
 </package>
-<package name="TO92-INLINE">
+<package name="TO92-INLINE" urn="urn:adsk.eagle:footprint:25296050/1">
 <description>TO92 inline pins</description>
 <wire x1="-2.095" y1="-1.651" x2="2.095" y2="-1.651" width="0.127" layer="21"/>
 <wire x1="-2.413" y1="1.1359" x2="2.413" y2="1.1359" width="0.127" layer="21" curve="-129.583"/>
@@ -649,6 +642,70 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <text x="-1.903" y="-1.701" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 </package>
 </packages>
+<packages3d>
+<package3d name="TO92-INLINE" urn="urn:adsk.eagle:package:25296052/2" type="model">
+<description>TO92 inline pins</description>
+<packageinstances>
+<packageinstance name="TO92-INLINE"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT23-5" urn="urn:adsk.eagle:package:25263039/2" type="model">
+<description>&lt;b&gt;Small Outline Transistor&lt;/b&gt;, 5 lead</description>
+<packageinstances>
+<packageinstance name="SOT23-5"/>
+</packageinstances>
+</package3d>
+<package3d name="4X8MOUNT" urn="urn:adsk.eagle:package:25263038/3" type="empty">
+<description>This is the screw hole pattern for the cubsat family PCBs.  Studs connect the individual boards vertically. Two elements ,rotated 180deg fromeach other are used for a full size board 88x88 mm, or a single one for a 1/2 size brd.
+Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm grid,whereas the components and the rest of the layout are on the standard 50/5 mil grid.  When creating a new board with this mount first place the mount on a board with mm grid by lining up the reference point with 0/0 , reposctively 88/88 of the new board, then switch the board grid back to mil before placing comopnents.</description>
+<packageinstances>
+<packageinstance name="4X8MOUNT"/>
+</packageinstances>
+</package3d>
+<package3d name="SMA" urn="urn:adsk.eagle:package:25337328/2" type="model">
+<description>&lt;b&gt;SMA&lt;/b&gt; CASE 403D-02&lt;p&gt;
+Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
+<packageinstances>
+<packageinstance name="SMA"/>
+</packageinstances>
+</package3d>
+<package3d name="SO08" urn="urn:adsk.eagle:package:25337327/2" type="model">
+<description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
+<packageinstances>
+<packageinstance name="SO08"/>
+</packageinstances>
+</package3d>
+<package3d name="SO16" urn="urn:adsk.eagle:package:25337326/3" type="model">
+<description>&lt;b&gt;Small Outline package&lt;/b&gt; 150 mil</description>
+<packageinstances>
+<packageinstance name="SO16"/>
+</packageinstances>
+</package3d>
+<package3d name="1X02" urn="urn:adsk.eagle:package:25337333/2" type="model">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<packageinstances>
+<packageinstance name="1X02"/>
+</packageinstances>
+</package3d>
+<package3d name="AA-BATT" urn="urn:adsk.eagle:package:25337332/3" type="model">
+<packageinstances>
+<packageinstance name="AA-BATT"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT23" urn="urn:adsk.eagle:package:28534/2" type="model">
+<description>SOT-23</description>
+<packageinstances>
+<packageinstance name="SOT23"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT-23F_TOS-M" urn="urn:adsk.eagle:package:25337323/2" type="model">
+<description>3-SOT23, 0.95 mm pitch, 2.40 mm span, 2.90 X 1.30 X 1.10 mm body
+&lt;p&gt;3-pin SOT23 package with 0.95 mm pitch, 2.40 mm span with body size 2.90 X 1.30 X 1.10 mm&lt;/p&gt;</description>
+<packageinstances>
+<packageinstance name="SOT-23F_TOS-M"/>
+</packageinstances>
+</package3d>
+</packages3d>
 <symbols>
 <symbol name="8.5X14&quot;">
 <wire x1="0" y1="0" x2="0" y2="205.74" width="0.254" layer="94"/>
@@ -1171,6 +1228,9 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <connect gate="P" pin="VDD" pad="16"/>
 <connect gate="P" pin="VSS" pad="8"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337326/3"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="POPULARITY" value="0" constant="no"/>
@@ -1215,6 +1275,9 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <connect gate="G$1" pin="+" pad="PLUS"/>
 <connect gate="G$1" pin="-" pad="MINUS"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337332/3"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="SY115T-ND"/>
@@ -1240,6 +1303,9 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <connect gate="G$1" pin="TRSH" pad="6"/>
 <connect gate="G$1" pin="V+" pad="8"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337327/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="ICM7555CBAZ-TCT-ND"/>
@@ -1258,6 +1324,9 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <connect gate="G$1" pin="A" pad="2"/>
 <connect gate="G$1" pin="C" pad="1"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:28534/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="LM4040D25FCT-ND" constant="no"/>
@@ -1278,6 +1347,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="G$1" pin="A" pad="A"/>
 <connect gate="G$1" pin="C" pad="C"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337328/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="MURA220T3GOSCT-ND"/>
@@ -1298,6 +1370,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337333/2"/>
+</package3dinstances>
 <technologies>
 <technology name=""/>
 </technologies>
@@ -1345,6 +1420,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="A" pin="2" pad="2"/>
 <connect gate="A" pin="3" pad="3"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337323/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="SSM3J338RLFECT-ND"/>
@@ -1367,6 +1445,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="A" pin="G" pad="1"/>
 <connect gate="A" pin="S" pad="2"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25337323/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="SSM3K345RLFCT-ND" constant="no"/>
@@ -1390,6 +1471,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="G$2" pin="VDD" pad="5"/>
 <connect gate="G$2" pin="VDD_GND" pad="2"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25263039/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="296-10500-1-ND" constant="no"/>
@@ -1406,12 +1490,15 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <devices>
 <device name="" package="4X8MOUNT">
 <connects>
-<connect gate="G$1" pin="1WIRE" pad="P$2 P$5" route="any"/>
-<connect gate="G$1" pin="3.3VBUS" pad="P$4 P$7" route="any"/>
-<connect gate="G$1" pin="GND" pad="P$1 P$8" route="any"/>
+<connect gate="G$1" pin="1WIRE" pad="P$2 P$5"/>
+<connect gate="G$1" pin="3.3VBUS" pad="P$4 P$7"/>
+<connect gate="G$1" pin="GND" pad="P$1 P$8"/>
 <connect gate="G$1" pin="SPARE1" pad="P$6"/>
 <connect gate="G$1" pin="SPARE2" pad="P$3"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25263038/3"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="NO_PN" value="Hole pattern template"/>
@@ -1471,6 +1558,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <connect gate="G$1" pin="OUT" pad="2"/>
 <connect gate="G$1" pin="VCC" pad="1"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:25296052/2"/>
+</package3dinstances>
 <technologies>
 <technology name="">
 <attribute name="DIGIKEY" value="TMP36GT9Z-ND"/>
@@ -1505,4 +1595,16 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </devicesets>
 </library>
 </drawing>
+<compatibility>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports URNs for individual library
+assets (packages, symbols, and devices). The URNs of those assets
+will not be understood (or retained) with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports the association of 3D packages
+with devices in libraries, schematics, and board files. Those 3D
+packages will not be understood (or retained) with this version.
+</note>
+</compatibility>
 </eagle>
