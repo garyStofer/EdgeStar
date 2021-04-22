@@ -1,36 +1,35 @@
 Circuit description for Battery Monitor /Delayed startup timer 
 
-The purpose of the circuit is to control the connection of the battery to the consumers by delaying
-the turn on of the satellite for a period of time and provide a cut-out period for the consumer to
+The purpose of the circuit is to control the connection of the battery to the load  by delaying
+ the turn on of the satellite for a period of time and provide a cut-out period for the solar panels to
  recharge the battery when the voltage drops  below a certain point.
 
 The circuit consists of a voltage comparator with hysteresis, a clock source that ticks at ~1Hz and 
-a 14 bit counter chip to provide a delay 8192 counts or about 2hrs and 16 minutes. A D Flipflop is
-used to keep state of weather the timer is running and the load is locked out or not. A quick start
-option is provided to disable the lockout timer altogether for use in lab testing of the circuit.
+ a 14 bit counter chip to provide a delay of 8192 counts or about 2hrs and 16 minutes. A D Flipflop is
+ used to keep state of weather the timer is running and the load is locked out or not. A quick start
+ option is provided to disable the lockout timer altogether for use in lab testing of the circuit.
 
-A solder jumper option is provided at IC5, the counter chip, to choose from different timeouts. 
+A solder jumper option is provided at IC5, the counter chip, to choose from two time values, 1hr8min and 2hr16min. 
 
 An option exists to manually trigger the timeout via D1 and UVP pin. Provide a logic high to this pin 
-and the timing period will start regardless of the actual battery voltage.
+ and the timing period will start regardless of the actual battery voltage.
 
 IC1, with associated resistors and band gap reference diode D6, forms a voltage comparator with Vthresh-
-at 3.18V and Vthresh+ at 3.35V.  If during operation the battery voltage drops below Vth- the output 
-of the comparator, via FET N2 will set the FlipFlop and the timeout period will start during which 
-time the load is disconnected via D2 /P1. If the voltage has not risen above Vth+ when the timeout 
-period elapses a new timeout period will immediately follow, otherwise if the voltage at the end of 
-the period is above Vth+ the load will be reconnected. 
+ at 3.18V and Vthresh+ at 3.35V.  If during operation the battery voltage drops below Vth- the output 
+ of the comparator, via FET N2 will set the FlipFlop and the timeout period will start during which 
+ time the load is disconnected via D2 /P1. If the voltage has not risen above Vth+ when the timeout 
+ period elapses a new timeout period will immediately follow, otherwise if the voltage at the end of 
+ the period is above Vth+ the load will be reconnected. 
 
 On initial connect of the battery, regardless of it's voltage, C1 is discharged and holds the negative
  input lower than the positive. This creates a Preset condition on the FF setting it and is starting the 
- timeout period. R8/C1 forms a low pass that filters out short dips in the battery voltage.  C2 also 
+ timeout period. R8/C1 forms a low pass that filters out short dips in the battery voltage, about 2 seconds.  C2 also 
  serves to make sure that the FF starts up in the preset condition when battery voltage is applied slowly.
 
-IC 4 is a Cmos type 555 timer, set to click at ~1Hz.  The clock is stopped when the load is connected through.
- IC5 74HC4060 is a 14 bit counter that counts up to 8192 counts. Taps on the outputs allows for different time
- settings with one very short setting of 8 seconds for testing of the logic.
+IC 4 is a Cmos type 555 timer, set to click at ~1Hz periode.  The clock is stopped when the load is connected through.
+ IC5 74HC4060 is a 14 bit counter that counts up to 8K counts.
  
- Diode D3 provides the once way connection of the solar panels -- No end of charge detection or solar panel disconnect 
+Diodes provides the a one way connection of the solar panels -- No end of charge detection or solar panel disconnect 
  is performed.
  
  

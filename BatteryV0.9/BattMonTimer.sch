@@ -8787,21 +8787,6 @@ Note: The mount holes and perimeter dimmensions of the boards are on a 0.5mm gri
 <pad name="P$3" x="-2.54" y="1.27" drill="0.9" diameter="1.778" shape="octagon"/>
 <text x="-2.46" y="5.572" size="1.016" layer="25" ratio="10">&gt;NAME</text>
 </package>
-<package name="SOT-23-5">
-<wire x1="-1.5" y1="-0.5" x2="1.5" y2="-0.5" width="0.127" layer="21"/>
-<wire x1="1.5" y1="-0.5" x2="1.5" y2="0.5" width="0.127" layer="21"/>
-<wire x1="1.5" y1="0.5" x2="-1.5" y2="0.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="0.5" x2="-1.5" y2="0.3" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="-0.3" x2="-1.5" y2="-0.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="0.3" x2="-1.2" y2="0" width="0.127" layer="21" curve="-90"/>
-<wire x1="-1.2" y1="0" x2="-1.5" y2="-0.3" width="0.127" layer="21" curve="-90"/>
-<smd name="1" x="-0.95" y="-1.2" dx="0.7" dy="1" layer="1"/>
-<smd name="2" x="0" y="-1.2" dx="0.7" dy="1" layer="1"/>
-<smd name="3" x="0.95" y="-1.2" dx="0.7" dy="1" layer="1"/>
-<smd name="4" x="0.95" y="1.2" dx="0.7" dy="1" layer="1"/>
-<smd name="5" x="-0.95" y="1.2" dx="0.7" dy="1" layer="1"/>
-<text x="-1.903" y="-1.701" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-</package>
 </packages>
 <packages3d>
 <package3d name="SOT23-5" urn="urn:adsk.eagle:package:25263039/2" type="model">
@@ -9291,18 +9276,6 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <pin name="3" x="0" y="-2.54" visible="pin" length="short" direction="pas" rot="R180"/>
 <text x="-7.62" y="4.318" size="1.524" layer="95">&gt;NAME</text>
 </symbol>
-<symbol name="TMP3_SOT23-5">
-<wire x1="2.54" y1="5.08" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="5.08" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-7.62" x2="2.54" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-7.62" x2="2.54" y2="5.08" width="0.254" layer="94"/>
-<pin name="!SHDN" x="5.08" y="-5.08" visible="pin" length="short" direction="in" rot="R180"/>
-<pin name="GND" x="5.08" y="-2.54" visible="pin" length="short" direction="pwr" rot="R180"/>
-<pin name="VCC" x="5.08" y="2.54" visible="pin" length="short" direction="pwr" rot="R180"/>
-<pin name="V_OUT" x="5.08" y="0" visible="pin" length="short" direction="out" rot="R180"/>
-<text x="-7.62" y="7.62" size="1.27" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-10.16" size="1.27" layer="96">&gt;VALUE</text>
-</symbol>
 </symbols>
 <devicesets>
 <deviceset name="AA-BATT" prefix="B">
@@ -9730,29 +9703,6 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="TMP36GRT" prefix="IC">
-<description>SENSOR TEMP ANLG VOLT SOT-23-5
-&lt;a href="http://www.analog.com/media/en/technical-documentation/data-sheets/TMP35_36_37.pdf"&gt;Datasheet&lt;a&gt;</description>
-<gates>
-<gate name="G$1" symbol="TMP3_SOT23-5" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SOT-23-5">
-<connects>
-<connect gate="G$1" pin="!SHDN" pad="4"/>
-<connect gate="G$1" pin="GND" pad="5"/>
-<connect gate="G$1" pin="VCC" pad="2"/>
-<connect gate="G$1" pin="V_OUT" pad="1"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="DIGIKEY" value="TMP36GRT-REEL7CT-ND"/>
-<attribute name="PACKAGE" value="SOT-23-5"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
 </devicesets>
 </library>
 </libraries>
@@ -10025,7 +9975,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <part name="IC8" library="BattMonTimer" deviceset="ICM7555" device="SO08" package3d_urn="urn:adsk.eagle:package:25337327/2"/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10 uf ,XR7">
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10u">
 <spice>
 <pinmapping spiceprefix="C">
 <pinmap gate="G$1" pin="1" pinorder="1"/>
@@ -10034,7 +9984,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </spice>
 <attribute name="DIGIKEY" value="490-14381-1-ND"/>
 </part>
-<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="Spare,XR7">
+<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2">
 <spice>
 <pinmapping spiceprefix="C">
 <pinmap gate="G$1" pin="1" pinorder="1"/>
@@ -10047,7 +9997,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <part name="IC3" library="burr-brown" library_urn="urn:adsk.eagle:library:111" deviceset="INA138" device="" package3d_urn="urn:adsk.eagle:package:4930/1">
 <attribute name="DIGIKEY" value="296-17936-2-ND"/>
 </part>
-<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R1206W" package3d_urn="urn:adsk.eagle:package:23539/2" value="1o">
+<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R1206W" package3d_urn="urn:adsk.eagle:package:23539/2" value="1.0o">
 <spice>
 <pinmapping spiceprefix="R">
 <pinmap gate="G$1" pin="1" pinorder="1"/>
@@ -10075,7 +10025,24 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </spice>
 <attribute name="DIGIKEY" value="1276-1099-1-ND"/>
 </part>
-<part name="IC4" library="BattMonTimer" deviceset="TMP36GRT" device=""/>
+<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120">
+<spice>
+<pinmapping spiceprefix="R">
+<pinmap gate="G$1" pin="1" pinorder="1"/>
+<pinmap gate="G$1" pin="2" pinorder="2"/>
+</pinmapping>
+</spice>
+<attribute name="DIGIKEY" value="311-4.7KARCT-ND"/>
+</part>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10 uf ">
+<spice>
+<pinmapping spiceprefix="C">
+<pinmap gate="G$1" pin="1" pinorder="1"/>
+<pinmap gate="G$1" pin="2" pinorder="2"/>
+</pinmapping>
+</spice>
+<attribute name="DIGIKEY" value="490-14381-1-ND"/>
+</part>
 </parts>
 <sheets>
 <sheet>
@@ -10084,15 +10051,14 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="448.31" y="121.92" size="1.27" layer="97">P-CH-MOSFET</text>
 <text x="293.37" y="64.516" size="1.27" layer="97">N-CH-MOSFET</text>
 <text x="326.898" y="64.008" size="1.27" layer="97">N-CH-MOSFET</text>
-<text x="233.68" y="43.18" size="1.778" layer="97">www.homemade-Circuits.com -- Hysteresis calc</text>
+<text x="269.24" y="10.16" size="1.778" layer="97">www.homemade-Circuits.com -- Hysteresis calc</text>
 <text x="441.96" y="124.46" size="1.778" layer="95">S</text>
 <text x="441.96" y="114.3" size="1.778" layer="95">D</text>
-<text x="459.74" y="78.74" size="1.778" layer="95">1Hr</text>
-<text x="459.74" y="72.39" size="1.778" layer="95">2Hr</text>
-<text x="261.62" y="48.26" size="1.778" layer="95">3.18V /3.35V</text>
+<text x="459.74" y="78.74" size="1.778" layer="95">1:08</text>
+<text x="459.74" y="72.39" size="1.778" layer="95">2:16</text>
 <text x="236.22" y="71.12" size="1.778" layer="95">2 Sec</text>
-<text x="236.22" y="48.26" size="2.54" layer="97">Cutout voltage</text>
-<text x="472.44" y="12.7" size="2.54" layer="97">V0.9</text>
+<text x="269.24" y="22.86" size="2.54" layer="97">Cutout voltage hysteresis </text>
+<text x="472.44" y="12.7" size="2.54" layer="97">V1.0</text>
 <text x="193.04" y="157.48" size="1.778" layer="97">Vout = Is*R1*R2/5000</text>
 <text x="180.34" y="149.86" size="1.778" layer="97">--&gt;Is</text>
 <text x="193.04" y="154.94" size="1.778" layer="97">100ma = 2.41V</text>
@@ -10100,7 +10066,11 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <text x="193.04" y="22.86" size="1.778" layer="97">Molex 2 pin cable housing: Digikey 0050579402</text>
 <text x="193.04" y="17.78" size="1.778" layer="97">Molex 3 pin cable housing: Digikey 0050579403</text>
 <text x="193.04" y="12.7" size="1.778" layer="97">Molex crimp sockets , 24-30AWG: Digikey 0016020097</text>
-<text x="190.5" y="88.9" size="1.778" layer="91">Optionally Populate IC1 or IC4</text>
+<text x="299.72" y="33.02" size="1.778" layer="97">Quick jumper bypasses 2Hr timing for turn on </text>
+<text x="226.06" y="73.66" size="1.778" layer="97">spare</text>
+<text x="269.24" y="7.62" size="1.778" layer="97">https://www.daycounter.com/Calculators/Voltage-Summer/Voltage-Summer-Calculator.phtml</text>
+<text x="269.24" y="15.24" size="1.778" layer="97">R22 2.49M : 3.0/3.66 V</text>
+<text x="269.24" y="17.78" size="1.778" layer="97">R22 7.5M : 3.18/3.42 V</text>
 </plain>
 <instances>
 <instance part="M1" gate="G$1" x="142.24" y="25.4" smashed="yes">
@@ -10178,10 +10148,10 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <attribute name="VALUE" x="423.418" y="137.16" size="1.778" layer="96" rot="R270"/>
 <attribute name="DIGIKEY" x="426.72" y="133.35" size="1.778" layer="96" rot="R270" display="off"/>
 </instance>
-<instance part="D4" gate="1" x="233.68" y="58.42" smashed="yes">
-<attribute name="NAME" x="231.394" y="60.325" size="1.778" layer="95"/>
-<attribute name="VALUE" x="231.394" y="54.991" size="1.778" layer="96"/>
-<attribute name="DIGIKEY" x="233.68" y="58.42" size="1.778" layer="96" display="off"/>
+<instance part="D4" gate="1" x="271.78" y="58.42" smashed="yes">
+<attribute name="NAME" x="269.494" y="60.325" size="1.778" layer="95"/>
+<attribute name="VALUE" x="269.494" y="54.991" size="1.778" layer="96"/>
+<attribute name="DIGIKEY" x="271.78" y="58.42" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="D5" gate="1" x="369.57" y="116.84" smashed="yes" rot="R180">
 <attribute name="NAME" x="369.316" y="114.935" size="1.778" layer="95" rot="R180"/>
@@ -10236,7 +10206,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <attribute name="VALUE" x="239.522" y="101.6" size="1.778" layer="96" rot="R90"/>
 <attribute name="DIGIKEY" x="236.22" y="105.41" size="1.778" layer="96" rot="R90" display="off"/>
 </instance>
-<instance part="IC2" gate="G$2" x="323.85" y="134.62" smashed="yes"/>
+<instance part="IC2" gate="G$2" x="323.85" y="134.62" smashed="yes">
+<attribute name="NAME" x="312.928" y="133.858" size="1.778" layer="95"/>
+</instance>
 <instance part="GND3" gate="1" x="255.27" y="63.5" smashed="yes">
 <attribute name="VALUE" x="252.73" y="60.96" size="1.778" layer="96"/>
 </instance>
@@ -10251,7 +10223,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <attribute name="DIGIKEY" x="266.7" y="134.62" size="1.778" layer="96" rot="R90" display="off"/>
 </instance>
 <instance part="IC7" gate="G$2" x="344.17" y="134.62" smashed="yes">
-<attribute name="NAME" x="343.535" y="133.985" size="1.778" layer="95"/>
+<attribute name="NAME" x="338.455" y="133.985" size="1.778" layer="95"/>
 </instance>
 <instance part="GND12" gate="1" x="354.33" y="121.92" smashed="yes">
 <attribute name="VALUE" x="351.79" y="119.38" size="1.778" layer="96"/>
@@ -10375,20 +10347,20 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </instance>
 <instance part="C1" gate="G$1" x="236.22" y="78.74" smashed="yes">
 <attribute name="NAME" x="237.236" y="79.375" size="1.778" layer="95"/>
-<attribute name="VALUE" x="232.156" y="74.549" size="1.778" layer="96"/>
+<attribute name="VALUE" x="237.236" y="74.549" size="1.778" layer="96"/>
 <attribute name="DIGIKEY" x="236.22" y="78.74" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="C2" gate="G$1" x="228.6" y="78.74" smashed="yes">
-<attribute name="NAME" x="229.616" y="79.375" size="1.778" layer="95"/>
-<attribute name="VALUE" x="227.711" y="82.296" size="1.778" layer="96" rot="R90"/>
 <attribute name="DIGIKEY" x="228.6" y="78.74" size="1.778" layer="96" display="off"/>
+<attribute name="NAME" x="229.616" y="79.375" size="1.778" layer="95"/>
+<attribute name="VALUE" x="224.536" y="74.549" size="1.778" layer="96"/>
 </instance>
 <instance part="IC1" gate="G$1" x="205.74" y="58.42" smashed="yes" rot="R90">
 <attribute name="NAME" x="203.454" y="66.294" size="1.27" layer="95" rot="R180"/>
-<attribute name="VALUE" x="208.28" y="50.8" size="1.27" layer="96" rot="R180"/>
+<attribute name="VALUE" x="210.82" y="53.34" size="1.27" layer="96" rot="R180"/>
 </instance>
 <instance part="IC3" gate="G$1" x="205.74" y="172.72" smashed="yes">
-<attribute name="NAME" x="226.06" y="153.035" size="1.778" layer="95" ratio="10"/>
+<attribute name="NAME" x="190.5" y="183.515" size="1.778" layer="95" ratio="10"/>
 <attribute name="VALUE" x="200.406" y="164.338" size="1.778" layer="96" ratio="10"/>
 <attribute name="DIGIKEY" x="205.74" y="172.72" size="1.778" layer="96" display="off"/>
 </instance>
@@ -10410,9 +10382,15 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <attribute name="VALUE" x="238.506" y="158.369" size="1.778" layer="96"/>
 <attribute name="DIGIKEY" x="237.49" y="162.56" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="IC4" gate="G$1" x="208.28" y="78.74" smashed="yes">
-<attribute name="NAME" x="200.66" y="86.36" size="1.27" layer="95"/>
-<attribute name="VALUE" x="200.66" y="68.58" size="1.27" layer="96"/>
+<instance part="R3" gate="G$1" x="238.76" y="58.42" smashed="yes">
+<attribute name="NAME" x="234.95" y="59.9186" size="1.778" layer="95"/>
+<attribute name="VALUE" x="234.95" y="55.118" size="1.778" layer="96"/>
+<attribute name="DIGIKEY" x="238.76" y="58.42" size="1.778" layer="96" display="off"/>
+</instance>
+<instance part="C5" gate="G$1" x="254" y="53.34" smashed="yes">
+<attribute name="NAME" x="255.016" y="53.975" size="1.778" layer="95"/>
+<attribute name="VALUE" x="249.936" y="49.149" size="1.778" layer="96"/>
+<attribute name="DIGIKEY" x="254" y="53.34" size="1.778" layer="96" display="off"/>
 </instance>
 </instances>
 <busses>
@@ -10632,10 +10610,6 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <junction x="185.42" y="68.58"/>
 <junction x="154.94" y="68.58"/>
 <junction x="187.96" y="76.2"/>
-<pinref part="IC4" gate="G$1" pin="GND"/>
-<wire x1="213.36" y1="76.2" x2="215.9" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="215.9" y1="76.2" x2="215.9" y2="55.88" width="0.1524" layer="91"/>
-<junction x="215.9" y="55.88"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="P" pin="VSS"/>
@@ -10676,6 +10650,9 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="281.94" y1="48.26" x2="290.83" y2="48.26" width="0.1524" layer="91"/>
 <junction x="290.83" y="48.26"/>
 <wire x1="290.83" y1="48.26" x2="295.91" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="C5" gate="G$1" pin="2"/>
+<wire x1="281.94" y1="48.26" x2="254" y2="48.26" width="0.1524" layer="91"/>
+<junction x="281.94" y="48.26"/>
 </segment>
 <segment>
 <pinref part="N4" gate="A" pin="S"/>
@@ -10748,7 +10725,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="228.6" y1="88.9" x2="236.22" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$38" class="0">
+<net name="V_OUT" class="0">
 <segment>
 <wire x1="440.69" y1="111.76" x2="472.44" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="P2" gate="A" pin="3"/>
@@ -10765,6 +10742,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <pinref part="C16" gate="G$1" pin="1"/>
 <wire x1="250.19" y1="165.1" x2="250.19" y2="180.34" width="0.1524" layer="91"/>
 <junction x="250.19" y="180.34"/>
+<label x="165.1" y="30.48" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$39" class="0">
@@ -10875,7 +10853,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <junction x="281.94" y="58.42"/>
 <wire x1="281.94" y1="58.42" x2="283.21" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="D4" gate="1" pin="C"/>
-<wire x1="236.22" y1="58.42" x2="281.94" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="274.32" y1="58.42" x2="281.94" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$42" class="0">
@@ -10896,12 +10874,12 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 </net>
 <net name="UVP_TRIG" class="0">
 <segment>
-<pinref part="D4" gate="1" pin="A"/>
-<label x="215.9" y="35.56" size="1.778" layer="95"/>
+<label x="165.1" y="33.02" size="1.778" layer="95"/>
 <pinref part="M1" gate="G$1" pin="SPARE1"/>
 <wire x1="162.56" y1="33.02" x2="226.06" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="226.06" y1="33.02" x2="226.06" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="226.06" y1="58.42" x2="231.14" y2="58.42" width="0.1524" layer="91"/>
+<pinref part="R3" gate="G$1" pin="1"/>
+<wire x1="226.06" y1="58.42" x2="233.68" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$43" class="0">
@@ -10953,36 +10931,26 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="454.66" y1="71.12" x2="458.47" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="BATT_TEMP" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="OUT"/>
 <wire x1="213.36" y1="58.42" x2="218.44" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="218.44" y1="58.42" x2="218.44" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="218.44" y1="48.26" x2="162.56" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="SPARE2"/>
-<pinref part="IC4" gate="G$1" pin="V_OUT"/>
-<wire x1="213.36" y1="78.74" x2="218.44" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="218.44" y1="78.74" x2="218.44" y2="58.42" width="0.1524" layer="91"/>
-<junction x="218.44" y="58.42"/>
+<label x="165.1" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="SYS_V3_3" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
 <wire x1="213.36" y1="60.96" x2="220.98" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="60.96" x2="220.98" y2="38.1" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="38.1" x2="193.04" y2="38.1" width="0.1524" layer="91"/>
-<wire x1="193.04" y1="38.1" x2="193.04" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="60.96" x2="220.98" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="50.8" x2="193.04" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="50.8" x2="193.04" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="193.04" y1="53.34" x2="162.56" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="3.3VBUS"/>
-<pinref part="IC4" gate="G$1" pin="VCC"/>
-<wire x1="213.36" y1="81.28" x2="220.98" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="81.28" x2="220.98" y2="73.66" width="0.1524" layer="91"/>
-<junction x="220.98" y="60.96"/>
-<pinref part="IC4" gate="G$1" pin="!SHDN"/>
-<wire x1="220.98" y1="73.66" x2="220.98" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="73.66" x2="220.98" y2="73.66" width="0.1524" layer="91"/>
-<junction x="220.98" y="73.66"/>
+<label x="165.1" y="53.34" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -11037,7 +11005,7 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <junction x="175.26" y="147.32"/>
 </segment>
 </net>
-<net name="SOL_CURRENT" class="0">
+<net name="SOL_I" class="0">
 <segment>
 <pinref part="IC3" gate="G$1" pin="OUT"/>
 <pinref part="R2" gate="G$1" pin="2"/>
@@ -11054,6 +11022,18 @@ Source: http://www.onsemi.com/pub_link/Collateral/MBRA340T3-D.PDF</description>
 <wire x1="180.34" y1="63.5" x2="180.34" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="M2" gate="G$1" pin="SPARE1"/>
 <wire x1="180.34" y1="50.8" x2="162.56" y2="50.8" width="0.1524" layer="91"/>
+<label x="165.1" y="50.8" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="R3" gate="G$1" pin="2"/>
+<pinref part="D4" gate="1" pin="A"/>
+<wire x1="243.84" y1="58.42" x2="254" y2="58.42" width="0.1524" layer="91"/>
+<pinref part="C5" gate="G$1" pin="1"/>
+<wire x1="254" y1="58.42" x2="269.24" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="254" y1="55.88" x2="254" y2="58.42" width="0.1524" layer="91"/>
+<junction x="254" y="58.42"/>
 </segment>
 </net>
 </nets>
