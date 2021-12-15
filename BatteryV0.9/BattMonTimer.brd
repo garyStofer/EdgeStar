@@ -159,7 +159,7 @@
 <layer number="255" name="routoute" color="7" fill="1" visible="no" active="yes"/>
 </layers>
 <board>
-<fusionsync huburn="a.YnVzaW5lc3M6Z21haWw5NTI4Mzg" projecturn="a.YnVzaW5lc3M6Z21haWw5NTI4MzgjMjAyMDEyMTAzNjE1NTAxMDE" f3durn="urn:adsk.wipprod:dm.lineage:uJTTGrnQS_WLAX9_R_gfSQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="eca91f45-7e87-42e0-bb91-0b87bae41d2c" lastsyncedrevisionid="eca91f45-7e87-42e0-bb91-0b87bae41d2c" lastboardhashguid="8019a437-25ff-6c5f-9e26-4e05f9582c14" lastpushedtime="2020-12-17T18:16:24Z" linktopcb3d="true"/>
+<fusionsync huburn="a.YnVzaW5lc3M6Z21haWw5NTI4Mzg" projecturn="a.YnVzaW5lc3M6Z21haWw5NTI4MzgjMjAyMDEyMTAzNjE1NTAxMDE" f3durn="urn:adsk.wipprod:dm.lineage:uJTTGrnQS_WLAX9_R_gfSQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="eca91f45-7e87-42e0-bb91-0b87bae41d2c" lastsyncedrevisionid="eca91f45-7e87-42e0-bb91-0b87bae41d2c" lastboardhashguid="8019a437-25ff-6c5f-9e26-4e05f9582c14" lastpushedtime="2020-12-17T18:16:24Z" linktopcb3d="false"/>
 <plain>
 <wire x1="0" y1="85" x2="0" y2="3" width="0" layer="20" locked="yes"/>
 <wire x1="0" y1="3" x2="3" y2="0" width="0" layer="20" curve="90" locked="yes"/>
@@ -173,8 +173,8 @@
 <text x="44.45" y="29.337" size="1.778" layer="21">SSU-EdgeStar Battery/Timer</text>
 <text x="62.23" y="26.67" size="1.778" layer="21">PCB Rev 1.0</text>
 <text x="44.45" y="26.67" size="1.778" layer="21">SCH Rev 1.0</text>
-<text x="75.18" y="41.66" size="0.6096" layer="21">1:08</text>
-<text x="75.18" y="39.62" size="0.6096" layer="21">2:16</text>
+<text x="75.18" y="39.12" size="0.6096" layer="21">1:08</text>
+<text x="75.18" y="42.16" size="0.6096" layer="21">2:16</text>
 <polygon width="0.1524" layer="21">
 <vertex x="1.27" y="8.89"/>
 <vertex x="3.81" y="11.43"/>
