@@ -1,0 +1,26 @@
+to getstream
+  clearcom
+  send-packet (se $aa 5 :who $80 $f9)
+  let [c trecc 800]     ; let [c recc]
+  if not :c = $aa [output []]
+  let [res []]
+  repeat recc - 2 [make "res se :res recc]
+  output bf bf :res
+end
+
+to get-packet
+  let [res [$aa]]
+  if not (trecc 5000) = $aa [output []]
+  let [len recc]
+  make "res se :res :len
+  repeat :len - 2 [make "res se :res trecc 100]
+  output :res
+end
+
+to send-packet :l
+  mwait 30
+  sendl :l
+  if :onewire [repeat count :l [ignore recc]]
+  mwait 30
+end
+

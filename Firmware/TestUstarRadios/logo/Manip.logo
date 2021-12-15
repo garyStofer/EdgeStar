@@ -1,0 +1,580 @@
+;*******************************************************************************
+; File: Manip.logo
+; File: create.logo
+; Last Modifyed: 2015/06/02
+; Created by: Ben Cunningham
+;
+; Purpose:
+;   A collection of words for data and list minipulation, searching, etc.
+;
+; Note:
+;   This file is a combination of three files create.logo, sort.logo, and
+;   search.logo. The layout, comments, and order could to be updated.
+;
+;
+;*******************************************************************************
+
+;*******************************************************************************
+; File: create.logo
+; Last Modifyed: 2015/06/02
+; Created by: Ben Cunningham
+;
+; Purpose:
+;   A collection of words for list creation
+;
+; Supporting Files:
+;   None
+;
+; Words:
+;  GenList :sz :mn :mx
+;  	     Input (sz) - Size of list. Positive interger only (sz >= 0)
+;	     Input (mn) - Minimum value of randomly generated values
+;	     Input (mx) - Maximum value of randomly generated values
+;	     Output     - 'sz' sized list of randomly generated INTs ('mn'->'mx')
+;  BinAlt :mn :mx :bn
+;     	     Input (mn) - Minimum/lowest value to be binned, real or int
+;	     Input (mx) - Maximum/greatest value to be binned, real or int
+;	     Input (bn) - Individual bin size which is uniformly applied
+;	     Output	- A populated list with (mx-mn)\bn number of cells
+;	     		    Each cell contains the min value for that bin
+;	     		  ex: ; "BinAlt 8 20 3" -> [8, 11, 14, 17, 20]
+;  HistAlt :inLst :inBin
+;  	     Input (inLst) - Ordered list of reals or ints
+;	     Input (inBin) - Bin list (as produced by the word 'BinAlt')
+;	     	   	    -   ex: BinAlt -4 12 5 -> [-4,1,6,11]
+;	     Output	    - A histogram list created from the 'inLst' list
+;	     		        values that fit into the 'inBin' bins
+;			    - ex: 'inLst' = [8,1,8,6,9,2,2,1,2]
+;			          'inBin  = [3,6,9,12]
+;				  $.HistAlt :inLst :inBin
+;				  $ 0 3 1 0
+;*******************************************************************************
+
+
+; *****************************************************************
+; *** List Of Randomly Generated Numbers - Set Max - Set Length ***
+; *****************************************************************
+;
+; Creates a list of randomly generated integers
+; Parameter List:
+;   ':sz' - number of values
+;   	  - for an empty list set :sz = '0'
+;   ':mn' - lower limit of randomly generated values (ie mn to mx)
+;   ':mx' - upper limit of randomly generated values (ie mn to mx)
+;   types - for a negative valued list :mn = lowest value (ie :(-mn) to 0)
+;	  - for a positive and negative list set :mn < '0' and :mx > '0'
+;	  - for an array of '0's set :mn = '0' and :mx = '0'
+;  example from command line (10 element list that goes from 0 to user input "mx")
+;    $.GenList 10 0 100
+;    $  47 39 24 9 42 83 57 14 52 78
+;    or
+;    $.GenList 10 -100 0
+;    $  -47 -39 -24 -9 -42 -83 -57 -14 -52 -78
+;    or
+;    $.GenList 10 0 0
+;    $  0 0 0 0 0 0 0 0 0 0
+;______________________________________________________________
+to GenList :sz :mn :mx
+
+  let [tmpList []]
+  ifelse (:mx = 0)
+    []
+    [ ifelse (:mx > 0)
+        [ make "mx (:mx + 1)]
+        [ make "mx (:mx - 1)]
+    ]
+
+  ifelse (and (:mn = 0) (:mx = 0))
+    [ repeat :sz
+      [ make "tmpList (se :tmpList 0)]
+    ]
+
+    [ ifelse (and (:mn = 0) (or (:mx < 0)(:mx > 0)))
+	
+	[ repeat :sz
+      	    [ make "tmpList (se :tmpList (random :mx)) ]
+	]
+
+	[ let [offset (:mx - :mn)]
+	  ifelse :offset > 0
+		[let [shift (:mx - :offset)]]
+		[let [shift (:mx - :offset + 1)]]
+	 repeat :sz
+      	    [ make "tmpList (se :tmpList (:shift + (random :offset)))]
+	]
+    ]
+
+  output :tmpList
+end
+
+
+; ***************************************************
+; *** Histogram Bins - Set Min/Max - Set Bin Size ***
+; ***************************************************
+;
+; 'BinAlt' takes three perimeters and returns a 1-d list
+; of bins.
+; Parameter List:
+;   ':mn' - minimum bin value
+;   ':mx' - maximum bin value
+;   ':bn' - bin size
+;  example from command line (10 element histogram from 8 to 20 and bin size 3)
+;    $.print BinAlt 8 20 3
+;    $  8 11 14 17 20
+;_____________________
+to BinAlt :mn :mx :bn
+  make "histLst []
+  let [pos :mn]
+  repeat (round (((:mx - :mn) / :bn) + 0.5)) [
+    make "histLst (se :histLst :pos)
+    make "pos :pos + :bn ]
+  output :histLst
+end
+
+
+; *****************************************************
+; *** Histogram List - Input: Value list & Bin List ***
+; *****************************************************
+;
+;  'HistAlt' takes two lists and returns one list.
+;  Values outside of bin list are not graphed.
+;  Parameter List:
+;    'inLst' - ordered list of values
+;    'inBin' - ordered bin list (as produced by the word 'BinAlt')
+;  example from command line (list: [0 16 21 35 37 37 70 70 73 96] bins [10 23 36 49 62 75])
+;    $.print HistAlt [0 16 21 35 37 37 70 70 73 96] [10 23 36 49 62 75]
+;    $  2 1 2 0 3 0
+;___________________________
+to HistAlt :inLst :inBin
+  let [binSize (nth 1 :inBin) - (nth 0 :inBin)]
+  let [histLst GenList (count :inBin) 0]
+  let [cnt 0]
+  let [cntend 0]
+  let [cnt2 0]
+
+  ;
+  ; Find first and last values that fit into bins
+  ;______________________________________________
+  repeat (count :inLst)[
+    if ( (nth :cnt :inLst) < (nth 0 :inBin))
+      [make "cnt :cnt + 1]
+    ifelse ( and ((nth :cntend :inLst) < ((nth ((count :inBin) - 1) :inBin) + :binSize)) (:cntend < ((count :inLst) - 1)) )
+      [make "cntend :cntend + 1]
+      []
+  ]
+
+  ;
+  ; Build histogram
+  ; All values that do not fit in a bin are excluded
+  ;_________________________________________________
+  repeat ((:cntend - :cnt) + (count :histLst)) [
+    if (and (not (:cnt2 > ((count :inBin) - 1))) (not (:cnt > :cntend)) ) [
+      ifelse  ((nth :cnt :inLst) < ((nth :cnt2 :inBin) + :binSize))
+        [ (setnth :cnt2 :histLst ((nth :cnt2 :histLst) + 1) )
+          make "cnt :cnt + 1]
+        [make "cnt2 :cnt2 + 1]
+    ]
+  ]
+
+  output :histLst
+end
+
+;*******************************************************************************
+; File: search.logo
+; Last Modifyed: 2015/05/31
+; Created by: Ben Cunningham
+;
+; Purpose:
+;   Words related to list searching
+;
+; Supporting Files:
+;   None
+;
+; Words:
+;  MinEntry :inLst
+;  	     Input	- (Un)sorted list of real or int values
+;	     Output	- Minimum/lowest value in 'inLst'
+;  MaxEntry :inLst
+;  	     Input	- (Un)sorted list of real or int values
+;	     Output	- Maximum/greatest value in 'inLst'
+;*******************************************************************************
+
+; *************************
+; *** Min Value In List ***
+; *************************
+;
+; ex: MinEntry [6.4, 4.2, 1.1, 0.9, 6.7] -> 0.9
+; ex: make "exList [83, -1, 3, 11, -16, 32]
+;     MinEntry :exList -> -16
+;_____________________________
+to MinEntry :inLst
+  let [ mn (nth 0 :inLst)
+        pos 1 ]
+  repeat ((count :inLst) - 1) [
+    if (nth :pos :inLst) < :mn [
+      make "mn (nth :pos :inLst) ]
+    make "pos (:pos + 1)
+  ]
+  output :mn
+end
+
+
+; *************************
+; *** Max Value In List ***
+; *************************
+;
+; ex: MaxEntry [6.4, 4.2, 1.1, 0.9, 6.7] -> 6.7
+; ex: make "exList [83, -1, 3, 11, -16, 32]
+;     MaxEntry :exList -> 83
+;____________________________
+to MaxEntry :inLst
+  let [ mx (nth 0 :inLst)
+        pos 1 ]
+  repeat ((count :inLst) - 1) [
+    if (nth :pos :inLst) > :mx [
+      make "mx (nth :pos :inLst) ]
+    make "pos (:pos + 1)
+  ]
+  output :mx
+end
+
+;*******************************************************************************
+; File: sort.logo
+; Last Modified: 2015/06/02
+; Created by: Ben Cunningham
+;
+; Purpose:
+;   Recreate well studied sort algoritums.
+;   Return an sorted list (acending) of numeric values from an unsorted list
+;
+; Supporting Files:
+;   create.logo ("to GenList")
+;   search.logo ("to MaxEntry")
+;
+; Words:
+;  InsertionSort :inLst
+;    	            Input - (Un)sorted list of Int or Real numbers
+;    	      	    Output - Sorted copy of original list
+;  ShellSort :inLst
+;   	            Input - (Un)sorted list of Int or Real numbers
+;    	      	    Output - Sorted copy of original list
+;  CountSort :inLst
+;		    Input - (Un)sorted list of Int numbers
+;    	      	    Output - Sorted copy of original list
+;		    <WARNING> Positive Integer (>=0) list only <WARNING>
+;  MergeSort :inLst
+;		    Input - (Un)sorted list of Int or Real numbers
+;    	      	    Output - Sorted copy of original list; 
+; TestSorts :cnt :inLst
+;		    Input (cnt) - Repeat each sorting meathod then average
+;		    Input (inLst) - (Un)sorted list of Int or Real numbers
+;		    Output - Average elapsed time for each sorting meathod
+;		    	       InsertionSort -> ShellSort -> 
+;			       CountSort ->  MergeSort
+;
+;  References:
+;    Visuilazations:
+;    Comparison Sorting Algorithms
+;        website: http://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html
+;    Counting Sort (CountSort)
+;        website: https://www.cs.usfca.edu/~galles/visualization/CountingSort.html
+;    Performance visual comparision for the main sort algorithms
+;        website: http://www.sorting-algorithms.com/insertion-sort
+;__________________________________________________________________
+
+
+; **************************
+; ***** Insertion Sort *****
+; **************************
+to InsertionSort :inLst
+  if (count :inLst) < 2 [ output :inLst ] ; Returns list if 'inLst'
+     	    	       	   	  	    ;   is either empty or 
+					    ;   1 element long
+
+  let [tmpLst :inLst ]     ; Copy list
+
+  let [pos 0]  	       	     ; List possition per top level repeat
+  let [pnt 0]		     ; Walks list starting at "pos"
+  let [lspnt 0]		     ; Trails "pos" by one
+  let [val 0]		     ; Cell value
+  let [go true]		     ; Boolian flag to continue/break out of repeat loop
+
+    ;
+    ; Walk the list from position "pnt" to cell 0
+    ; Check if 'pnt' points to cell 0
+    ; Check if 'pnt' cell value is less than 'pnt - 1'.
+    ;   set 'pnt - 1' value to 'pnt' value if true
+    ; Set bool flag to false if check fails
+    ;______________________________________
+  repeat ((count :tmpLst) - 1) [
+    make "pos (:pos + 1)
+    make "pnt :pos
+    make "lspnt :pnt
+    make "go true
+    make "val (nth :pos :tmpLst)
+
+    repeat :pnt [
+      ifelse and (and (:go) (:pnt > 0)) (:val < (nth (:pnt - 1) :tmpLst)) [
+        (setnth :pnt :tmpLst (nth (:pnt - 1) :tmpLst))
+        make "lspnt (:pnt - 1) ]
+        [ make "go false ]
+      make "pnt (:pnt - 1)
+    ];END INNER REPEAT
+					; Set 'pnt' value to largest
+    (setnth :lspnt :tmpLst :val)	;   value found during this repeat
+  ];END OUTER REPEAT
+
+  output :tmpLst
+end
+
+
+; **********************
+; ***** Shell Sort *****
+; **********************
+to ShellSort :inLst
+  if (count :inLst) < 2 [ output :inLst ]  ; Returns list if 'inLst'
+     	    	       	   	  	     ;   is either empty or 
+					     ;   1 element long
+
+  let [tmpLst :inLst]			      ; Copy list
+  let [sz (count :tmpLst)]		      ; List Size
+  let [x 1]	 			      ; Counts times through loop
+  let [gap (((power 3 :x) - 1) / 2)]	      ; Calculate the gap size
+
+  let [i :gap]				      ; List cell stepper
+  let [j 0]				      ; Inner loop repeat stepper
+  let [tmp 0]				      ; Initial value per repeat
+
+  OuterShell				      ; Sort Call
+
+  output :tmpLst
+end
+
+to InnerShell
+
+          repeat (round ((:j / :gap) - 0.5)) [
+
+	      ;
+  	      ; Stop if cell location is less than gap size
+	      ;   OR if cell value is greater than initial cell value
+	      ;______________________________________________________
+            ifelse (and (or (:j > :gap) (:j = :gap)) (:tmp < (nth (:j - :gap) :tmpLst ) ))
+              [ (setnth :j :tmpLst (nth (:j - :gap) :tmpLst))
+                make "j :j - :gap ] 
+              [ stop ]
+            ]
+
+end
+
+to MiddleShell
+
+      repeat (:sz - :gap) [
+        ifelse (:i < :sz) [
+          make "tmp (nth :i :tmpLst)
+          make "j :i
+          InnerShell
+        (setnth :j :tmpLst :tmp)
+        ]
+        [ stop ]
+      make "i :i + 1
+      ]
+
+end
+
+to OuterShell
+
+  repeat (round ((sqrt (:sz)) - 0.5)) [	      ; Square root than floor of size
+    ifelse (:gap > 0) [
+      make "i :gap			      ; Set starting cell location
+      MiddleShell
+    ]
+    [ stop ]
+  make "x :x + 1
+  make "gap (((power 3 :x) - 1) / 2)
+  ]
+
+end
+
+
+; **********************
+; ***** Count Sort *****
+; **********************
+to CountSort :inLst
+
+  if (count :inLst) < 2 [ output :inLst ]   ; Returns list if 'inLst'
+     	    	       	   	  	      ;   is either empty or 
+					      ;   1 element long
+
+  let [cnt 0]
+  let [mx MaxEntry :inLst]
+  let [tmpLst GenList (:mx + 1) 0 0]
+  let [tmpLst2 []]
+  let [val 0]
+
+    ;
+    ; Bump count 'tmpLst' cell location that matches 'inLst' cell value
+    ; ex [1,5,5,2,1,5] -> [0,(1+1),1,0,0,(1+1+1)] or [0,2,1,0,0,3]
+    ;_____________________________________________________________
+  repeat (count :inLst) [
+    (setnth ((nth :cnt :inLst)) :tmpLst ((nth (nth :cnt :inLst) :tmpLst) + 1 ))
+    make "cnt :cnt + 1
+  ]
+
+  make "cnt (count :tmpLst) - 1  ; Set 'cnt' equal to last cell of 'tmpLst'
+  make "val 0
+
+    ;
+    ; Rebuild sorted 'inLst' using 'tmpLst' bump count values
+    ; ex [0,2,1,0,0,3] -> [1,1,2,5,5,5]
+    ;__________________________________
+  repeat (count :tmpLst) [
+    make "val (nth :cnt :tmpLst)    
+    if :val > 0 [
+      repeat :val [ make "tmpLst2 (se :cnt :tmpLst2) ]
+    ]
+    make "cnt :cnt - 1
+  ]
+
+  output :tmpLst2
+end
+
+
+; **********************
+; ***** Merge Sort *****
+; **********************
+to MergeSort :inLst
+  let [center 0]
+  let [tmpArray []]
+  let [leftEnd 0]
+  let [tmpPos 0]
+  let [numElements 0]
+  output  _mergeSort 0 ((count :inLst) - 1) :inLst
+end
+
+to _mergeSort :min :max :inLst
+
+  if (:min < :max) [	;Recursively call sub lists until list size 1
+    make "center (round ((:min + :max) / 2) - .5) 	  ; Sort left half
+    make "inLst (_mergeSort :min :center :inLst)          ; then right half
+    make "inLst (_mergeSort (:center + 1) :max :inLst)    ; of the list
+    output _merge :inLst :min (:center + 1) :max
+  ]
+  output :inLst
+end
+
+to _merge :inLst :leftPos :rightPos :rightEnd
+  make "tmpArray (GenList (count :inLst) 0 0)            ; Creat a empty array
+  make "leftEnd (:rightPos - 1)
+  make "tmpPos :leftPos
+  make "numElements ((:rightEnd - :leftPos) + 1)
+
+  repeat (:numElements) [                    ; Check if both the left and right
+    if and (not (:leftPos > :leftEnd))       ;  position pointers are less than 
+           (not (:rightPos > :rightEnd)) [   ;  the left/rightEnd locations.
+      ifelse not ((nth :leftPos :inLst) > (nth :rightPos :inLst))
+        [setnth :tmpPos :tmpArray (nth :leftPos :inLst)
+         make "tmpPos (:tmpPos + 1)
+         make "leftPos (:leftPos + 1) ]
+        [ setnth :tmpPos :tmpArray (nth :rightPos :inLst)
+         make "tmpPos (:tmpPos + 1)
+         make "rightPos (:rightPos + 1) ]
+    ]
+  ]
+  
+  if not (:leftPos > :leftEnd) [  ; Check if left (but not the right)
+     	 	     	       	  ;  position pointer is < leftEnd.
+				  ;  Swap values
+    repeat ((:leftEnd - :leftPos) + 1) [
+      setnth :tmpPos :tmpArray (nth :leftPos :inLst)
+      make "tmpPos (:tmpPos + 1)
+      make "leftPos (:leftPos + 1)
+    ]
+  ]
+
+  if not (:rightPos > :rightEnd) [  ; Check if right (but not the left)
+     	 	     	       	    ;  position pointer is < rightEnd.
+				    ;  Swap values
+    repeat ((:rightEnd - :rightPos) + 1) [
+      setnth :tmpPos :tmpArray (nth :rightPos :inLst)
+      make "tmpPos (:tmpPos + 1)
+      make "rightPos (:rightPos + 1)
+    ]
+  ]
+
+  repeat (:numElements) [  ; Copy sorted list over "inLst" then return.
+    setnth :rightEnd :inLst (nth :rightEnd :tmpArray)
+    make "rightEnd (:rightEnd - 1)
+  ]
+
+  output :inLst
+end
+
+
+; **********************
+; ***** Test Sorts *****
+; **********************
+; Each sorting function is called and the returned list is discarded
+; The elapsed time for each pass is summed then averaged using 'cnt'
+; The timer is reset between each sort meathod test to avoid rollover
+; Order: InsertionSort -> ShellSort -> CountSort ->  MergeSort
+;
+; ex: $.TestSorts 25 GenList 500 50
+;     $ InsertionSort - average time (milliseconds)
+;     $ 179.12
+;     $ ShellSort - average time (milliseconds)
+;     $ 293.88
+;     $ MergeSort - average time (milliseconds)
+;     $ 491.88
+;     $ CountSort (aka bin-sort) - average time (milliseconds)
+;     $ NOTE - Non-Natrual Numbers [0 1 2 3...) results in a fatal error
+;     $ CountSort - average time (milliseconds)
+;     $ 1.24
+;
+; **********
+to TestSorts :cnt :inLst
+
+  let [tm_0 0]
+  let [ave_tm 0]
+
+  print "|InsertionSort - average time (milliseconds)|
+  resett
+  repeat :cnt [
+    make "tm_0 timer
+    ignore InsertionSort :inLst
+    make "ave_tm (:ave_tm + (timer - :tm_0))
+  ]
+  print (:ave_tm / :cnt)
+
+  print "|ShellSort - average time (milliseconds)|
+  resett
+  make "ave_tm 0
+  repeat :cnt [
+    make "tm_0 timer
+    ignore ShellSort :inLst
+    make "ave_tm (:ave_tm + (timer - :tm_0))
+  ]
+  print (:ave_tm / :cnt)
+
+  print "|MergeSort - average time (milliseconds)|
+  resett
+  make "ave_tm 0
+  repeat :cnt [
+    make "tm_0 timer
+    ignore MergeSort :inLst
+    make "ave_tm (:ave_tm + (timer - :tm_0))
+  ]
+  print (:ave_tm / :cnt)
+
+  print "|CountSort (aka bin-sort) - average time (milliseconds)|
+  print "|NOTE - Non-Natrual Numbers [0 1 2 3...) results in a fatal error|
+  resett
+  make "ave_tm 0
+  print "|CountSort - average time (milliseconds)|
+  repeat :cnt [
+    make "tm_0 timer
+    ignore CountSort :inLst
+    make "ave_tm (:ave_tm + (timer - :tm_0))
+  ]
+  print (:ave_tm / :cnt)
+
+end

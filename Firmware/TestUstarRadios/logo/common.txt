@@ -1,0 +1,501 @@
+;******************************************************************************
+; These constants define variables to reference various parts of the ADC12
+; 12-bit analog-to-digital device on the MSP430F2410 micro controller. We have
+; to define the ADC device itself, as well as various controls for it. 
+; See the MSP430F2410 spec sheet for detailed descriptions of ports and the
+; values written to them when the device is configured.
+;
+; The ADC12 device is located at port 6, and our app board uses channel (pin)
+; numbers 3 and 4 on that port.
+;
+;###############
+;## Constants ##
+;###############
+constants [
+  [rpacket $1fc0] ;the memory address where packets are written on the MSP430
+  [packet $1f80]  ;the memory address where packets are written on the MSP430
+
+  [ADC12CTL0 $1A0][ADC12CTL1 $1A2][ADC12MEM0 $140]
+  [ADC12IE $1A6][ADC12MCTL0 $080][ADC12IFG $1A4]
+  [ADC12IV $1A8]
+
+  [adcae0 $4a][adcae1 $4b][adcctl0 $01b0][adcctl1 $1b2][adcmem $1b4]
+
+  [MSC $80][REF2_5V $40][REFON $20][ADC12ON $10][ENC $2][ADC12SC $1]
+  [SHT0_8 $100][ADC12CLK_16 $200][ADC12CLK_4 $0][ADC12CLK_256 $800]
+  [SHP $200][SHS_ADC12SC $0][ASC12SSEL_SMCLK $18][CONSEQ_SINGLE $0]
+  [EOS $80]
+
+  [p1in $20][p1out $21][p1dir $22][p1sel $26]
+  [p2in $28][p2out $29][p2dir $2A][p2sel $2E]
+  [p3in $18][p3out $19][p3dir $1A][p3sel $1B]
+  [p4in $1C][p4out $1D][p4dir $1E][p4sel $1F]
+  [p5in $30][p5out $31][p5dir $32][p5sel $33]
+  [p6in $34][p6out $35][p6dir $36][p6sel $37]
+  [channel0 $01][channel1 $02][channel2 $04][channel3 $08][channel4 $10]
+  [channel5 $20][channel6 $40][channel7 $80]
+
+  [ucb0ctl0 $68][ucb0ctl1 $69]
+  [ucb0br0 $6a][ucb0br1 $6b]
+  [ucb0stat $6d][ucb0rxbuf $6e][ucb0txbuf $6f]
+  
+  [pinAI $3c][pinAO $3b]
+
+  [type_image 60]
+  [bumpcount $be00]
+
+  [ta0ctl $0160][ta0r $0170][ta0ccr0 $172]
+
+  [reset-timestamp $210]
+]
+
+;#############
+;## Globals ##
+;#############
+global [tstamph tstampl npwords npaddress tsh0 tsl0 psequence]
+
+;#############
+;## Defines ##
+;#############
+define redon    [][bclr p2out $20]
+define redoff   [][bset p2out $20]
+define greenon  [][bclr p2out $10]
+define greenoff [][bset p2out $10]
+define blueon   [][bclr p2out $08]
+define blueoff  [][bset p2out $08]
+define yellowon [][yellow]
+define allon    [][white]
+define alloff   [][bset p2out $38]
+
+define red     [][redon blueoff greenoff]
+define green   [][redoff blueoff greenon]
+define blue    [][redoff blueon greenoff]
+define cyan    [][redoff greenon blueon]
+define magenta [][redon greenoff blueon]
+define yellow  [][redon greenon blueoff]
+define white   [][redon greenon blueon]
+define off     [][redoff greenoff blueoff]
+
+; watch dog timer
+to set-timeout :time
+   write reset-timestamp :time + timestamph
+end
+
+;###################
+;## On-board LEDs ##
+;###################
+; constants, global, and defines at top of document
+
+to init-OnBoardLeds
+  writeb p2dir $38
+  writeb p2out $00
+  write adcctl0 $10
+  write adcctl1 $f8
+  bset adcae0 1
+  bset adcctl0 2
+  alloff
+end
+
+to flash
+  repeat 10 [cyan mwait 50
+             magenta mwait 50
+	     blue mwait 50]
+  off
+end
+
+;*******************************************************************************
+; Code To perform digital i/o functions on the ulogo App Board
+; This includes setting individual pins to high/low
+; and reading an input voltage as either high or low
+;
+; Written by Hunter Mills on 11/26/14
+; Based on iopinshunterV3.txt for Dev Board V3.5
+;
+; Supporting documentation:
+;
+;    * http://www.ti.com/lit/ds/symlink/msp430f2410.pdf
+;    * http://www.ti.com/lit/ug/slau144j/slau144j.pdf
+;
+;*******************************************************************************
+; Introduction
+;*******************************************************************************
+; Most MSP430 lines have digital I/O capabilities. These include three primary
+; functions:
+;
+;    * Set output voltage as high (ON)
+;    * Set output voltage as low (Off)
+;    * Read input voltage as either high or low (1 or 0)
+;
+; But before these operations are possible, each line must be set as either an
+; input or an output. The following words allow this functionality, and an
+; operation example is presented in the last section.
+;
+; To help prevent conflicts with other MSP430 peripherals, we have designated 9
+; of the MSP430 lines for I/O. They are labeled dp0 - d9 and are located on the
+; App Board as described below:
+;
+;                           App Board Pin Outs
+;
+;                          --------------------
+;                          |                O |
+;        1.  3.3V Out      |             ---  |   18. Ground
+;        2.  DAC Out 0     |            | O | |   19. 3.3V
+;        3.  DAC Out 1     |             ---  |   20. 1-Wire
+;        4.  p6.7 - ADC7   |                  |   21. DAC Ref
+;        5.  p6.6 - ADC6   |                  |   22. MSP Ref
+;        6.  p6.5 - ADC5   |                  |   23. p1.3 - dp4
+;        7.  p6.4 - ADC4   |                  |   24. p1.4 - dp5
+;        8.  p6.3 - ADC3   |                  |   25. p3.1 - MOSI (SPI)
+;        9.  p6.2 - ADC2   |            ----  |   26. p3.2 - MISO (SPI)
+;        10. p6.1 - ADC1   |            |  |  |   27. p3.3 - CLK (SPI)
+;        11. p6.0 - ADC0   |            |  |  |   28. p3.0 - dp6
+;        12. p5.7 - dp0    |            ----  |   29. p3.6 - TX (UART)
+;        13. p5.6 - dp1    |             ||   |   30. p3.7 - RX (UART)
+;        14. p5.5 - dp2    |                  |   31. p5.0 - dp7
+;        15. p5.4 - dp3    |                  |   32. p5.1 - SDA (I2C)
+;        16. Reset         | _________  _____ |   33. p5.2 - SCL (I2C)
+;        17. Ground        | |       |  |   | |   34. p5.3 - dp8
+;                          --------------------
+;                           Port 4        RFM-22B
+;                          (p4.7 - p4.0) (p2.0, p1.7, p1.6, p1.5)
+;
+;*******************************************************************************
+; Table of Contents
+;*******************************************************************************
+;
+;  1) Constants
+;  2) Input/Output Mode Words (Initiation)
+;     A) Input
+;     B) Output
+;  3) On, Off and Read Words
+;     A) On
+;     B) Off
+;     C) Read
+;  4) Operation Example
+;
+;*******************************************************************************
+; 1) Constants
+;*******************************************************************************
+; This section defines the register names as per the msp430f2410
+; datasheet available at:
+;
+; A breif explaination of the msp430 i/o pin nomenclature can
+; seen at:
+;
+; http://processors.wiki.ti.com/index.php/Digital_I/O_(MSP430)
+;
+;###############
+;## Constants ##
+;###############
+; constants at top of document
+
+;*******************************************************************************
+; 2A) Input Mode
+;*******************************************************************************
+; Each of the following words in this section individually sets each digial pin
+; as an input. It first eanbles GPIO operation, and thes sets the operationn to
+; input
+;
+define dp0input [][ bclr p5sel channel7       ; Enable GPIO
+                    bclr p5dir channel7 ]     ; Set GPIO as input
+define dp1input [][ bclr p5sel channel6
+                    bclr p5dir channel6 ]
+define dp2input [][ bclr p5sel channel5
+                    bclr p5dir channel5 ]
+define dp3input [][ bclr p5sel channel4
+                    bclr p5dir channel4 ]
+define dp4input [][ bclr p1sel channel3
+                    bclr p1dir channel3 ]
+define dp5input [][ bclr p1sel channel4
+                    bclr p1dir channel4 ]
+define dp6input [][ bclr p3sel channel0
+                    bclr p3dir channel0 ]
+define dp7input [][ bclr p5sel channel0
+                    bclr p5dir channel0 ]
+define dp8input [][ bclr p5sel channel3
+                    bclr p5dir channel3 ]
+;*******************************************************************************
+; 2A) Output Mode
+;*******************************************************************************
+; Each of the following words in this section individually sets each digial pin
+; as an output. It first eanbles GPIO operation, and thes sets the operationn to
+; output
+;
+define dp0output [][ bclr p5sel channel7      ; Enable GPIO
+                     bset p5dir channel7 ]    ; Set GPIO as output
+define dp1output [][ bclr p5sel channel6
+                     bset p5dir channel6 ]
+define dp2output [][ bclr p5sel channel5
+                     bset p5dir channel5 ]
+define dp3output [][ bclr p5sel channel4
+                     bset p5dir channel4 ]
+define dp4output [][ bclr p1sel channel3
+                     bset p1dir channel3 ]
+define dp5output [][ bclr p1sel channel4
+                     bset p1dir channel4 ]
+define dp6output [][ bclr p3sel channel0
+                     bset p3dir channel0 ]
+define dp7output [][ bclr p5sel channel0
+                     bset p5dir channel0 ]
+define dp8output [][ bclr p5sel channel3
+                     bset p5dir channel3 ]
+;*******************************************************************************
+; 3A) On Command Word
+;*******************************************************************************
+; Each of the following words in this section individually sets each digial pin
+; on. it does this by setting the appropriate MSP430 register.
+;
+;     ****** Each pin must be set to output mode ******
+;
+define dp0on [][ bset p5out channel7 ]
+define dp1on [][ bset p5out channel6 ]
+define dp2on [][ bset p5out channel5 ]
+define dp3on [][ bset p5out channel4 ]
+define dp4on [][ bset p1out channel3 ]
+define dp5on [][ bset p1out channel4 ]
+define dp6on [][ bset p3out channel0 ]
+define dp7on [][ bset p5out channel0 ]
+define dp8on [][ bset p5out channel3 ]
+;*******************************************************************************
+; 3B) Off Command Word
+;*******************************************************************************
+; Each of the following words in this section individually sets each digial pin
+; off. it does this by setting the appropriate MSP430 register.
+;
+;     ****** Each pin must be set to output mode ******
+;
+define dp0off [][ bclr p5out channel7 ]
+define dp1off [][ bclr p5out channel6 ]
+define dp2off [][ bclr p5out channel5 ]
+define dp3off [][ bclr p5out channel4 ]
+define dp4off [][ bclr p1out channel3 ]
+define dp5off [][ bclr p1out channel4 ]
+define dp6off [][ bclr p3out channel0 ]
+define dp7off [][ bclr p5out channel0 ]
+define dp8off [][ bclr p5out channel3 ]
+
+;*******************************************************************************
+; 3C) Read Command Word
+;*******************************************************************************
+; Each of the following words in this section individually read each digial.
+; it does this by testing the appropriate MSP430 register and returning the
+; test.
+;
+;     ****** Each pin must be set to input mode ******
+;
+define dp0read [][ output btst p5in channel7 ]
+define dp1read [][ output btst p5in channel6 ]
+define dp2read [][ output btst p5in channel5 ]
+define dp3read [][ output btst p5in channel4 ]
+define dp4read [][ output btst p1in channel3 ]
+define dp5read [][ output btst p1in channel4 ]
+define dp6read [][ output btst p3in channel0 ]
+define dp7read [][ output btst p5in channel0 ]
+define dp8read [][ output btst p5in channel3 ]
+;*******************************************************************************
+; 4) Operation Example
+;*******************************************************************************
+; EXAMPLE 1:
+; Using an i/o pin as an output to create a square wave:
+;
+; dp1output   (Sets pin to output mode)
+;
+; loop [
+;    dp1on    (Turns pin on)
+;    wait 1
+;    dp1off   (Turns pin off)
+;    wait 1
+; ]
+;
+; EXAMPLE 2:
+; Using an i/o pin as an input to continually check for a
+; supplied signal:
+;
+; dp1input    (sets pin to input mode)
+;
+; loop [
+;    if dp1read = 1 [ prs "High ]
+;    if dp1read = 0 [ prs "Low ]
+;    wait 1
+; ]
+;
+;*******************************************************************************
+
+
+;#########
+;## ADC ##
+;#########
+; constants, global, and defines at top of document
+
+; 
+; The setup-adc word configures the device and makes it available for use.
+;
+to setup-adc :channel
+  write ADC12CTL0 ADC12CLK_16 + ADC12ON  ; $210 16 ADC12CLK cycles, ADC12on
+; $218  SAMPCON sourced samp timer, ADC12OSC, single channel
+  write ADC12CTL1 SHS_ADC12SC + SHP + ASC12SSEL_SMCLK + CONSEQ_SINGLE
+  write ADC12MCTL0 (:channel + EOS)      ; ref AVcc & AVss, channel A0
+  bsetb p6sel (lsh $1 :channel)          ; init special function for ADC12
+end
+
+;
+; The read-adc word reads the voltage on the configured device.
+;
+to read-adc
+  bset ADC12CTL0 (ENC + ADC12SC); $3 start sample
+  mwait 1          ; wait for sample
+  bclr ADC12CTL0 (ENC + ADC12SC); $3   turn off enable
+  output read ADC12MEM0                                                 
+end
+	
+;
+; This word shuts down the ADC device.
+;
+to adcOff
+  write ADC12CTL0 $0
+end
+
+;
+; This word selects the ADC device on pin three of the app board, labelled A0.
+; It then reads the voltage on that pin and outputs the ADC value to the
+; calling function.
+;
+
+to readADC :n
+  setup-adc :n
+  let [adc 0]
+  make "adc read-adc
+  if(:adc = 2048) [ output readADC :n ]
+  output :adc
+end
+
+to adc-diag  
+  let [index 0]
+  repeat 10 [
+    print :index 
+    print readADC :index
+    make "index :index + 1]
+end
+
+;###########
+;## Timer ##
+;###########
+to Xreset-time
+ settsh0 timestamph
+ settsl0 timestampl
+end
+
+to Xtime
+  output (10 * (timestamph - tsh0)) + ((timestampl - tsl0) / 1000)
+end
+
+
+;#######################
+;## Packet Management ##
+;#######################
+; constants, global, and defines at top of document
+
+to init-packet :n
+  write rpacket 0
+  settstamph timestamph
+  settstampl timestampl
+  clear-res
+  setnpwords 0
+
+  writeb rpacket + 1 :n
+  fprint read $be00  
+  fprint tstamph
+  fprint tstampl
+end
+
+to fprint :n
+  let [cnt readb rpacket]      ; ignore type just use length
+  write rpacket + :cnt + 2 :n
+  writeb rpacket   :cnt + 2
+  if npwords > 1 [ write npaddress npwords ]
+end
+
+to packet-word :n
+  let [cnt readb rpacket]      ; ignore type just use length
+  setnpwords  npwords + 1
+  if npwords = 1 [ setnpaddress rpacket + :cnt + 2
+                   fprint npwords ]
+  fprint :n
+end
+
+to fprintb :n
+ let [cnt readb rpacket]      ; ignore type just use length
+ writeb rpacket + :cnt + 2 :n
+ writeb rpacket :cnt + 1
+end
+
+to wdchecksum :addr :len
+  let [res 0]
+  repeat :len / 2 
+  [ make "res :res + read :addr 
+    make "addr :addr + 2]
+  output :res
+end
+
+to add-checksum
+;  fprint psequence    ; add this option later
+  setpsequence psequence + 1
+; add checksum to end of packet
+  fprint 0 - wdchecksum rpacket (readb rpacket) + 2
+  writeb rpacket (readb rpacket) - 2 
+  mcpy rpacket packet 40
+end
+
+to mcpy :src :dst :len
+  repeat :len [
+    writeb :dst readb :src
+    make "src :src + 1
+    make "dst :dst + 1 ]
+end
+
+to clear-res    ; fill with $0000 $ffff $ffff $0000 $0000 ...
+  let [addr rpacket]
+  write :addr 0
+  make "addr :addr + 2
+  repeat 6 [
+    write :addr $ffff
+    make "addr :addr + 2
+    write :addr $ffff
+    make "addr :addr + 2
+    write :addr $0000
+    make "addr :addr + 2
+    write :addr $0000
+    make "addr :addr + 2] 
+end
+
+to test-packet :n
+  let [cnt 0]
+  repeat :n [
+    redon
+    make "cnt :cnt + 1
+    init-packet 60
+    fprint 0
+    fprint :cnt
+    fprint 1
+    repeat 6 [ mwait 10000 ]
+    redoff]
+end
+
+;to yellowon
+;	redon
+;	greeon
+;end
+
+to yellowoff
+	redoff
+	greenoff
+end
+
+to clear-packet
+	let [i 0]
+	repeat 40 [
+		writeb ($1f80 + :i) 0
+		let [i :i + 1]
+	]
+end
+

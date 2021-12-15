@@ -1,0 +1,228 @@
+define ul-go    [][runvm $1050]
+
+define Xul-init  [][runvm $1048]
+define Xul-power [][runvm $1040]
+
+to ticktask
+if not :heartbeat [stop]
+let [res getstream]
+dolist [c :res]
+ [ifelse :c = 13
+    [got-line :monstr make "monstr "]
+    [make "monstr word :monstr char :c]]
+end
+
+to got-line :x
+if empty? :x [print " stop]
+ifelse and :hostrun (first :x) = "+
+ [carefully parse bf :x [print :x]]
+ [print :x]
+end
+
+to chip-check
+clearcom
+send-packet (se $aa 5 :who $80 $ff)
+let [res get-packet]
+mwait 10
+if not (count :res) = 5 [output false]
+output (last :res) = 37
+end
+
+to rl :addr :len
+send-packet (se $aa 8 :who $80 $fe byte0 :addr byte1 :addr :len)
+ let [res get-packet]
+ if (count :res) < 5 [print "xxx output []]
+output bf bf bf bf :res
+end
+
+to rl-rfm22b :addr :len
+send-packet (se $aa 8 :who $80 $fe byte0 :addr byte1 :addr :len)
+wait 30
+let [result get-packet]
+if (count :result) < 5 [output []]
+let [tmpa bf bf bf bf :result]       ;strip off one-wire header
+let [tmpb []]
+if :who = ($80 + 16)             ; special case for uStar
+       [ repeat :len [ 
+                       make "tmpb se :tmpb (nth 0 :tmpa)
+                       make "tmpa bf :tmpa
+                     ]
+         output :tmpb
+       ]
+output :tmpa
+end
+
+to wl :addr :l
+let [len (count :l) + 7]
+send-packet (se $aa :len :who $80 $fd byte0 :addr byte1 :addr :l)
+if empty? get-packet [print [wl error]]
+mwait 10
+end
+
+to wfl :addr :data
+loop
+ [if empty? :data [stop]
+  wfl1 :addr first32 :data
+  make "addr :addr + 32
+  make "data bf32 :data]
+end
+
+to wfl1 :addr :l
+let [len (count :l) + 7]
+send-packet (se $aa :len :who $80 $fc byte0 :addr byte1 :addr :l)
+ignore get-packet
+end
+
+to erase-seg :addr
+send-packet (se $aa 7 :who $80 $fb byte0 :addr byte1 :addr)
+ignore get-packet
+end
+
+to runvm :addr
+send-packet (se $aa 7 :who $80 $fa byte0 :addr byte1 :addr)
+if empty? get-packet [print [runvm error] force-error ]
+mwait 10
+end
+
+to stopvm
+send-packet (se $aa 5 :who $80 $f8)
+if empty? get-packet [print [stopvm error]]
+mwait 100
+end
+
+to printstream
+send-packet (se $aa 5 :who $80 $f9)
+print hexl get-packet
+end
+
+to hexl :l
+let [res []]
+dolist [i :l][make "res se :res hb :i]
+output :res
+end
+
+
+to first32 :l
+if (count :l) < 32 [output :l]
+let [res []]
+dotimes [i 32][make "res se :res nth :i :l]
+output :res
+end
+
+to bf32 :l
+if (count :l) < 32 [output []]
+repeat 32 [make "l bf :l]
+output :l
+end
+
+
+;---------------
+;
+; low level comms
+;
+
+to send :n
+.send :n
+end
+
+to recc
+output trecc 100
+end
+
+to trecc :n
+let [c 0 starttime timer]
+loop
+ [make "c .recc
+  if :c > -1 [output :c]
+  if (timer - :starttime) > :n [output -1]]
+end
+
+to start-comms
+let [os getproperty "os.name]
+make "hostrun true
+make "heartbeat true
+talkto $10
+if windows? [open-windows-port stop]
+if member? "Linux :os [open-linux-port stop]
+open-mac-port
+end
+
+to open-named-port :name
+openport :name
+setportparams 19200 8 1 0
+end
+
+to open-windows-port
+usbinit
+let [names portnames $0403 $6001]
+dolist [i :names]
+ [carefully [openport :i][]
+  if not porthandle = 0 [make "portname :i setportparams 19200 8 1 0 stop]]
+print "|dongle not found| stop
+end
+
+to open-mac-port
+make "port find-mac-port
+if empty? :port [stop]
+openport :port
+ignore exec (word "|stty -f | :port "| 19200|)
+end
+
+to find-mac-port
+dolist [i files "/dev][if member? "cu.usbserial :i [output :i]]
+output "
+end
+
+to open-linux-port
+make "port find-linux-port
+if empty? :port [stop]
+openport :port
+ignore exec (word "|stty -F | :port "| raw -echo 19200|)
+end
+
+to find-linux-port
+dolist [i files "/dev][if member? "ttyUSB0 :i [output :i]]
+;dolist [i files "/dev][if member? "ulogo :i [output :i]]
+output "
+end
+
+to .reset
+dtrrts 0 0 wait .2
+dtrrts 1 0 wait .2
+end
+
+to reset
+dtrrts 0 1 wait .2
+dtrrts 1 1 wait .2
+end
+
+to dtrrts :dtr :rts
+ifelse windows? [modemctrl :dtr :rts][ioctrl :dtr :rts]
+end
+
+to ioctrl :dtr :rts
+ignore exec (word "|./ioctl | :port "| | :dtr "| | :rts "| 0|)
+end
+
+to mwait :n
+let [end timer + :n]
+loop [if timer > :end [stop]]
+end
+
+to packet-monitor
+let [l []]
+loop
+ [make "l get-packet
+  if not empty? :l [print hexl :l]
+  wait 3]
+end
+
+
+to wnth :i :l
+  output (nth 2 * :i :l) + 256 * (nth 2 * :i + 1 :l)
+
+end
+
+define recv[][output .recc]
+define talkto [n][make "who :n]
+define uart[][make "onewire false]

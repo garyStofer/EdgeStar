@@ -1,0 +1,316 @@
+*******************************************************************************
+; File: screen.logo
+;
+;*******************************************************************************
+
+define redraw []   [savepic :wwwaddr]
+define clean  []   [setcolor 99 fillscreen setcolor 0]
+define moveto [x y][%moveto  sx :x sy :y]
+define lineto [x y][%lineto sx :x sy :y]
+define draw   [x y][%lineto sx :x sy :y]
+
+define dotdashedlineto   [x y][%dotdashedlineto sx :x sy :y]
+define shortdashedlineto [x y][%shortdashedlineto sx :x sy :y]
+define longdashedlineto  [x y][%longdashedlineto sx :x sy :y]
+define dotshortdashedlineto  [x y][%dotshortdashedlineto sx :x sy :y]
+define dotlongdashedlineto   [x y][%dotlongdashedlineto sx :x sy :y]
+define shortlongdashedlineto [x y][%shortlongdashedlineto sx :x sy :y]
+
+
+define %ldrawstring [s x y]  [%drawstring :s :x  + (stringw :s) / 2  :y]
+define drawstring   [s x y]  [%drawstring :s sx :x sy :y]
+define ldrawstring  [s x y]  [%ldrawstring :s sx :x sy :y]
+define drawstringr [s x y r][%drawstringr :s sx :x sy :y :r]
+
+; define sx [x][output 100 + (:x - :x0) / (:x1 - :x0) * (:xp1 - 200)]
+; define sy [y][output 100 + (:y1 - :y) / (:y1 - :y0) * (:yp1 - 200)]
+
+define sx [x][output :xpad + (:x - :x0) / (:x1 - :x0) * (:xp1 - (2 * :xpad) )]
+define sy [y][output :ypad + (:y1 - :y) / (:y1 - :y0) * (:yp1 - (2 * :ypad) )]
+
+to setup-screen
+  make "wwwaddr "screen.png
+;  newimage 800 int (800 * ( :vwid / :hwid )) ; set aspect ratio
+;   newimage 800 600
+   newimage :geo0   :geo1
+  make "xpad 0.12 * :geo0
+  make "ypad 0.17 * :geo1
+  clean
+  limits -1 1 -1 1
+  lweight 3
+  %setcolor $000000
+  setfont "courier 16 1
+  TickSize 10 20 10 20
+end
+
+
+
+to rel :x :y
+  make "savex :x
+  make "savey :y
+  moveto :x :y
+end
+
+to limits :ix0 :ix1 :iy0 :iy1
+  make "x0 :ix0 make "y0 :iy0
+  make "x1 :ix1 make "y1 :iy1
+  make "xp0 0
+  make "xp1 :geo0
+  make "yp0 0
+  make "yp1 :geo1
+end
+
+to ylower
+  output 10 * round ((yminimum - 5) / 10)
+end
+
+to yupper
+  output 10 * round ((ymaximum + 5) / 10)
+end
+
+to xlower
+  output 10 * round ((xminimum - 5) / 10)
+end
+
+to xupper
+  output 10 * round ((xmaximum + 5) / 10)
+end
+
+to grid :n :m 
+  let [xinc (:x1 - :x0) / :n
+       yinc (:y1 - :y0) / :m]
+  let [x :x0 y :y0]
+  repeat (:x1 - :x0) / :xinc
+    [make "x :x + :xinc
+     moveto :x :y0 lineto :x :y1]
+  repeat (:y1 - :y0) / :yinc
+    [make "y :y + :yinc
+     moveto :x0 :y lineto :x1 :y]
+end
+
+to xgrid :n 
+  let [xinc (:x1 - :x0) / :n]
+  let [x :x0 y :y0]
+  repeat (:x1 - :x0) / :xinc
+    [make "x :x + :xinc
+     moveto :x :y0 lineto :x :y1]
+end
+
+to ygrid :n 
+  let [yinc (:y1 - :y0) / :n]
+  let [y :y0 x :x0]
+  repeat (:y1 - :y0) / :yinc
+    [make "y :y + :yinc
+     moveto :y :x0 lineto :y :x1]
+end
+
+to labels
+  let [xinc (:x1 - :x0) / 10
+       yinc (:y1 - :y0) / 6]
+  let [x :x0 y :y0]
+  repeat (:x1 - :x0) / :xinc
+    [%drawstring trim :x (sx :x + :xinc * .1) + (stringw trim :x) / 2 590
+     make "x :x + :xinc]
+  repeat (:y1 - :y0) / :yinc
+    [%drawstring trim :y 790 - (stringw trim :y) / 2 (sy :y + :yinc * .1)
+     make "y :y + :yinc]
+end
+
+to label :inStr
+  let [labstr insertspace :inStr]
+  drawstring :labstr :savex :savey
+end
+
+to xlabel :inStr
+  let [xl insertspace :inStr] 
+  drawstring :xl :x0 + 0.45 * (:x1 - :x0)      :y0 - 0.15 * (:y1 - :y0)
+end
+
+to ylabel :inStr
+  let [yl insertspace :inStr]
+  drawstringr :yl :x0 - 0.12 * (:x1 - :x0)	:y0 + 0.55 * (:y1 - :y0)   -90.0
+end
+
+to title :inStr
+  let [tl insertspace :inStr] 
+  drawstring :tl :x0 + 0.45 * (:x1 - :x0)      :y1 + 0.12 * (:y1 - :y0)
+end
+
+to insertunderscore :inStr
+  let [outStr  "|| ]
+  repeat count :inStr [
+   ifelse ((first :inStr) = "| |) 
+     [make "outStr word :outStr "|_| ]
+     [make "outStr word :outStr first :instr]
+   make "inStr  bf :inStr
+  ]
+  output :outStr
+end
+
+to insertspace :inStr
+  let [outStr  "|| ]
+  repeat count :inStr [
+   ifelse ((first :inStr) = "|_|) 
+     [make "outStr word :outStr "| | ]
+     [make "outStr word :outStr first :instr]
+   make "inStr  bf :inStr
+  ]
+  output :outStr
+end
+
+to tmlabel :unixTime :%x :%y  ;%x and %y = percentage of chart size (>100% ok)
+  let [ nixTm (se :unixTime "unix)
+        ppDateNow (dateformat "|y/M/d HH:mm:ss z| :unixTime "utc) ]
+
+  ;label graph with Unix time & Stadard Date/Time
+  drawstringr :nixTm     :x0 + :%x * (:x1 - :x0) :y0 + :%y * (:y1 - :y0) 90.0
+  drawstringr :ppDateNow :x0 + (:%x - 0.05) * (:x1 - :x0) :y0 + :%y * (:y1 - :y0)  90.0
+end
+
+to xticks :n :m
+  let [cnt 0]
+  let [xoff 0]
+  let [yoff :y0 - 0.05 * (:y1 - :y0)]
+  repeat :n + 1 [
+             make "xoff :x0 + (:cnt / :n) * (:x1 - :x0)
+             drawstring (se (round (:m * :xoff) + 0.1) / :m) :xoff :yoff
+             make "cnt :cnt + 1
+            ]
+end
+ 
+to yticks :n :m
+  let [cnt 0]
+  let [yoff 0]
+  let [xoff :x0 - 0.05 * (:x1 - :x0)]
+  repeat :n + 1 [
+             make "yoff :y0 + (:cnt / :n) * (:y1 - :y0)
+             drawstring (se (round (:m * :yoff) + 0.1) / :m) :xoff :yoff
+             make "cnt :cnt + 1
+            ]
+end 
+
+to box
+  ;setpensize 1
+  moveto :x0 :y0
+  lineto :x1 :y0
+  lineto :x1 :y1
+  lineto :x0 :y1
+  lineto :x0 :y0
+end
+ 
+to trim :x
+  output (word (int :x * 10) / 10)
+end
+
+to setcolor :c
+  make "currentcolor nth remainder :c 200
+  [$000000 $030303 $050505 $080808 $0A0A0A $0D0D0D $0F0F0F $121212 $141414
+   $171717 $1A1A1A $1C1C1C $1F1F1F $212121 $242424 $262626 $292929 $2B2B2B
+   $2E2E2E $303030 $333333 $363636 $383838 $3B3B3B $3D3D3D $404040 $424242
+   $454545 $474747 $4A4A4A $4D4D4D $4F4F4F $525252 $545454 $575757 $595959
+   $5C5C5C $5E5E5E $616161 $636363 $666666 $696969 $6B6B6B $6E6E6E $707070
+   $737373 $757575 $787878 $7A7A7A $7D7D7D $808080 $828282 $858585 $878787
+   $8A8A8A $8C8C8C $8F8F8F $919191 $949494 $969696 $999999 $9C9C9C $9E9E9E
+   $A1A1A1 $A3A3A3 $A6A6A6 $A8A8A8 $ABABAB $ADADAD $B0B0B0 $B3B3B3 $B5B5B5
+   $B8B8B8 $BABABA $BDBDBD $BFBFBF $C2C2C2 $C4C4C4 $C7C7C7 $C9C9C9 $CCCCCC
+   $CFCFCF $D1D1D1 $D4D4D4 $D6D6D6 $D9D9D9 $DBDBDB $DEDEDE $E0E0E0 $E3E3E3 
+   $E6E6E6 $E8E8E8 $EBEBEB $EDEDED $F0F0F0 $F2F2F2 $F5F5F5 $F7F7F7 $FAFAFA
+   $FCFCFC $FF0000 $FF0D00 $FF1A00 $FF2600 $FF3300 $FF4000 $FF4D00 $FF5900
+   $FF6600 $FF7300 $FF8000 $FF8C00 $FF9900 $FFA600 $FFB300 $FFBF00 $FFCC00
+   $FFD900 $FFE600 $FFF200 $FFFF00 $E6FF00 $CCFF00 $B3FF00 $99FF00 $80FF00
+   $66FF00 $4DFF00 $33FF00 $1AFF00 $00FF00 $00FF0D $00FF1A $00FF26 $00FF33
+   $00FF40 $00FF4D $00FF59 $00FF66 $00FF73 $00FF80 $00FF8C $00FF99 $00FFA6
+   $00FFB3 $00FFBF $00FFCC $00FFD9 $00FFE6 $00FFF2 $00FFFF $00F2FF $00E6FF
+   $00D9FF $00CCFF $00BFFF $00B3FF $00A6FF $0099FF $008CFF $0080FF $0073FF
+   $0066FF $0059FF $004DFF $0040FF $0033FF $0026FF $001AFF $000DFF $0000FF
+   $0D00FF $1A00FF $2600FF $3300FF $4000FF $4D00FF $5900FF $6600FF $7300FF 
+   $8000FF $8C00FF $9900FF $A600FF $B300FF $BF00FF $CC00FF $D900FF $E600FF
+   $F200FF $FF00FF $FF00E6 $FF00CC $FF00B3 $FF0099 $FF0080 $FF0066 $FF004D
+   $FF0033 $FF001A]
+  %setcolor :currentcolor
+end
+
+to red
+  color $FF0000
+end
+
+to green
+  color $00FF00
+end
+
+to blue
+  color $0000FF
+end
+
+to yellow
+  color $FFFF00
+end
+
+to magenta
+  color $FF00FF
+end
+
+to cyan
+  color $00FFFF
+end
+
+to white
+  color $FFFFFF
+end
+
+to black
+  color $000000
+end
+
+to gray :decimal%
+  if or (:decimal% > 1.0) (:decimal% < -1.0)
+    [ print "|value for gray must be between -1 and 1|
+      stop ]
+  let [redvalue (lsh (logand $FF0000 :currentcolor) -16)
+       greenvalue (lsh (logand $00FF00 :currentcolor) -8)
+       bluevalue  (logand $0000FF :currentcolor)]
+
+  let [ave (round ((:redvalue + :greenvalue + :bluevalue) / 3))]
+
+  make "redvalue lsh (:redvalue + ((:ave - :redvalue) * :decimal%)) 16
+  make "greenvalue lsh (:greenvalue + ((:ave - :greenvalue) * :decimal%)) 8
+  make "bluevalue :bluevalue + ((:ave - :bluevalue) * :decimal%)
+
+  color (:redvalue + :greenvalue + :bluevalue)
+end
+
+to darken :decimal%
+  if or (:decimal% > 1.0) (:decimal% < -1.0)
+    [ print "|The value for darken must be between -1 and 1|
+      stop ]
+  make "decimal% (1.0 - :decimal%)
+  let [redvalue lsh (logand $FF0000 :currentcolor) -16
+       greenvalue lsh (logand $00FF00 :currentcolor) -8
+       bluevalue  logand $0000FF :currentcolor]
+
+  make "redvalue lsh (:redvalue * :decimal%) 16
+  make "greenvalue lsh (:greenvalue * :decimal%) 8
+  make "bluevalue :bluevalue * :decimal%
+
+  color (:redvalue + :greenvalue + :bluevalue)
+end
+
+to lighten :decimal%
+  if or (:decimal% > 1.0) (:decimal% < -1.0)
+    [ print "|The value for lighten must be between -1 and 1|
+      stop ]
+  let [redvalue lsh (logand $FF0000 :currentcolor) -16
+       greenvalue lsh (logand $00FF00 :currentcolor) -8
+       bluevalue  logand $0000FF :currentcolor]
+
+  make "redvalue lsh (:redvalue + (($FF - :redvalue) * :decimal%)) 16
+  make "greenvalue lsh (:greenvalue + (($FF - :greenvalue) * :decimal%)) 8
+  make "bluevalue :bluevalue + (($FF - :bluevalue) * :decimal%)
+
+  color (:redvalue + :greenvalue + :bluevalue)
+end 
+
+to color :incolor
+ %setcolor :incolor
+ make "currentcolor :incolor
+end

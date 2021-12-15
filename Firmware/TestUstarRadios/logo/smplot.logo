@@ -1,0 +1,776 @@
+;*******************************************************************************
+; File: smplot.logo
+;
+;*******************************************************************************
+;#############################################
+;   DATA HANDLING
+;#############################################
+to save-xycol :fileName
+  let [dx copylist :xcol-data
+       dy copylist :ycol-data] 
+  make "ncol 2
+  blindexec word "|rm | :fileName
+  prfopen :fileName
+  prfprint :ncol
+  prfprint se :xname :yname
+  dotimes [i count :dx]
+    [ prfprint se nth :i :dx nth :i :dy ]
+  prfclose
+  print se "|>> data saved to| :fileName
+end
+
+to save-data :fileName
+  let [d copylist :data-list]
+  blindexec word "|rm | :fileName
+  wait 10
+  prfopen :fileName
+  prfprint :ncol
+  dotimes [i count :d] 
+    [prfprint nth :i :d ]
+  prfclose
+end
+
+to restore-data :fileName
+  make "data-list parse filetostring :fileName
+  make "ncol nth 0 :data-list
+  make "xname nth 1 :data-list
+  make "yname nth 2 :data-list
+  make "data-list bf bf bf :data-list
+  xcol 1
+  ycol 2
+end
+
+to select-data :n :m
+  let [dx copylist :xcol-data
+       dy copylist :ycol-data
+       tdx []
+       tdy []]
+  dotimes [i count :dx]
+    [ if and ((nth :i :dx) > (:n )) ((nth :i :dx) < (:m ))
+        [ make "tdx (se :tdx (nth :i :dx))
+          make "tdy (se :tdy (nth :i :dy)) ] ]
+    make "xcol-data :tdx
+    make "ycol-data :tdy
+end
+
+to select-all
+  select-data -32766 32766
+end
+
+to show-select
+  let [dx copylist :xcol-data
+       dy copylist :ycol-data]
+  dotimes [i count :dx]
+    [ print se nth :i :dx nth :i :dy ]
+end
+
+to x-data :inStr :inList
+  make "xname insertunderscore :inStr
+  make "xcol-data :inList
+end
+
+to y-data :inStr :inList
+  make "yname insertunderscore :inStr
+  make "ycol-data :inList 
+end
+
+to data :m :namex :datax :namey :datay
+  make "xname insertunderscore :namex
+  make "yname insertunderscore :namey
+  let [newlist []
+       dx copylist :datax
+       dy copylist :datay]
+  make "newlist se :newlist :xname
+  make "newlist se :newlist :yname
+  make "newlist se :newlist :dx
+  make "newlist se :newlist :dy
+  make :m :newlist
+end
+
+to xcol :n
+  let [ucol :n - 1]
+  make "xcol-data []
+  dotimes [i ((count :data-list) / :ncol)]
+    [ make "xcol-data (se :xcol-data nth (:ucol + (:ncol * :i)) :data-list) ]
+end
+
+to ycol :n
+  let [ucol :n - 1]
+  make "ycol-data []
+  dotimes [i ((count :data-list) / :ncol)]
+    [ make "ycol-data (se :ycol-data nth (:ucol + (:ncol * :i)) :data-list) ]
+end
+
+to add-data :n :m
+  make "data-list (se :data-list :n :m)
+end
+
+to init-data
+  make "data-list []
+  make "xcol-data []
+  make "ycol-data []
+end
+
+to show-data
+  let [dx copylist :xcol-data
+       dy copylist :ycol-data]
+  print (se :xname :yname) 
+  dotimes [i count :dx]
+    [ print (se nth :i :dx "|    | nth :i :dy) ]
+end
+
+;#############################################
+;     STATISTICS
+;#############################################
+to average
+  let [value 0
+       sum 0
+       avg 0
+       cnt (count :ycol-data)]
+  dotimes [i :cnt]
+    [ make "sum  :sum + (nth :i :ycol-data) ]
+  make "avg :sum / :cnt
+  output :avg
+end
+
+to ymaximum
+  output MaxEntry :ycol-data
+end
+
+
+to xmaximum
+  output MaxEntry :xcol-data
+end
+
+
+to yminimum
+  output MinEntry :ycol-data
+end
+
+
+to xminimum
+  output MinEntry :xcol-data
+end
+
+to stddev
+  let [std 0
+       value 0
+       sumsqr 0
+       avg average
+       var 0
+       cnt count :ycol-data]
+  dotimes [i :cnt] 
+    [ make "value  ((nth :i :ycol-data) - :avg)
+      make "sumsqr  :sumsqr + (:value * :value) ]
+  make "std sqrt (:sumsqr / :cnt)
+  output :std
+end
+
+to stddev-mean
+  let [std 0
+       value 0
+       sumsqr 0
+       avg average
+       var 0
+       cnt (count :ycol-data)
+       std-mean 0]
+  dotimes [i :cnt]
+    [ make "value  ((nth :i :ycol-data) - :avg)
+    make "sumsqr  :sumsqr + (:value * :value) ]
+
+  make "std sqrt (:sumsqr / :cnt)
+  make "std-mean :std / sqrt (:cnt)
+  output :std-mean
+end
+
+to sort :n
+  let [d copylist :n
+       dc []
+       s []
+       i 0
+       j 0
+       value 0
+       minval (nth 0 :d)
+       cnt count :d]
+
+  repeat :cnt [
+    make "i 0
+    make "cnt count :d
+    make "minval 100000
+    repeat :cnt [
+      make "value nth :i :d   
+      if (:value < :minval) [ 
+        make "minval :value 
+        make "j :i ]       
+      make "i :i + 1 ] 
+      make "i 0
+      make "dc []
+      repeat :cnt [      
+        if or (:j < :i) (:j > :i)  [make "dc se :dc (nth :i :d)]               
+        make "i :i + 1 ]
+      make "s se :s :minval
+      make "d :dc  
+  ]
+  output :s
+end
+
+to median
+  let [d copylist :ycol-data
+       cnt (count :d)
+       dc sort :d
+       val 0
+       v1 0
+       v2 0]
+  ifelse ((:cnt % 2) > 0)
+    [ make "val nth (:cnt / 2) :dc
+      output :val ]
+    [ make "v1 nth (:cnt / 2) :dc
+      make "v2 nth (:cnt / 2 - 1) :dc
+      output (:v1 + :v2) / 2 ]
+end
+
+to noise
+  let [d copylist :ycol-data
+       drestore copylist :ycol-data
+       dc []
+       val 0
+       cnt (count :d)
+       av-val average]
+
+  repeat :cnt [
+    make "val abs ((nth 0 :d) - :av-val)
+    make "dc se :dc :val
+    make "d bf :d ]
+  make "ycol-data :dc
+  setup-screen
+  limits xlower xupper ylower yupper
+  box
+  xaxis 10 50 1 true
+  yaxis 10 50 1 true
+  title "|Residuals| 
+  xlabel "|Time (seconds)| 
+  ylabel "|res| 
+
+;## setup the plotting style ##;
+  ptype 2 
+  points
+  errorbars 0
+  
+;## Draw the plot ##;
+  display-clear
+  display-plot tile 1 1 1 1
+
+;##restore the original ycol-data
+  make "ycol-data copylist :drestore
+end
+
+to two-digit :n
+   output (int ((:n * 100) + 0.5)) / 100
+end
+
+to four-digit :n
+  output (int ((:n * 10000) + 0.5)) / 10000
+end
+
+to analyze
+  print se "|dataset         | :yname
+  print se "|N               | (count :ycol-data)
+  print se "|minimum         | (four-digit yminimum)
+  print se "|maximum         | (four-digit ymaximum)
+  print se "|average         | (two-digit average)
+  print se "|median          | (two-digit median)
+  print se "|stddev          | (four-digit stddev)
+  print se "|stddev/sqrt(N)  | (four-digit stddev-mean)
+  print    "|mode             manually inspect list |
+  print (se "|[|sort :ycol-data "|]|
+end
+
+
+;#############################################"
+;       PLOTTING
+;#############################################"
+
+to ptype :n
+  make "val-ptype :n
+end
+
+to points 
+  checkLengths
+  let [xx0 0
+       yy0 0]
+  dotimes [i count :xcol-data]
+    [
+     make "xx0 nth :i :xcol-data
+     make "yy0 nth :i :ycol-data
+
+     if(check-bounds :xx0  :yy0)
+       [ if (:val-ptype = 0) [drawstring "| | :xx0 :yy0]
+         if (:val-ptype = 1) [drawstring "|.| :xx0 :yy0]
+         if (:val-ptype = 2) [drawstring "|o| :xx0 :yy0]
+         if (:val-ptype = 3) [drawstring "|x| :xx0 :yy0]
+         if (:val-ptype = 4) [drawstring "|*| :xx0 :yy0]
+       ]]
+end
+
+to ltype :n
+  make "val-ltype :n ; " setting the linestyle for plots
+end
+
+to connect
+	checkLengths
+	let [dx copylist :xcol-data]
+	let [dy copylist :ycol-data]	
+	dotimes[i ((count :dx) - 1)] 
+	[ 
+		make "xi0 nth (:i) :dx 
+		make "yi0 nth (:i) :dy
+		make "xi1 nth (:i + 1) :dx 
+		make "yi1 nth (:i + 1) :dy
+		draw-line :xi0 :yi0 :xi1 :yi1 :val-ltype
+	]
+end
+
+to histogram
+  	let [dx copylist :xcol-data]
+  	let [dy copylist :ycol-data]
+  
+	dotimes[i ((count :dx) - 1)] 
+   [
+      make "xi0 nth (:i) :dx 
+		make "yi0 nth (:i) :dy
+		make "xi1 nth (:i + 1) :dx 
+		make "yi1 nth (:i + 1) :dy
+		make "xmid :xi0 + (:xi1 - :xi0) / 2
+		draw-line :xi0 :yi0 :xmid :yi0 :val-ltype
+		draw-line :xmid :yi0 :xmid :yi1 :val-ltype
+		draw-line :xmid :yi1 :xi1 :yi1 :val-ltype
+    ]
+end
+
+to quick-histogram
+ltype 0
+  let [dy copylist :ycol-data
+       ycol-data copylist :dy
+       name :yname
+       low yminimum - 1
+       high ymaximum + 1]
+  bin :low :high 1
+  hist :dy
+  setup-screen
+  limits xlower xupper ylower yupper
+  box
+;  grid 10 10
+  xaxis 10 50 1 true
+  yaxis 10 50 1 true
+  histogram
+  title se "|Histogram of | :name
+  xlabel "|Value|
+  ylabel "|Frequency|
+  aspect 2 2
+  display-plot tile 2 2 2 2
+  make "ycol-data copylist :dy
+end
+
+to errorbars :n
+  let [xx0 0
+       yy0 0]
+  make "xx0 nth 0 :xcol-data
+  make "yy0 nth 0 :ycol-data
+  moveto :xx0 :yy0
+  moveto nth 0 :xcol-data nth 0 :ycol-data
+  dotimes [i count :xcol-data]
+    [ 
+     make "xx0 nth :i :xcol-data
+     make "yy0 nth :i :ycol-data
+     if(check-bounds :xx0 :yy0)
+       [ moveto :xx0 :yy0
+         lineto :xx0  (:yy0 + :n)
+         lineto :xx0 (:yy0 - :n)
+       ]]
+     redraw
+end
+ 
+; This word creates a least-squares fit to the selected
+; data and prints the equation
+to fit-line
+  let [sumx 0
+       sumy 0
+       sumxy 0
+       sumx2 0
+       sumy2 0
+       xmean 0
+       ymean 0
+       xval 0
+       yval 0
+       slope 0
+       yint 0
+       xmin xminimum
+       xmax xmaximum
+       ymax ymaximum]
+
+  let [cnt (count :xcol-data)]
+  dotimes [i :cnt]
+    [
+      make "xval nth :i :xcol-data
+      make "yval nth :i :ycol-data
+      make "sumx :sumx + :xval
+      make "sumy :sumy + :yval
+      make "sumxy :sumxy + (:xval * :yval)
+      make "sumx2 :sumx2 + (:xval * :xval)
+      make "sumy2 :sumy2 + (:yval * :yval)
+    ]
+  make "xmean :sumx / :cnt
+  make "ymean :sumy / :cnt
+  make "slope ((:sumxy - :sumx * :ymean) / (:sumx2 - :sumx * :xmean))
+  make "yint (:ymean - :slope * :xmean) 
+  moveto :xmin (:slope * :xmin + :yint)
+  lineto :xmax (:slope * :xmax + :yint)
+  ;shortdashedlineto :xmax (:slope * :xmax + :yint)
+  moveto :xmax (:ymax - :yint)
+  make "intlabel "|y-int |
+  make "slabel "|slope |
+  make "intlabel2 two-digit :yint
+  make "slabel2 two-digit :slope
+  drawstring (se "|y =| (two-digit :slope) "|x +| (two-digit :yint)) (0.5 * (xupper + xlower)) (0.2 * (yupper + ylower))
+  redraw
+ ; output :slope
+end
+
+to bin :n :m :p
+  let [val :n]
+  make "xcol-data []
+  repeat (:m - :n) / :p [
+    make "xcol-data se :xcol-data :val
+    make "val :val + :p ]
+end
+
+to hist :n
+  let [len count :xcol-data
+       bin 0
+       low nth 0 :xcol-data
+       lendata count :n
+       high nth (:len - 1) :xcol-data
+       cnt 0
+       val 0]
+
+  make "ycol-data []
+  repeat :len [make "ycol-data se :ycol-data 0.0]
+  dotimes [i :lendata]
+    [
+    make "bin ((( nth :i :n) - :low) / (:high - :low)) * (:len - 1)
+    make "bin round :bin
+      if  and (:bin > 0) (:bin < (:len + 1)) [
+        make "val  nth :bin :ycol-data
+        make "val  :val + 1
+        setnth :bin :ycol-data :val
+      ]
+    ]
+end
+ 
+to quick-plot
+  setup-screen
+  select-all
+  limits xlower xupper ylower yupper 
+  box
+  xaxis 10 50 1 true
+  yaxis  5 20 1 true
+  ptype 2 points
+  title (se insertspace :yname "| vs. | :xname)
+  xlabel :xname
+  ylabel :yname
+end
+
+to display-quick
+ make "steadyImage False
+ make "steadyPlot False
+ aspect 2 2
+ display-plot tile 2 2 2 2
+ make "steadyImage True
+ make "steadyPlot True
+end
+
+to plot-filename :name
+	make "plotfn :name
+end
+
+to saveplot ; save the plot with a unique name after display-plot
+     blindexec (se "|cp |
+                    :plot-name  ;name of plot file
+                    word "|./images/| (word (word :plot-name (word "|_| now)) "|.png|))
+end
+
+
+to display-plot :flags
+  redraw
+  wait 10
+  ifelse(name? "plotfn)
+  [
+		make "plot-name word :plotfn "|.png|
+		clearname "plotfn		
+  ]
+  [
+  		make "plot-name word :yname "|.png|
+  ]
+  make "doit (se "|mv | "|screen.png | :plot-name )
+  blindexec :doit
+  wait 10
+  display-eot :flags :plot-name 
+end
+
+to lweight :npixel
+   setpensize :npixel
+end
+
+to check-bounds :x :y
+	if(:x < :x0) [output false]
+	if(:x > :x1) [output false]
+	if(:y < :y0) [output false]
+	if(:y > :y1) [output false]	
+	output true
+end
+
+to tickSize :ismallx :ibigx :ismally :ibigy
+	make "smallx :ismallx
+	make "bigx :ibigx
+	make "smally :ismally
+	make "bigy :ibigy
+end
+
+to xaxis :major :minor :precision :label 
+	if(:label) [ xticks :major :precision ]
+	major-grid-x :major
+	minor-grid-x :minor
+end
+
+to yaxis :major :minor :precision :label 
+	if(:label) [yticks :major :precision ]
+	major-grid-y :major
+	minor-grid-y :minor
+end
+
+to major-grid-x :n  
+ 	let [savecolor :currentcolor]
+  	let [xinc (:x1 - :x0) / :n]
+	let [px (:y1 - :y0) / :yp1]
+
+	let [x :x0]
+  	repeat (:x1 - :x0) / :xinc
+   [
+		make "x :x + :xinc
+	   moveto :x (:y0) lineto :x (:y0 + (:bigx * :px))
+	   moveto :x (:y1) lineto :x (:y1 - (:bigx * :px))
+	]
+end
+
+to minor-grid-x :n   
+ 	let [savecolor :currentcolor]
+	let [xinc (:x1 - :x0) / :n]
+	let [px (:y1 - :y0) / :yp1]
+	let [x :x0]
+  	repeat (:x1 - :x0) / :xinc
+   [
+		make "x :x + :xinc
+	   moveto :x (:y0) lineto :x (:y0 + (:smallx / 2 * :px))
+	   moveto :x (:y1) lineto :x (:y1 - (:smallx / 2 * :px))
+	]
+end
+
+to major-grid-y :m
+  	let [yinc (:y1 - :y0) / :m]
+	let [px (:y1 - :y0) / :yp1]	
+	let [px (:x1 - :x0) / :xp1]
+	let [y :y0]
+  	repeat (:y1 - :y0) / :yinc
+   [
+		make "y :y + :yinc
+    	moveto (:x0) :y lineto (:x0 + (:bigy  * :px)) :y
+    	moveto (:x1) :y lineto (:x1 - (:bigy  * :px)) :y
+	]
+end
+
+to minor-grid-y :m  
+	let [yinc (:y1 - :y0) / :m]
+	let [px (:x1 - :x0) / :xp1]	
+	let [y :y0]
+  	repeat (:y1 - :y0) / :yinc
+   [
+		make "y :y + :yinc
+    	moveto (:x0) :y lineto (:x0 + (:smally / 2 * :px)) :y
+    	moveto (:x1) :y lineto (:x1 - (:smally / 2 * :px)) :y
+	]
+end
+
+to draw-line :ix1 :iy1 :ix2 :iy2 :type
+	let [p1Check check-bounds :ix1 :iy1]
+	let [p2Check check-bounds :ix2 :iy2]	
+	ifelse(:p1Check)
+	[	
+    	ifelse(:p2Check)
+		[
+			draw-segment :ix1 :iy1 :ix2 :iy2 :type	
+		]	
+		[	
+			let [replacementPoint find-intercept :ix1 :iy1 :ix2 :iy2]
+			let [repl_x nth 0 :replacementPoint] 
+			let [repl_y nth 1 :replacementPoint] 			
+			draw-segment :ix1 :iy1 :repl_x :repl_y :type	
+		]		
+	]
+	[
+		ifelse(:p2Check)
+		[	
+			let [replacementPoint find-intercept :ix2 :iy2 :ix1 :iy1 ]
+			let [repl_x nth 0 :replacementPoint] 
+			let [repl_y nth 1 :replacementPoint]	
+			draw-segment :repl_x :repl_y :ix2 :iy2 :type	
+		]
+		[
+			;some day write the code for crossing the box 
+		]
+	]	
+	
+end
+
+to find-intercept :ix1 :iy1 :ix2 :iy2 
+	
+	ifelse(:ix2 > :ix1) 
+	[
+		ifelse(:iy2 > :iy1)
+		[
+			;print("|x increasing, y increasing|)	
+			let[ xintercept [] ]	
+			let[ yintercept [] ]		
+			let[yintercept (se :yintercept (y1-int :ix1 :iy1 :ix2 :iy2)) ]
+	      let[yintercept (se :yintercept (:y1)) ]			
+			let[xintercept (se :xintercept (:x1)) ]
+			let[xintercept (se :xintercept (x1-int :ix1 :iy1 :ix2 :iy2)) ]			
+		]
+		[
+			;print("|x increasing, y decreasing|)	
+			let[ xintercept [] ]	
+			let[ yintercept [] ]
+			let[yintercept (se :yintercept (y0-int :ix1 :iy1 :ix2 :iy2)) ]
+	      let[yintercept (se :yintercept (:y0)) ]			
+			let[xintercept (se :xintercept (:x1)) ]
+			let[xintercept (se :xintercept (x1-int :ix1 :iy1 :ix2 :iy2)) ]
+		] 
+	]
+	[
+		ifelse(:iy2 > :iy1)
+		[
+			;print("|x decreasing, y increasing|)				
+			let[ xintercept [] ]	
+			let[ yintercept [] ]			
+			let[yintercept (se :yintercept (y1-int :ix1 :iy1 :ix2 :iy2)) ]
+	      let[yintercept (se :yintercept (:y1)) ]			
+			let[xintercept (se :xintercept (:x0)) ]
+			let[xintercept (se :xintercept (x0-int :ix1 :iy1 :ix2 :iy2)) ]
+		]
+		[
+			;print("|x decreasing, y decreasing|)	
+			let[ xintercept [] ]	
+			let[ yintercept [] ]			
+			let[yintercept (se :yintercept (y0-int :ix1 :iy1 :ix2 :iy2)) ]
+	      let[yintercept (se :yintercept (:y0)) ]			
+			let[xintercept (se :xintercept (:x0)) ]
+			let[xintercept (se :xintercept (x0-int :ix1 :iy1 :ix2 :iy2)) ]
+		] 
+	]	
+	if(check-bounds nth 0 :yintercept nth 1 :yintercept) [output :yintercept]
+	if(check-bounds nth 0 :xintercept nth 1 :xintercept) [output :xintercept]
+end
+
+
+to y0-int :ix1 :iy1 :ix2 :iy2 
+	output XofY :ix1 :iy1 :ix2 :iy2 :y0
+end
+
+to y1-int :ix1 :iy1 :ix2 :iy2 
+	output XofY :ix1 :iy1 :ix2 :iy2 :y1
+end
+
+to x0-int :ix1 :iy1 :ix2 :iy2 
+	output YofX :ix1 :iy1 :ix2 :iy2 :x0
+end
+
+to x1-int :ix1 :iy1 :ix2 :iy2 
+	output YofX :ix1 :iy1 :ix2 :iy2 :x1
+end
+
+to YofX :ix1 :iy1 :ix2 :iy2 :ix
+	let[m (:iy2 - :iy1)/(:ix2 - :ix1)]
+	output :m * (:ix - :ix1) + :iy1
+end
+
+to XofY :ix1 :iy1 :ix2 :iy2 :iy
+	let[m (:iy2 - :iy1)/(:ix2 - :ix1)]
+	output (:iy - :iy1) / :m + :ix1
+end
+
+
+to draw-segment :ix1 :iy1 :ix2 :iy2 :type
+	rel :ix1 :iy1
+ 	if (:type = 0) [lineto :ix2 :iy2]
+	if (:type = 1) [dotdashedlineto :ix2 :iy2]
+	if (:type = 2) [shortdashedlineto :ix2 :iy2]
+	if (:type = 3) [longdashedlineto :ix2 :iy2]
+	if (:type = 4) [dotshortdashedlineto :ix2 :iy2]
+	if (:type = 5) [dotlongdashedlineto :ix2 :iy2]
+	if (:type = 6) [shortlongdashedlineto :ix2 :iy2]
+end
+
+to y-data-add :inList 
+  init-y-series
+  let [newSeries [ [] ] ]
+  setnth 0 :newSeries :inList       
+  make "y-series se :y-series :newSeries       
+end
+
+to init-y-series
+  if not(name? "y-series)[  
+    make "y-series [] 
+    if(name? "ycol-data) [
+      let [newSeries [ [] ] ]
+      setnth 0 :newSeries :ycol-data       
+      make "y-series se :y-series :newSeries
+    ]
+  ]
+end
+
+to multi-plot
+  make "colorList [$FF0000 $00FF00 $0000FF] 
+  setup-screen
+  select-all
+  combineLists
+  limits xlower xupper MinEntry :alldata MaxEntry :alldata 
+  box
+  xaxis 10 50 1 true
+  yaxis 5 20 1 true
+  ptype 2
+  title (se insertspace :yname "| vs. | :xname)
+  xlabel :xname
+  ylabel :yname
+  dotimes [i count :y-series]
+  [
+    let [ycol-data nth :i :y-series]    
+    color nth :i :colorList 
+    points               
+  ]
+end
+
+to combineLists
+  make "alldata []
+  dotimes [i count :y-series]
+  [
+    let [data nth :i :y-series]
+    make "alldata (se :alldata :data) 
+  ]
+end
+
+to checkLengths
+	if((count :xcol-data) > (count :ycol-data))[
+		make "xcol-data bl :xcol-data
+		checkLengths
+
+	]
+end

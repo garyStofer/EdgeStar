@@ -1,0 +1,84 @@
+; address must match the constant rpacket in the common.txt / mycommon.txt
+to msp_rpacket
+	output $1fc0	; hard coded MSP430 packet buffer memory address has to match the address used in the ulogo code 
+end	
+
+; this is the main entry point for this Jlogo test program -- starts the ulogo side via call to ul-power and then communicates 
+; via the 1 wire interface to get packets from the ulogo and displays the raw contents via Jlogo print statements in the terminal window
+to run-receive
+	print (se "|In Jlogo startup to receive and print packets | :project-name)  ;welcome message
+	
+	init-jlogo	; init both the jlogo and the ulogo environments -- starts the ulogo program asynchronously
+	print "|Waiting for packets to arrive ...|
+	loop 
+	[
+		make "packet-bytes  retrieve-packet ; makes a globally persist variable from the return value -- the local copy of the packet buffer 
+;		print (se "|Package Type| :type)	; this variables origins as global from within retrieve-packet
+;		print (se "|Package Lenght| :len)	; this variables origins as global from within retrieve-packet
+;		print (se "|Package:| :packet-bytes) 
+
+		extract-packet-header ; sets packet receive time 
+		print-packet 
+	]
+end
+
+
+
+
+to init-ulogo
+;	talkto 16		; This sets the one wire target device number -- only needed if app board does not have the default ID
+	stopvm        	; stop vm makes sure the App board is not running anything
+	compile			; needed so that the Jlogo side knows about the u-logo entry points ( i.e. ul-power)
+	print "|In boot delay 5 seconds ..|
+	ul-blind-run [ ul-power ] ;run power up sequence in App board without waiting for a return 
+	wait 50 				  ;5 seconds for u-logo program to start up 
+
+end 
+
+to init-jlogo               ;master initialization word
+
+	init-ulogo                ;uLogo initialization and boot sequence
+	init-time                 ;start the elapse time clock
+
+end
+
+
+to retrieve-packet
+	;	print "|retrieve loop|
+	loop 
+	[
+		
+		let[ pack rl msp_rpacket 50 ]		; read list , make local copy from MSP430 packet receive buffer 
+		make "len  nth 0 :pack		; makes a globally persisting variable with address offset 0 from local variable pack
+		make "type nth 1 :pack 		; makes a globally persisting variable with address offset 1 from local variable pack
+
+		;   print (se "|Package Type| :type)
+		;	print (se "|Package Length| :len)
+		;   print (se "Package :pack )
+
+		wl msp_rpacket [0 0]; null out the len and type in the packet buffer on the MSP430 to indicate that this record has been processed
+
+		; filter valid package types and return the local packet buffer to the caller
+		if (:type = 42) 	[output :pack]
+		if (:type = 72) 	[output :pack]
+		if (:type = 60) 	[output :pack]
+		if (:type = 50) 	[output :pack]
+		if (:type = 128) 	[output :pack]
+		if (:type = 64) 	[output :pack]
+		if (:type = 65) 	[output :pack]
+		if (:type = 66) 	[output :pack]
+		if (:type = 67) 	[output :pack]
+		if (:type = 68) 	[output :pack]
+		if (:type = 69) 	[output :pack]
+		if (:type = 70) 	[output :pack]
+		if (:type = 71) 	[output :pack]
+		if (:type = 72) 	[output :pack]
+		if (:type = 101) 	[output :pack]
+
+		
+		wait 20	; wait so that the polling for new data is slowed down a bit -- but can not be slower than the influx of new packets 
+		; no harm if no wait time at all 
+	]
+end
+
+

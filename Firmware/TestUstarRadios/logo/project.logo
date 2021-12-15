@@ -1,0 +1,268 @@
+;*******************************************************************************
+; File: project.logo
+;
+;*******************************************************************************
+
+define byte0 [n]  [output logand :n $ff]
+define byte1 [n]  [output logand lsh :n -8 $ff]
+define hb    [n]  [output hexw logand $ff :n 2]
+define hw    [n]  [output hexw logand $ffff :n 4]
+define .word [a b][output intern word :a :b]
+to reset-usb
+   blindexec "| /usr/local/i3/tools/usbreset.sh|
+end
+
+to auto-project :n
+	ifelse (file? "/dev/ulogo) 
+	[ project :n ]
+	[ jproject :n ]
+end
+
+to jproject :n 
+  make "project-name :n
+  let [sdate bl exec "date]
+  if not(:silent  = "true)
+  [
+     print (se "|Start Project: | :n "|   | :sdate "|  unix time: | now ) 
+  ]
+  load :n
+  make "debug-flag false
+  make "steadyImage true
+  make "steadyCamera true
+  make "steadyPlot true
+  jlogo
+  make "machine 1
+  ;setup-screen
+  start_log
+  make "playback true
+end
+
+to project :n 
+  make "project-name :n
+  let [sdate bl exec "date]
+  if not(:silent  = "true)
+  [
+     print (se "|Start Project: | :n "|   | :sdate "|  unix time: | now ) 
+  ]
+  load :n make "debug-flag false make "steadyImage true
+  make "steadyCamera true
+  make "steadyPlot true
+  ulogo
+  make "machine 1
+  ;setup-screen
+  start_log
+  make "playback false 
+  ;reset-usb
+end
+
+to start_log
+  blindexec "|mkdir data|
+  let [logop word :project-name  "|.log| ]
+  logopen word "|./data/| :logop
+  let [logpac word :project-name  "|.pac| ]
+  make "logpac word "|./data/| :logpac
+  prfopen :logpac
+  make "playback false
+  make "playback-file :logpac
+end
+
+to startup
+  blindexec "| ln -s /usr/local/i3/logo/ . |
+  blindexec "| ln -s /usr/local/i3/logo/common.txt . |
+  print "|Welcome to Logo|
+  make "silent false
+  jLogo-dot
+  blindexec "|pkill xv|
+  make "hwid 800
+  make "vwid 600
+  make "geo0 800
+  make "geo1 600
+  make "xvlist []
+ end
+
+to jLogo-nodot
+  sethandleline false
+end 
+
+to jLogo-dot
+  sethandleline true
+end 
+
+to jLogo
+  make "run-ulogo false
+  jLogo-dot
+  load "logo/screen
+  load "logo/smplot
+  load "logo/common
+  load "logo/Manip
+  physical 0 1366 0 768
+end
+ 
+to uLogo
+  make "check 0
+  make "run-ulogo true
+  sethandleline true   ; dot needed for jLogo words - with ulogo code
+  print (se "|Opening Project | :project-name)
+  load "logo/compiler
+  load "logo/decompiler
+  load "logo/uartcomms
+  load "logo/screen
+  load "logo/smplot
+  load "logo/onewire-packets
+  load "logo/common
+  load "logo/Manip
+  physical 0 1366 0 768
+  make "onewire true
+  load :project-name
+  if not name? "inited [make "inited true compiler-startup start-comms]
+  make "srcpath  "./
+;  make "srcpath word dirnamefrompath first files ". "/
+  make "srcfile word :project-name "|.prj|
+end
+
+to rr   
+  make "silent true
+  ifelse :run-ulogo
+    [project :project-name]
+    [jproject :project-name]
+  print "|project reloaded|
+  make "silent false
+end
+
+to edit :n
+   if ( file? :n)
+   [
+		blindexec (se "pluma :n)
+   ]
+end
+
+
+to edit-project
+   edit-prj
+   edit-ulogo
+   edit-jlogo
+end
+
+to edit-prj
+	blindexec (se "/usr/local/i3/tools/i3-edit.sh "*.prj)
+end
+
+to edit-ulogo
+	blindexec (se "/usr/local/i3/tools/i3-edit.sh "*.txt "common.txt)
+end
+
+to edit-jlogo
+	blindexec (se "/usr/local/i3/tools/i3-edit.sh "*.logo)
+  
+end
+
+to dprint :n
+  if :debug-flag [ print :n ]
+end
+
+to debug :n
+  make "debug-flag :n
+end
+
+
+to limit :n :min :max                ; general min and max limits for boundary effects
+  if :n < :min [output :min]          ; :n too small replace with :min
+  if :n > :max [output :max]          ; :m too large replace with :max
+  output :n                           ; return value within the limits
+end
+
+to cUp :n
+  print (word char 27 "|[| :n [|A|])
+end
+
+to cDown :n
+  print (word char 27 "|[| :n [|B|])
+end
+
+to cForward :n
+  print (word char 27 "|[| :n [|C|])
+end
+
+to cBackward :n
+  print (word char 27 "|[| :n [|D|])
+end
+
+to yellow-text
+  output (word char 27 "|[| 33 "m)
+end
+
+to green-text
+  output (word char 27 "|[| 32 "m)
+end
+
+to blue-text
+  output (word char 27 "|[| 34 "m)
+end
+
+to white-text
+  output (word char 27 "|[| 37 "m)
+end
+
+to red-text
+    output (word char 27 "|[| 91 "m)
+end
+
+to magenta-text
+    output (word char 27 "|[| 95 "m)
+end
+
+to cyan-text
+    output (word char 27 "|[| 96 "m)
+end
+
+to printrc :r :c :str                                 ; puts cursor at row :r  column :c
+  ; print (word char 27 "|[| :r + 1 char 59 :c + 1 [|H|]
+  print (word char 27 "|[| :r + 1 char 59 :c + 2 [|H|] :str)
+end
+
+to Xclr-line :l                                   ; clears a line of old chars
+  print (word char 27 "|[| :l + 1 char 59 [|1H|] char 27 [|[2K|]])
+end
+
+to clr-screen :n       ; clears the entire screen :n lines long
+  dotimes [i :n][Xclr-line :i]
+end 
+
+; to set-DISPLAY
+;   blindexec "|bash source /usr/local/i3/logo/set-display|
+; end
+
+; notes onn VT100  screen commands
+;
+;Cursor Home 		<ESC>[{ROW};{COLUMN}H
+;Sets the cursor position where subsequent text will begin. 
+; If no row/column parameters are provided (ie. <ESC>[H), 
+; the cursor will move to the home position, ;at the upper left of the screen.
+;
+;Cursor Up		<ESC>[{COUNT}A
+;Moves the cursor up by COUNT rows; the default count is 1.
+;
+;Cursor Down		<ESC>[{COUNT}B
+;Moves the cursor down by COUNT rows; the default count is 1.
+;
+;Cursor Forward		<ESC>[{COUNT}C
+;Moves the cursor forward by COUNT columns; the default count is 1.
+;
+;Cursor Backward		<ESC>[{COUNT}D
+;Moves the cursor backward by COUNT columns; the default count is 1.
+;
+;Force Cursor Position	<ESC>[{ROW};{COLUMN}f
+;Identical to Cursor Home.
+;
+;Save Cursor		<ESC>[s
+;Save current cursor position.
+;
+;Unsave Cursor		<ESC>[u
+;Restores cursor position after a Save Cursor.
+;
+;Save Cursor & Attrs	<ESC>7
+;Save current cursor position.
+;
+;Restore Cursor & Attrs	<ESC>8
+;Restores cursor position after a Save Cursor.
+;

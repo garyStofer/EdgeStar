@@ -1,0 +1,320 @@
+
+define rfm-init-data [][output [#
+	0x06 0x00		; Disable all interrupts
+	0x07 0x01		; Set READY mode
+	0x09 0x7F		; Cap = 12.5pF
+	0x0A 0x05		; Clk output is 2MHz
+	
+	0x0B 0xF4		; GPIO0 is for Rx data output
+	0x0C 0xEF		; GPIO1 is Tx/Rx data CLK output
+	0x0D 0x00		; GPIO2 for MCLK output
+	0x0E 0x00		; GPIO port use default value
+	
+	0x0F 0x70		; NO ADC used
+	0x10 0x00		; no ADC used
+	0x12 0x00		; No temp sensor used
+	0x13 0x00		; no temp sensor used
+
+	0x2C 0x00
+	0x2D 0x00
+	0x2E 0x00
+	
+;	0x6E 0x04    ; Tx data rate 1 500 buad
+;	0x6F 0x19    ; TX data rate 0 500 buad
+
+	; 0x6E 0x27	;	; Tx data rate 1    0x27 becomes 0x09 1200 baud 
+	; 0x6F 0x52	;	; Tx data rate 0    0x52 becomes 0xd4 1200 baud
+	;0x6E 0x09		; Tx data rate 1    0x27 becomes 0x09 1200 baud 
+	;0x6F 0xd4		; Tx data rate 0    0x52 becomes 0xd4 1200 baud
+
+	0x30 0x8C		; Data access control
+	
+	; 0x32 0xFF		; Header control
+	0x32 0x00		; Header control
+
+	; 0x33 0x42		; Header 3 2 1 0 used for head length fixed packet length synchronize word length 3 2
+	0x33 0x02		; Header 3 2 1 0 used for head length fixed packet length synchronize word length 3 2
+
+	0x34 64			; 64 nibble = 32 byte preamble
+	0x35 0x20		; 0x35 need to detect 20bit preamble
+	0x36 0x2D		; synchronize word
+	0x37 0xD4
+	0x38 0x00
+	0x39 0x00
+	0x3A 115		; set tx header 3
+	0x3B 111		; set tx header 2
+	0x3C 110		; set tx header 1
+	0x3D 103		; set tx header 0
+	0x3E 50			; set packet length to 50 bytes
+	
+	0x3F 115		; set rx header
+	0x40 111
+	0x41 110
+	0x42 103
+	0x43 0xFF		; check all bits
+	0x44 0xFF		; Check all bits
+	0x45 0xFF		; check all bits
+	0x46 0xFF		; Check all bits
+	
+	0x56 0x01
+	
+	 0x6D 0x07		; Tx power to max
+	;  0x6D 0x04		; Tx power to +11 dBm
+	 ; 0x6D 0x05		; Tx power to +28 dBm 6V 23BP
+	; 0x6D 0x07		; Tx power to +30 dBm 6V 23BP
+        
+        ; 0x6D 0x07		; Tx power to +20 dBm
+        
+       ;  0x6D 0x00               ; Tx power low
+
+
+        0x79 0x00		; no frequency hopping
+	0x7A 0x00		; no frequency hopping
+	
+	;0x71 0x22	;	; GFSK fd[8]=0 no invert for Tx/Rx data FIFO mode txclk-->gpio
+;	0x71 0x23
+
+	;0x72 0x48	;	; Frequency deviation setting to 45K=72*625
+
+; erg 0x72 sets freq. deviation in multiples of  625 Hz  - 30 kHz = 48 dec
+;       0x72  0x06   ; 3.75 kHz old setting
+	0x72  12     ; 7.5 kHz
+;       0x72  18     ; 11.25 kHz
+;        0x72  30     ; 18.75 kHz
+	
+	0x73 0x00		; No frequency offset
+	0x74 0x00		; No frequency offset
+
+; Notes on setting frequency
+; fb[4:0] Value = 19  N = 43    with hbsel = 0   430 - 439.9 MHz
+;
+; reg 0x75       D7 not used D6 sbsel D5 hbsel   D4,D3,D2,D1,D0  fb[4-0]
+; erg 0x76       fc[15-8]   high byte
+; erg 0x77       fc[7-0]    low byte - not used ?
+;
+; example   437.000 MHz
+;        fc[15:0] =   ( frx / 10MHz * (hbsel + 1) - fb[4:0] ) * 64000
+;        for 437.000 fb[4:0] = 19  so   N =  43d
+;  sbsel (side band)  D6 fo[6] how to set ???
+;  hbsel = 0 low band includes 437 MHz
+;  f_carrier = 10MHz * (hbsel + 1) * ( fb[4:0] + 24 + (fc[15:0]/64000) )
+;  set sbsel = 1 or 0x40 set fb[4:0] = 19 so N= 43 implies 430 MHz
+;  fc[50:0] to zero to stay at 430 MHz   reg 0x75  19d = 13 hex + 40 hex = 53 hex
+;  430 MHz  0x75 0x53  0x76 0x00   0x77 0x00
+; 437.465 MHz    0.7465 x 64000 = 47776 dec = 2^15 + 2^13 + 2^12 + 2^11 + 2^9 + 2^7 + 2^5 = 1011 1010 1010 0000 = 0xbaa0
+;     32768 + 8192 + 4096 + 2048 + 512 + 128 + 32 = 47776 / 64000 = 0.7465 * 10 MHz = 7.465 MHz + 430 = 437.465 MHz 
+;                0x75  0x53   0x76 0xba   0x75 0xa0
+	
+	; 0x75 0x53		; frequency set to 434MHz   example works with packets
+        ; 0x76 0x64		; frequency set to 434MHz   example works with packets
+
+        ; 0x75 0x42		; frequency set to 434MHz   example works with packets
+        ; 0x76 0x00		; frequency set to 434MHz   example works with packets
+
+; values used for 437.000 MHz
+;	0x75 0x53               ; 19 d or N=43d (430 MHz)  (19d + 24d = 43d) sbsel = 1  0x40)
+;        0x76		; frequency set to 437MHz (0xaf comes out at 436.950 MHz - need 0xb0) 
+;        0x77		; frequency set to 437Mhz (must use 0x40 instead of 0x00)
+                                ; needed offset   0x140   0x76 0xaf  becomes  0x76 0xb0 
+; try 437.465 MHz    works between  437.455 and 437.475 MHz centered on 437.465 MHz
+        0x75 0x53  
+        0x76 0xba
+        0x77 0xa0 ; 0xa0
+
+
+	0x5A 0x7F
+	0x59 0x40
+	0x58 0x80
+	
+	0x6A 0x0B
+	0x68 0x04
+	0x1F 0x03
+]]
+
+define rfm-500-data [][output [#
+        0x1c  0x37     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x0a     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0xe8     ; clk_recovery_oversampling_ratio
+        0x21  0x60     ; clk_recovery_offset2
+        0x22  0x20     ; clk_recovery_offset1
+        0x23  0xc5     ; clk_recovery_offset0
+        0x24  0x00     ; clk_recovery_timing_loop_gain1
+        0x25  0x0a     ; clk_recovery_timing_loop_gain0
+        0x2a  0x0e     ; afc_limiter AFC_pull_in_range
+        0x6e  0x04     ; tx_data_rate1
+        0x6f  0x19     ; tx_data_rate0
+        0x70  0x2d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0x06     ; frequency_deviation
+]]
+
+define rfm-501-data [][output [#
+        0x6e 0x04     ; tx_data_rate1
+        0x6f 0x19     ; tx_data_rate0
+	  0x1C 0x27     ; IF filter bandwidth
+        0x70 0x2c     ; modulation_mode_control1   was 0x2d   new turns off data whitening
+        0x58 0x80     ; ??? not documented
+
+        0x71 0x22     ; modulation_mode_control2   was 0x23    new fsk  (was gsfk)
+        0x72 0x13     ; frequency_deviation        0x13 for 12 kHz  0x26 for 24 kHz(? does not work) 
+
+	0x20 0xd0		; clock recovery         was 0xe8
+	0x21 0xe0		; clock recovery         was 0x60
+	0x22 0x10		; clock recovery         was 0x20
+	0x23 0x62		; clock recovery         was 0xc5
+	0x24 0x00		; clock recovery timing   was 0x00
+	0x25 0x03		; clock recovery timing   was 0x0a
+
+	0x1D 0x40		; AFC Loop
+ 	0x1E 0x0a
+        0x2a 0x1d               ; for freq dev  12 kHz  0x1d    for 24 kHz 0x1e (? does not work)
+
+	0x1F 0x03               ; was 0x03
+	0x69 0x60               ; new value
+]]
+
+define rfm-502-data [][output [#
+        0x6e 0x04     ; tx_data_rate1
+        0x6f 0x19     ; tx_data_rate0
+	  0x1C 0x27     ; IF filter bandwidth
+        0x70 0x2c     ; modulation_mode_control1   was 0x2d   new turns off data whitening
+        0x58 0x80     ; ??? not documented
+
+        0x71 0x22     ; modulation_mode_control2   was 0x23    new fsk  (was gsfk)
+        0x72 0x26     ; frequency_deviation        0x13 for 12 kHz  0x26 for 24 kHz(? does not work) 
+
+	0x20 0xd0		; clock recovery         was 0xe8
+	0x21 0xe0		; clock recovery         was 0x60
+	0x22 0x10		; clock recovery         was 0x20
+	0x23 0x62		; clock recovery         was 0xc5
+	0x24 0x00		; clock recovery timing   was 0x00
+	0x25 0x03		; clock recovery timing   was 0x0a
+
+	0x1D 0x40		; AFC Loop
+ 	0x1E 0x0a
+        0x2a 0x1e               ; for freq dev  12 kHz  0x1d    for 24 kHz 0x1e (? does not work)
+
+	0x1F 0x03               ; was 0x03
+	0x69 0x60               ; new value
+]]
+	
+define rfm-1000-data [][output [#
+        0x1c  0x37     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x0a     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0xf4     ; clk_recovery_oversampling_ratio
+        0x21  0x20     ; clk_recovery_offset2
+        0x22  0x41     ; clk_recovery_offset1
+        0x23  0x89     ; clk_recovery_offset0
+        0x24  0x00     ; clk_recovery_timing_loop_gain1
+        0x25  0x23     ; clk_recovery_timing_loop_gain0
+        0x2a  0x0e     ; afc_limiter AFC_pull_in_range
+        0x6e  0x08     ; tx_data_rate1
+        0x6f  0x31     ; tx_data_rate0
+        0x70  0x2d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0x06     ; frequency_deviation
+]]
+
+define rfm-2000-data [][output [#
+        0x1c  0x37     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x0a     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0xfa     ; clk_recovery_oversampling_ratio
+        0x21  0x00     ; clk_recovery_offset2
+        0x22  0x83     ; clk_recovery_offset1
+        0x23  0x12     ; clk_recovery_offset0
+        0x24  0x00     ; clk_recovery_timing_loop_gain1
+        0x25  0x85     ; clk_recovery_timing_loop_gain0
+        0x2a  0x0e     ; afc_limiter AFC_pull_in_range
+        0x6e  0x10     ; tx_data_rate1
+        0x6f  0x62     ; tx_data_rate0
+        0x70  0x2d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0x06     ; frequency_deviation
+]]
+
+define rfm-4000-data [][output [#
+        0x1c  0x37     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x0a     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0x70     ; clk_recovery_oversampling_ratio
+        0x21  0x01     ; clk_recovery_offset2
+        0x22  0x06     ; clk_recovery_offset1
+        0x23  0x25     ; clk_recovery_offset0
+        0x24  0x02     ; clk_recovery_timing_loop_gain1
+        0x25  0x0e     ; clk_recovery_timing_loop_gain0
+        0x2a  0x0e     ; afc_limiter AFC_pull_in_range
+        0x6e  0x20     ; tx_data_rate1
+        0x6f  0xc5     ; tx_data_rate0
+        0x70  0x2d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0x06     ; frequency_deviation
+]]
+
+define rfm-9600-data [][output [#
+        0x1c  0x3b     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x0a     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0x34     ; clk_recovery_oversampling_ratio
+        0x21  0x02     ; clk_recovery_offset2
+        0x22  0x75     ; clk_recovery_offset1
+        0x23  0x25     ; clk_recovery_offset0
+        0x24  0x07     ; clk_recovery_timing_loop_gain1
+        0x25  0xff     ; clk_recovery_timing_loop_gain0
+        0x2a  0x0d     ; afc_limiter AFC_pull_in_range
+        0x6e  0x4e     ; tx_data_rate1
+        0x6f  0xa5     ; tx_data_rate0
+        0x70  0x2d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0x08     ; frequency_deviation
+]]
+
+define rfm-256K-data [][output [#
+        0x1c  0x8c     ; if_filter bandwidth
+        0x1d  0x44     ; afc_loop_gearshift_override
+        0x1e  0x02     ; afc_timing _control
+        0x1f  0x03     ; recovery_gearshift_override
+        0x20  0x2f     ; clk_recovery_oversampling_ratio
+        0x21  0x02     ; clk_recovery_offset2
+        0x22  0xbb     ; clk_recovery_offset1
+        0x23  0x0d     ; clk_recovery_offset0
+        0x24  0x07     ; clk_recovery_timing_loop_gain1
+        0x25  0xff     ; clk_recovery_timing_loop_gain0
+        0x2a  0x50     ; afc_limiter AFC_pull_in_range
+        0x6e  0x41     ; tx_data_rate1
+        0x6f  0x89     ; tx_data_rate0
+        0x70  0x0d     ; modulation_mode_control1
+        0x71  0x23     ; modulation_mode_control2
+        0x72  0xcd     ; frequency_deviation
+]]
+ 
+
+
+;data_rate = {   500,  1000,  2000,  4000,  8000,  9600, 16000, 19200, 24000,  32000,  64000, 128000, 192000, 256000};
+;reg_1C[] = {  0x37,  0x37,  0x37,  0x37,  0x3A,  0x3B,  0x26,  0x28,  0x2E,   0x16,   0x07,   0x83,   0x8A,   0x8C}; // rfm22_if_filter_bandwidth
+;reg_1D[] = {  0x44,  0x44,  0x44,  0x44,  0x44,  0x44,  0x44,  0x44,  0x44,   0x44,   0x44,   0x44,   0x44,   0x44}; // rfm22_afc_loop_gearshift_override
+;reg_1E[] = {  0x0A,  0x0A,  0x0A,  0x0A,  0x0A,  0x0A,  0x0A,  0x0A,  0x0A,   0x0A,   0x0A,   0x0A,   0x0A,   0x02}; // rfm22_afc_timing_control
+;reg_1F[] = {  0x03,  0x03,  0x03,  0x03,  0x03,  0x03,  0x03,  0x03,  0x03,   0x03,   0x03,   0x03,   0x03,   0x03}; // rfm22_clk_recovery_gearshift_override
+;reg_20[] = {  0xE8,  0xF4,  0xFA,  0x70,  0x3F,  0x34,  0x3F,  0x34,  0x2A,   0x3F,   0x3F,   0x5E,   0x3F,   0x2F}; // rfm22_clk_recovery_oversampling_ratio
+;reg_21[] = {  0x60,  0x20,  0x00,  0x01,  0x02,  0x02,  0x02,  0x02,  0x03,   0x02,   0x02,   0x01,   0x02,   0x02}; // rfm22_clk_recovery_offset2
+;reg_22[] = {  0x20,  0x41,  0x83,  0x06,  0x0C,  0x75,  0x0C,  0x75,  0x12,   0x0C,   0x0C,   0x5D,   0x0C,   0xBB}; // rfm22_clk_recovery_offset1
+;reg_23[] = {  0xC5,  0x89,  0x12,  0x25,  0x4A,  0x25,  0x4A,  0x25,  0x6F,   0x4A,   0x4A,   0x86,   0x4A,   0x0D}; // rfm22_clk_recovery_offset0
+;reg_24[] = {  0x00,  0x00,  0x00,  0x02,  0x07,  0x07,  0x07,  0x07,  0x07,   0x07,   0x07,   0x05,   0x07,   0x07}; // rfm22_clk_recovery_timing_loop_gain1
+;reg_25[] = {  0x0A,  0x23,  0x85,  0x0E,  0xFF,  0xFF,  0xFF,  0xFF,  0xFF,   0xFF,   0xFF,   0x74,   0xFF,   0xFF}; // rfm22_clk_recovery_timing_loop_gain0
+;reg_2A[] = {  0x0E,  0x0E,  0x0E,  0x0E,  0x0E,  0x0D,  0x0D,  0x0E,  0x12,   0x17,   0x31,   0x50,   0x50,   0x50}; // rfm22_afc_limiter .. AFC_pull_in_range = ?AFCLimiter[7:0] x (hbsel+1) x 625 Hz
+;reg_6E[] = {  0x04,  0x08,  0x10,  0x20,  0x41,  0x4E,  0x83,  0x9D,  0xC4,   0x08,   0x10,   0x20,   0x31,   0x41}; // rfm22_tx_data_rate1
+;reg_6F[] = {  0x19,  0x31,  0x62,  0xC5,  0x89,  0xA5,  0x12,  0x49,  0x9C,   0x31,   0x62,   0xC5,   0x27,   0x89}; // rfm22_tx_data_rate0
+;reg_70[] = {  0x2D,  0x2D,  0x2D,  0x2D,  0x2D,  0x2D,  0x2D,  0x2D,  0x2D,   0x0D,   0x0D,   0x0D,   0x0D,   0x0D}; // rfm22_modulation_mode_control1
+;reg_71[] = {  0x23,  0x23,  0x23,  0x23,  0x23,  0x23,  0x23,  0x23,  0x23,   0x23,   0x23,   0x23,   0x23,   0x23}; // rfm22_modulation_mode_control2
+;reg_72[] = {  0x06,  0x06,  0x06,  0x06,  0x06,  0x08,  0x0D,  0x0F,  0x13,   0x1A,   0x33,   0x66,   0x9A,   0xCD}; // rfm22_frequency_deviation
+
+
+
+

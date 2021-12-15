@@ -1,0 +1,242 @@
+; The following connections to radio modules are through the 4 wire external cable between the App board and the uStar-V2 brd
+; See uStar-V2 schematic, conector X4
+
+; The hardware automatically switches these signals to the RFM22B or RFM23BP radio depening on which radio is powered
+; The power is controlled by App board via signals DP5 for RFM22 and DP8 for RFM23BP
+;    rxant           P1.7 , cable pin X4-1
+;    txant           P2.0 , cable pin x4-2
+;    radio Nirq      P1.6 , cable pin X4-3
+;    radio Nsel      P1.5 , cable pin X4-4
+
+define cslow  [][bclrb p1out $20]                  ; radio Nsel low, i.e. active  , P1.5
+define cshigh [][bsetb p1out $20]				   ; radio Nsel high, i.e. inactive,   P1.5
+define rx-ant [][bclrb p2out $01 bsetb p1out $80]  ; P1.7 (RX-ANT) on, P2.0 (TX-ANT) off
+define tx-ant [][bclrb p1out $80 bsetb p2out $01]  ; P1.7 (RX-ANT) off, P2.0 (TX-ANT) on
+define no-ant [][bclrb p1out $80][bclr p2out $01]  ; both off
+define waitfor-irq [][waituntil [not (readb p1in) and $40]]   ; irg P1.6
+define receive-packet? [][output not (readb p1in) and $40]    ; irg P1.6
+
+define uwait[n][repeat :n / 8 [setn n]]
+define len [l][output ((lsh readb :l - 1 8) + readb :l - 2) and $0fff]
+define ignore [n][]
+
+
+to  init_RFMcontrol_pins	; initializes the msp430 pins (ports) that control the RFM modules via the external 4 wire cable
+	bsetb p1dir $a0         ; 1010 0000 bits 6 + 8  rxant + radio_select (out = 1)
+	bsetb p2dir $01         ; 0000 0001 bit 1   txant (out = 1)
+	bsetb p1out $00         ; rxant irg off
+	bsetb p2out $00         ; txant off
+	cshigh                  ; deselect RFM radios
+end
+
+to  init_MSP-SPI-Port		; Initialized and configures the SPI port signals on the MSP430 chip so it can talk to the radios
+	bsetb ucb0ctl1 1
+	bsetb p3sel $0e		; set port1 bits to special fcn    p3 miso $02 mosi $04 clk $08  all $0e
+	writeb ucb0ctl1 $81	; reset and smclk
+	writeb ucb0ctl0 $a9	; master msb first cpol=0 cpha=1
+	;writeb ucb0br0 120	; 1 us bit time
+	writeb ucb0br0 24	; was 24 1 us bit time
+	writeb ucb0br1 0
+	bclrb ucb0ctl1 1
+	;bclr ucb0ctl1 1
+end
+
+
+to regs :a :n
+	setn :a
+	repeat :n 
+	 [prf "|%b | n 
+	  prhb rreg n 
+	  setn n + 1]
+end
+
+to send-packet
+ 
+	fprint 0 - wdchecksum rpacket (readb rpacket) + 2  ; add checksum to end of packet
+	writeb rpacket (readb rpacket) - 2                 ; do not count wdchecksum in length
+
+	; prs "a
+	let [d 0]
+	tx-ant
+	rfm-init        ; was missing - added
+	mwait 10
+	wreg $07 $01	; To ready mode
+	mwait 5           ; was 50
+	wreg $08 $03	; FIFO reset
+	wreg $08 $00	; Clear FIFO
+	wreg $34 64	; preamble = 64nibble
+	wreg $3E 50	; packet length = 50 bytes
+
+	; repeat repeatpacket [send-packet-data rpacket mwait repeatdelay]
+	send-packet-data rpacket
+
+	no-ant
+	; clear-res
+end
+
+to send-packet-data :l
+	repeat 50
+	 [wreg $7f readb :l
+	  make "l :l + 1]
+	wreg $05 $04	; enable packet sent interrupt
+	ignore rreg $03	; Read Interrupt status1 register
+	ignore rreg $04
+	wreg $07 9	; Start TX
+	waitfor-irq
+	;mwait 100
+	wreg $07 $01	; to ready mode
+end
+
+; to respond
+; prs "respond
+; writeb rpacket + 1 type_response
+; mwait 10 
+; rfm-init
+; send-packet
+; mwait 500
+; rfm-init
+; setup-rx
+; end
+
+
+to send-data :n
+  prf "|+packet-data %d\n| :n 
+end
+   
+; to send-gzout
+;   prf "|+gzout-data %d | time
+;   prf "|%d\n| read (packet + 22)       ; gxout is the 12th integer in packet 50  
+;end
+   
+comment_out [
+to process-packet
+	; prs |got packet|
+
+	let [len rreg $4b
+		 addr packet]
+	; print :len
+
+	make "addr packet
+
+	repeat :len [writeb :addr rreg $7f make "addr :addr + 1]
+
+	; make "addr packet
+	; repeat :len / 2 [print read :addr   make "addr :addr + 2  mwait 20]
+
+	; send-gzout
+
+	prs "|+init-packet\n|
+
+	make "addr packet
+	repeat :len [send-data readb :addr
+					 make "addr :addr + 1
+					 mwait 350
+	;                 mwait 200
+					 ]
+	prs "|+prp\n|     ; send command to host to print packet
+
+	; make "addr packet
+	; repeat 10 [prf |%b | readb :addr make "addr :addr + 1  mwait 20]
+	; prs "\n
+	; prs "\n
+
+	; print (checksum packet 50) and $ff
+	; if ((checksum packet 50) and $ff) [flag 666 stop]    ; if checksums do not match then csr is not executed
+
+	clear-res
+	; prs |after clear-res|
+	; if (readb packet) = 82 [ fprint read bumpcount fprint timestamph fprint timestampl]
+	; if (readb packet) = 82 packet + 1
+	; fprint 888        ; simulate a flag 888
+	; respond
+
+end
+]
+
+to setup-rx
+	rx-ant
+	wreg $07 $01	; To ready mode
+	mwait 50        ; changed from 10 (50 was used for T-LogoCube)
+	ignore rreg $03	; Read Interrupt status1 register
+	ignore rreg $04
+	wreg $7e 50
+	wreg $08 3
+	wreg $08 0
+	wreg $07 5
+	wreg $05 2
+end
+
+
+to rfm-init
+	let [addr rfm-init-data]
+	writeb ucb0ctl0 $a9	; master msb first cpol=0 cpha=1
+	wreg 7 $80 mwait 100
+	init-rfm-regs rfm-init-data
+	if ( baud =  500 ) [ init-rfm-regs rfm-500-data ]
+	if ( baud =  501 ) [ init-rfm-regs rfm-501-data ]
+	if ( baud =  502 ) [ init-rfm-regs rfm-502-data ]
+	if ( baud = 1000 ) [ init-rfm-regs rfm-1000-data ]
+	if ( baud = 2000 ) [ init-rfm-regs rfm-2000-data ]
+	if ( baud = 4000 ) [ init-rfm-regs rfm-4000-data ]
+	if ( baud = 9600 ) [ init-rfm-regs rfm-9600-data ]
+	if ( baud =  256 ) [ init-rfm-regs rfm-256K-data ]
+	if ( baud > 9600 ) [ init-rfm-regs baud ]              ; override pre-defined baud tables
+	if (not freqdev = 0) [wreg 0x72 freqdev]         ; override value in table
+	if (not freq75 = 0) [wreg 0x75 freq75]           ; override value in table
+	if (not freq76 = 0) [wreg 0x76 freq76]           ; override value in table
+	if (not freq77 = 0) [wreg 0x77 freq77]           ; override value in table
+end
+
+to init-rfm-regs :addr
+	repeat (len :addr) / 2
+	[wreg readb :addr readb :addr + 1
+	make "addr :addr + 2] ;"  
+end
+
+to rreg :x
+	let [res 0]
+	cslow
+	write ucb0txbuf :x
+	write ucb0txbuf 0
+	waituntil [not (read ucb0stat) and 1]
+	make "res read ucb0rxbuf ;"
+	cshigh
+	output :res
+end
+
+to wreg :x :d
+	cslow
+	write ucb0txbuf :x + $80
+	write ucb0txbuf :d
+	waituntil [not (read ucb0stat) and 1]
+	cshigh
+end
+
+; should read reg or bits and set again ? - or writeb ?
+; to RFM22B_temp
+;  wreg $0f            ; zero D4, D5, D6  (D0 = first)  ADCSEL[0-2]
+;  wreg $0f            ; zero D2 ND D3  ADCREF[0-1]
+;  wreg $12            ; D6 and D6 = zero (tsrange[1] and [0])   -64 C to 64 C
+;  wreg $12            ; set bit D5 entsoffs = 1 temp. sensor calib.
+;  wreg $0f            ; adcstart D7 high bit = 1 
+;  output rreg($11)    ; contains adc of temperature
+; end 
+;
+; rssi  received signal strength indicator
+; linear fro  -120 to 0    0-20 flat at 230 dbm
+; 0 = 230 dBM
+; -120 = 16 dBM
+
+to rssi
+	output rreg $26
+end
+
+to fcpy :src :dst :len
+ repeat :len [writefb :dst readb :src make "src :src + 1 make "dst :dst + 1]
+end
+
+
+; end special copy code to high flash memory
+
+
+

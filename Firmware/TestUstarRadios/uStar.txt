@@ -1,0 +1,122 @@
+;This file contains code that's specific to the uStar-V2 main board  and contains the programs entry point ul-power            
+
+
+to RFM22_off	; turn off radio1 RFM22 power
+    dp5off   	 
+    dp5output
+    wait 5 		; wait 500ms to bleed off caps
+end
+
+to RFM22_on		; enables the 3.3V power for the RFM22B radio
+    RFM23_off  	; make positively sure that only one radio is powered at a time
+    dp5on   	; turn off radio1 RFM22 power
+    dp5output
+	wait 1		; allow time for the power to come up 
+end
+
+to RFM23_off	; turn off radio2 RFM23BP power
+    dp8off   	
+    dp8output
+    wait 5 		; wait 500ms to bleed off caps
+
+end
+
+to RFM23_on		; enables the 5V power for the RFM23BP radio
+    RFM22_off  	; make positively sure that only one radio is powered at a time
+    dp8on  		; turn on radio2 RFM23BP power
+    dp8output
+	wait 1		; allow time for the power to come up 
+end
+
+to bus-3.3-on 	; that's the system 3.3V going off to other boards
+    dp4output
+	dp4on
+end
+
+to bus-3.3-off	; that's the system 3.3V going off to other boards
+  dp4off
+  dp4output
+end
+
+to UVP_off		; turn off Under Volt Trigger line -- so that we don't trigger a battery disconnect
+    dp7off  
+    dp7output
+end
+
+to Trig_UVP
+    dp7output 
+    dp7on   	; This triggers the under voltage circuit on the battery board that disconnects
+				; the ustar board from it for 2hrs and 16 minutes, effectively stopping the App board from
+				; executing any further
+    wait 10 	; a 1 second wait to allow for capacitor discharge, processing will stop in here
+end
+
+
+to ul-power ; This is the entry point into the user's code. Called from run-once 
+
+    ; !!! first make sure that all of the v-regs and external control lines on the app board are positively turned off
+    UVP_off
+    RFM22_off
+    RFM23_off
+    bus-3.3-off  
+	clear_packet_buffer  ; sets the buffer to all 0's so that the Jlogo receiving end doesn't pick up a false packet on startup
+	prs "|Start of ul-power| ; Message to jl terminal 
+    init-OnBoardLeds ;control the APP board LEDs
+
+    redon ;turns on the red LED
+    wait 20 ;wait 2 second -- arbitrary time
+    alloff ;turns off LEDs
+ 
+; watch dog reset activation 
+;set-timeout 100 ; resets board after 1000s
+   
+    yellowon ;turns on the red and green LEDs
+    wait 20 ;wait 2 second-- arbitrary time
+    alloff ;turns off LEDs
+    init_MSP-SPI-Port	; initializes the SerialPeripheralInterface on the MSP430 chip
+	init_RFMcontrol_pins ; initializes the 4 pins that connect to the radios via the external 4 wire cable
+
+    ul-go		; calling the infinite loop
+	
+	; if we ever get back to here power everything off
+    Trig_UVP	; if connected to a Battery Board this cuts out power for 2hrs 16min
+    RFM22_off	; otherwise power off all the Vregs on the ustar-V2 board
+    RFM23_off
+    bus-3.3-off  
+end
+
+;Some other functions not strictly specific the the uStar brd  -- should be moved to common.txt  
+to print_packet :name       ; debug message via 1Hz heartbeat -- print package contents 
+	let [					; create local variables 
+			addr rpacket	; set the addr variable to the address of buffer rpacket -- i.e.0x1fc0 as defined in common.txt
+		]
+		
+	prs :name		; display this text in the jl terminal window
+	prhb readb :addr	; the length in bytes ( not counting 2 bytes of header)
+	prhb readb :addr + 1 ; the packet type
+	; prh read :addr + 2 ; magic number 
+	; prh read :addr + 4 ; timestamp h
+	; prh read :addr + 4 ; timestamp l
+	  
+     
+; Note: it is possible to overrun the print buffer of this 1Hz heartbeat print mech. Possibly crashing/resetting the Appboard
+; reduce the loop-count if garbling or crashing occurs	 
+	make "addr :addr + 2 + 6 ; skip length, ptype, magic # and 2 words of timestamps
+	repeat 5 [	; display the next n words of the packet only 
+				prh read :addr	; print hex word
+				make "addr :addr + 2 ; increment pointer into buffer
+			]
+	prs "||		; newline
+end
+
+; Not strictly specific the the uStar brd  -- should be moved to common.txt  
+to clear_packet_buffer ; function to clear the packet global buffer with all 0's
+	let [addr rpacket]
+
+	repeat 25 	;as per rfm22b-init.txt  packet buffer is 50 bytes 
+	[
+		write :addr $0000
+		make "addr :addr + 2
+	]
+
+end

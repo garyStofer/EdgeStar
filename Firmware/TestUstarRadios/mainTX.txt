@@ -1,0 +1,79 @@
+;This is the main program for the test transmit project. It contains the infinite loop of the application and thev specific 
+; transmit functions
+; ul-go is called from ul_power in the uStar.txt file 
+
+
+
+global [baud freqdev freq75 freq76 freq77]
+
+
+to ul-go				; This is the main loop -- usually never to be returned from -- called from ul_power in uStar.txt
+    setbaud 501			; Parameters must match the receiving end       
+    setfreqdev 0        ; overridden by baud rate table
+    setfreq75  0        ; regs 75 0x53, 76 0xba, 77 0xa0 set to 437.465 MHz
+    setfreq76  0
+    setfreq77  0
+
+    rfm-init			; initializes the registers in the RFM radio chip
+	
+	test-send-loop 100		; argument is wait time between transmission in 1/10 second increments
+
+	
+	;execution should never go here
+	prs "|End of ul-power -- End of program| 
+		
+
+end
+to test-send-loop :wait ; this loop sends dummy packets every ~1 minute, alternating between the two Radios 
+
+	let [p_num 0]
+	prs "|Start of transmit loop| ;Debug message back to jl 
+	loop
+	[ 
+	;	prf "|Radio 1, packet # %d | :p_num 
+	;	prs "|| ; print a newline 
+
+		
+		greenon
+		RFM22_on	
+		test-send-one_paket :p_num 1
+		RFM22_off
+		alloff	; LEDs off
+		wait :wait ; wait n/10 seconds
+		make "p_num :p_num + 1 			; "increment packet number
+
+	;	prf "|Radio 2, packet # %d | :p_num 
+	;	prs "|| ; print a newline 
+		
+		redon
+		RFM23_on
+		test-send-one_paket :p_num 2
+		RFM23_off
+		alloff	; LEDs off
+	  	wait :wait ; wait n/10 seconds
+		make "p_num :p_num + 1 			; "increment packet number
+	]
+end
+
+
+to test-send-one_paket :p_num :radio
+	blueon
+	clear_packet_buffer ; Not strictly necessary but helps in debugging packet issues with debug prints
+	init-packet 65 		; the argument designates the packet/protocol type -- must match the receiving end -- see project.logo file 
+
+	fprint :radio
+	fprint :p_num
+	fprint $aaaa  ; = decimal 43690
+
+	repeat 5
+	[
+	  fprint $1092  ; = decimal 4242
+	]
+	
+	fprint $5555  ; = decimal 21845
+		
+	print_packet "TX	;prints a few words of the packet buffer
+	send-packet	
+	blueoff
+end
+

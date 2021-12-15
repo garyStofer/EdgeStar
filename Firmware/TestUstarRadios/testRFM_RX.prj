@@ -1,0 +1,8 @@
+; This file specifies the collection of files that the JL command is going to work on    
+; An accompanying .logo file with the same root as this file needs to be present next to it with the PC side logo program
+mycommon.txt
+uStar.txt
+mainRX.txt
+rfm22b_23bp.txt
+rfm22b-init.txt
+

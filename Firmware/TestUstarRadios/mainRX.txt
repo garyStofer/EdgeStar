@@ -1,0 +1,61 @@
+;This is the main program for the test receive project. It contains the infinite loop of the application and the specific 
+; receive functions
+; ul-go is called from ul_power in the uStar.txt file 
+
+global [baud freqdev freq75 freq76 freq77]
+ 
+to ul-go				; This is the main loop -- usually never to be returned from
+    setbaud 501			; Parameters must match the receiving end       
+    setfreqdev 0        ; overridden by baud rate table
+    setfreq75  0        ; regs 75 0x53, 76 0xba, 77 0xa0 set to 437.465 MHz
+    setfreq76  0
+    setfreq77  0
+
+    rfm-init			; initializes the registers in the RFM radio chip
+	
+
+	test-receive-loop		; inf loop waiting for packets to arrive over the air
+
+	
+	;execution should never go here
+	prs "|End of ul-power -- End of program| 
+		
+
+end
+
+
+
+; ***************** receive functions 
+to test-receive-loop
+    prs "|Start of receive loop|
+	
+	RFM22_on	
+ 
+	loop 
+	[
+	 	rfm-init
+	 	setup-rx		; this clears a preceding received packet
+	 
+		waitfor-irq		; This is blocking at the IRQ signal from the Radio  
+
+		alloff
+		greenon
+		save-packet		; this puts the received data into the MSP memory buffer so that the java-logo program can pick it up 																																				
+		print_packet "RX	;prints a few words of the packet buffer
+		wait 1		; to allow the green LED to be seen
+		alloff
+	]
+end
+
+
+to save-packet	; reads the received packet data from the radio chip fifo and places it into the MSP430 packet buffer 
+
+	let [					; create local variables 
+			len rreg $4b	; create and set len to the length of the received transmission from the radio chips register
+			addr rpacket	; set the addr variable to the address of buffer rpacket -- i.e.0x1fc0 as defined in common.txt
+		]
+; maybe should check len for sanity, not to overrun the buffer ??
+	repeat :len [writeb :addr rreg $7f make "addr :addr + 1]	; reads one byte at a time from the radio chip reg 0x7f and stores it into rpacket buffer
+
+end
+

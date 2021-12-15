@@ -1,0 +1,5 @@
+; This project does not have a PC side program 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Use .project "projectfilename from the JL terminal to load the project -- then
+; Use . compile and .download to compile and write the program to the app board via the USB cable
+; Then start the program on the app board by pressing reset 

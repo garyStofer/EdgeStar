@@ -1,0 +1,579 @@
+;*******************************************************************************
+; File: common.logo
+;
+;*******************************************************************************
+to physical :xlowpix :xhighpix :ylowpix :yhighpix
+  make "xlp :xlowpix
+  make "xhp :xhighpix
+  make "ylp :ylowpix
+  make "yhp :yhighpix
+end
+
+to geometry :xs :ys :xoff :yoff
+  output (word "|-geometry | :xs "x :ys "+ :xoff "+ :yoff)
+end
+
+to tile :nh :nv :ht :vt
+  let [gap 0.03]
+  make "hwid (:xhp - :xlp) / :nh  ; horizontal width
+  make "vwid (:yhp - :ylp) / :nv  ; vertical height
+  make "geo0 round ((1 - (2 * :gap)) * :hwid)
+  make "geo1 round ((1 - (2 * :gap)) * :vwid)
+  make "geo2 round (((:ht - 1) * :hwid) + :xlp + (:gap * :hwid))
+  make "geo3 round (((:vt - 1) * :vwid) + :ylp + (:gap * :vwid))
+  output geometry :geo0 :geo1 :geo2 :geo3
+end
+
+to aspect :nh :nv
+  let [gap 0.03]
+  make "hwid (:xhp - :xlp) / :nh  ; horizontal width
+  make "vwid (:yhp - :ylp) / :nv  ; vertical height
+  make "geo0 round ((1 - (2 * :gap)) * :hwid)
+  make "geo1 round ((1 - (2 * :gap)) * :vwid)
+end
+
+to screencapture
+  blindexec "|/usr/local/i3/tools/ScreenCapture.sh|
+end
+
+to screensave
+  blindexec "|/usr/local/i3/tools/ScreenSave.sh|
+end
+
+to restart-run :fcn
+  dotimes [i 100000]
+    [carefully :fcn [ifelse empty? errormessage [stopme][print errormessage wait 300]
+    if ((:i + 1) > 10) [exit]]
+    ]
+  print se "restarting :i + 1]
+end
+
+to display-camera :flags
+	if not (:playback) [
+	blindexec "|avconv -y -f video4linux2 -s 640x480 -i /dev/usbCam -ss 0:0:0.5 -frames 1 cam-image.jpg|  
+	wait 20
+	]
+	display-eot :flags "cam-image.jpg
+end
+
+to display-image :filename :flags ;file geometry
+  display-eot :flags :filename ;:steadyImage  ;steadyImage default true in project.logo
+end
+
+to display-xv :flags :filename :isSteady 
+  ifelse (:isSteady = true)
+    [ if empty? get :filename "already.displayed  ;check if already called
+        [ put :filename "already.displayed "true
+          make "xvlist (se :xvlist :filename)
+          blindexec (se "|/usr/local/i3/xv -nodecor -poll -viewonly -nostat| :flags :filename) ] ]
+    [blindexec (se "|/usr/local/i3/xv -viewonly -nostat| :flags :filename)]
+end
+
+
+to display-eot :flags :filename
+   make "folder exec "pwd
+   if not (contains :xvlist :filename)
+   [
+      make "xvlist (se :xvlist :filename)
+      blindexec (se "|/usr/local/i3/EyeOfThree| :folder :filename :flags  )
+   ]
+   
+end
+
+to display-terminal :flags
+	let[command (se "/usr/local/i3/tools/resize-terminal :flags)]
+	print :command
+end
+
+to contains :list :item
+   if (List? :list) [
+	dolist [i :list]
+	[
+	   if(:i = :item) [ output true ]
+	]
+   ]	
+   output false
+end
+
+to start-dtach
+  blindexec "|/usr/local/i3/tools/dtach.sh|
+end
+
+to run-forever
+  restart-run [run-loop ]
+end
+
+to run-playback-forever
+	restart-run [playback-loop ]
+end
+
+to run-loop
+  loop 
+  [ 
+    display-clear
+    run-once
+    print "|Wait 10 seconds before restarting|
+    screencapture
+    wait 100 ; wait ~10 sec before restarting
+  ] ;forever loop
+end
+
+to playback-loop
+  loop
+  [
+    display-clear
+    run-playback
+    print "|Wait 10 seconds before restarting|
+    screencapture
+    wait 100 ; wait ~10 sec before restarting
+  ] ;forever loop
+end
+
+to receive-packet
+  blindexec "|touch -ma /home/lbym/.watch-time|
+  if not :playback [make "packet-bytes retrieve-packet  ] 
+  if :playback [make "packet-bytes retrieve-packet-playback]  		      
+  if not (validate-packet)  [ stop ]
+  extract-packet-header  
+  if not (validate-checksum) [ stop]  
+   generate-packet-words
+  addTimeToList  
+  packet-process  
+end
+
+to receive-packets-from :nodes
+  blindexec "|touch -ma /home/lbym/.watch-time|
+  make "packet-bytes retrieve-packet-from :nodes
+  if not (validate-packet)  [ stop ]
+  extract-packet-header  
+  if not (validate-checksum) [stop]  
+  generate-packet-words
+  addTimeToList  
+  packet-process  
+end
+
+to retrieve-packet  ;reads the packet memory location on the MSP430
+  loop [
+    make "pack rl $1f80 40
+    if((count :pack) = 0) [stop]
+    if (not ((nth 0 :pack) = 0)) [
+        wl $1f80 [0 0] ; clear pack
+        output :pack 
+    ]
+    wait 10
+  ]
+end
+
+to retrieve-packet-from :nodes
+  let[i 0]
+  loop [
+    talkto nth :i :nodes
+    make "pack rl $1f80 40
+    if((count :pack) = 0) [stop]
+    if (not ((nth 0 :pack) = 0)) [
+        wl $1f80 [0 0] ; clear pack
+        output :pack 
+    ]
+    let[i :i + 1]
+    if(:i > ((count :nodes) - 1))[let [i 0]]
+    wait 10
+  ]  
+
+end
+
+to retrieve-packet-playback ;reads the packet from the PAC file
+  make "linewords parse freadline    
+  if ((count :linewords) = 0 ) [ output [] ] ;break on comment
+  make "pack []
+  let [lowbyte 0]
+  let [highbyte 0]
+  let [nthword 0]
+  make "play-time nth 1 :linewords   
+  if not ( name? "start-time ) [make "start-time :play-time]
+  dotimes [i (count :linewords) - 2]
+  [
+    make "nthword nth (:i + 2) :linewords
+    make "highbyte int (:nthword / 256)
+    make "lowbyte  :nthword - (256 * :highbyte) 
+    make "pack (se :pack :lowbyte :highbyte)
+  ]
+  repeat (40 - (count :pack)) [ make "pack (se :pack 0) ]    
+  output :pack
+end
+
+
+
+to packet-process
+   if(:playback)[
+    if(:realtime) [      
+      if(name? "last-time)[      
+        make "wait-time (:play-time - :last-time)
+        if(:wait-time > 0)[
+        print (se "|waiting for| :wait-time "seconds...)
+        wait :wait-time * 10
+        ]
+      ]
+      make "last-time :play-time
+    ]
+  ]
+  print-packet
+  if not (:playback) [ process-data-packet ]
+  if (:playback)[           
+    if (:analysis) [ process-data-packet ]
+  ]  
+end
+
+to extract-packet-header
+    make "type nth 1 :packet-bytes 
+    if (:master-packet = 0) [make "master-packet :type] 
+    make "wp packet-words :packet-bytes
+    if not :playback [ make "packet-time round now / 1000 ]
+    if :playback [ make "packet-time :play-time]     
+end
+
+to validate-checksum
+  if(name? "NoChecksum) [output true]
+  let [csum 0]
+  dotimes [i count :wp] [ 
+    make "csum :csum + nth :i :wp     
+  ] 
+  make "csum  (:csum / 65536 )
+  make "csum  :csum - int ( :csum )  
+  output (:csum = 0)
+end
+
+to generate-packet-words
+  dotimes [i nth 4 :wp] [
+    make "wname word "|-word| bf (100 + :i) 
+    make "wname word :type :wname
+    make "wname word "p :wname
+    if (name? :wname ) = false [ make :wname [] ]
+    if (count :time-list) = 0  [ make :wname [] ]
+    make :wname (se thing :wname nth (:i + 5) :wp) 
+  ]
+end
+
+to print-packet
+   make "wp packet-words :packet-bytes
+   make "wplist (se word "T bf 100 + :type :packet-time)
+   make "wppac  :wplist
+   dotimes [i  count :wp][
+        make "wpword nth :i :wp
+        make "wplist (se :wplist :wpword) 
+        if :i = 3                 [make "wplist (se :wplist blue-text)]        
+        if :i = ((count :wp) - 2) [make "wplist (se :wplist white-text)]        
+        ]
+   print :wplist
+   dotimes [i  count :wp][
+        make "wpword nth :i :wp
+        make "wppac (se :wppac :wpword) 
+        ]
+   if not :playback [ prfprint :wppac ]
+end
+
+to packet-words :l          
+  let [res []]
+  let [nws (first :l) / 2 + 2]
+  if ( :nws > 25 ) [ make "nws 25 ]
+  dotimes [i :nws ][make "res se :res bf 100000 + wnth :i :l]
+  output :res
+end
+
+to addTimeToList 
+  make "time  elapsedTime
+  if :type = :master-packet [
+    make "time-list (se :time-list :time)
+  ]
+end
+
+to elapsedTime ;calculate time since the experiment started
+   if not :playback [ output  int ( now / 1000 ) - :start-time ]
+   if     :playback [ output  :packet-time - :start-time ]
+end
+
+to init-time
+  make "start-time int ( now / 1000 ) ;make current time the start time
+  make "time-list  []
+  make "master-packet 0
+  make "packet-time 0
+end
+
+to display-clear
+  dotimes [i count :xvlist] [erplist nth :i :xvlist]
+  blindexec "|/usr/local/i3/pkill.sh|
+  make "xvlist []
+end
+
+to desktop-clear
+  dotimes [i count :xvlist] [erplist nth :i :xvlist]
+  blindexec "|/usr/local/i3/pkill.sh|
+  make "xvlist []
+end
+  
+
+to wnth :i :inList		     ;pull the nth word out of a packet
+  output (nth 2 * :i :inList) + 256 * (nth 2 * :i + 1 :inList)
+end
+
+
+to convert-list :outlist :list :operator
+  let [newlist copylist :list]
+  dotimes[ i count :newlist ]
+  [
+    let [ oldvalue nth :i :newlist ] 
+    let [ oldvalue :oldvalue + 0 ] 
+    let [ cmd se :operator :oldvalue ]
+    make "newvalue run :cmd 
+    setnth :i :newlist :newValue
+  ]
+  make :outlist :newlist
+end
+
+to calibrate-list :outlist :list :inList
+  let [clist copylist :list]
+  dotimes [i count :list] [
+      setnth :i :clist calibrate nth :i :list :inList
+  ]
+  make :outlist :clist
+end
+
+to calibrate :n :inList
+  if (count :inlist) = 0  [output :n]
+  let [adc0  nth 0 :inList
+       temp0 nth 1 :inList
+       adc1  nth 2 :inList
+       temp1 nth 3 :inList
+       slope ( :temp1 - :temp0 ) / (:adc1 - :adc0 )]
+  output four-digit ( :temp0 + (:n - :adc0) * :slope )
+end
+
+to PacketData :packet
+  let [pktName word "pktData (nth 0 :packet)	; Default list name
+       pktLen count :packet]			; Packet length
+  ifelse not name? :pktName			; Define if not defined
+    [make :pktName [] put :pktName "pktLen :pktLen]
+    [if not list? thing :pktName		; Set to empty list if other
+       [make :pktName [] put :pktName "pktLen :pktLen]]
+  ifelse not :pktLen = get :pktName "pktLen	; Data-in matching format check
+    [error word "|Packet length/data mismatch: | :pktName]
+    [make :pktName se thing :pktName :packet]	; Append new data to list
+end
+
+to wait-ready
+ loop [
+  wait 10
+  if (not ul-running?) [stop]
+ ]
+end 
+
+to ul-power
+;  usbreset
+;  wait 10
+  Xul-power
+  wait-ready
+end
+
+to ul-init
+  Xul-init
+  wait-ready
+end
+
+to assign-node
+  ask "|current node number: |
+  let [fromnode answer]
+  talkto :fromnode
+  ask "|new     node number: |
+  let [tonode answer]
+  make "command (se "xeraseseg "|$1000| "xwritefb "|$1000| :tonode)
+  ul-run :command
+  talkto :tonode
+  print "|Test new node number by printing 1234.|
+  print (se "|talkto | :tonode "| print 1234|)
+  ul-run [ print 1234 ]
+end
+
+to parameter :name :prompt
+	ifelse ( file? :name ) 
+	[ 
+		let [value filetostring :name ] 
+	]
+	[
+		ask :prompt
+		let [value answer ]
+		stringtofile :name :value
+	]
+	make :name :value
+end
+
+to parameter-clear :name
+	let [command (se "rm "-f :name)]
+	clearname :name
+	blindexec :command
+end
+
+to clear-packet
+	let[i 40]
+	repeat 40 [..
+		writeb ( $1f80 + :i ) 0
+		let [i :i + 1]
+	]
+end
+
+to fileexists :file
+	make "out exec word "|bash /usr/local/i3/scripts/fileexists.sh | :file
+	output nth 0 :out
+end
+
+to listdir :dir
+   mkdir :dir
+   make "fnames []
+   make "fname []
+   
+   make "out exec word "|python /usr/local/i3/scripts/listdir.py | :dir
+ 
+   dotimes [iter count :out] [
+      make "val nth :iter :out
+      ifelse :val = "|,| [
+         make "fnames se :fnames :fname
+         make "fname []
+      ] [
+         if (and not :val = "'  not :val = "| | not :val = "|]| not :val = "|[| ) [
+            make "fname word :fname nth :iter :out
+         ]
+      ]
+   ]
+   make "fnames se :fnames bl :fname
+   output :fnames
+end
+
+to reload
+	blindexec "|/usr/local/i3/scripts/i3-restart.sh|
+end
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; playback features ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to playback-default :file
+  set-playback-file :file
+  make "analysis true
+  make "realtime false
+  make "NoChecksum true
+  playback-pac-file
+end
+
+to playback-special :file :timeStart :timeEnd :realtime :sample :analysis
+  if not (:sample = 0) [ make "playback_sample :sample make "sampleIndex 0 ]
+  if not (:timeEnd = 0) [ make "playback_timeEnd :timeEnd ]
+  if not (:timeStart = 0) [ make "playback_timeStart :timeStart ]
+  make "analysis :analysis
+  make "realtime :realtime
+  make "NoChecksum true 
+  set-playback-file :file
+  playback-pac-file
+end
+
+to playback-pac-file  
+  clearname "start-time
+  clearname "wait-time
+  clearname "last-time
+  loop 
+  [
+    if (feot? = true) [stop] 
+    receive-packet 
+  ] 
+end
+
+to set-playback-file :file
+  make "playback true
+  make "playback-file :file
+  setfread :playback-file
+end
+
+to validate-packet
+  if not ((count :packet-bytes) > 0) [output false] 
+  if (:playback) [ output validate-playback ]
+  output true
+end
+
+to validate-playback
+  let [out true]
+  
+  if (name? "playback_sample) [ 
+    if not ( :sampleIndex = 0 ) [let [out false]]
+    make "sampleIndex :sampleIndex + 1
+    if (:sampleIndex > :playback_sample - 1 ) [make "sampleIndex 0]
+  ]
+
+  if(name? "playback_timeEnd) [
+    if (:play-time > :playback_timeEnd ) [let [out false]]
+  ]
+
+  if(name? "playback_timeStart) [
+    if (:play-time < :playback_timeStart ) [let [out false]]
+  ]
+
+  if(:play-time < :start-time) [let [out false]] ;handle case where system clock tweaks out. 
+  output :out
+end
+
+to last-n :in-list :n
+	let [start (count :in-list) - :n + 1]
+	let [end (count :in-list) ]	
+	output sublist :in-list :start :end
+end
+
+to first-n :in-list :n
+	let [start 1]
+	let [end :n  ]	
+	output sublist :in-list :start :end	
+end
+
+to sublist :in-list :start :end
+	let[length (:end - :start) + 1]	
+	if((count :in-list) < :length) [output :in-list]
+	let[out-list []]
+	let[i :start]
+	repeat :length 
+	[
+		let [out-list (se :out-list (item :i :in-list))]
+		let [i :i + 1]
+	]
+	output :out-list
+end
+
+
+to roundUpToNearest :value :target
+	let [negative false]
+	if(:value < 0) [let [negative true]]
+	let [ value ( int :value ) + 1]
+	loop
+	[
+		ifelse(( :value % :target ) = 0 )
+		[
+			if(:negative = true) 
+			[				
+				let [value :value + :target ]
+			]
+			output :value 
+		]
+		[ let [value :value + 1 ] ]
+	]
+end
+to roundDownToNearest :value :target
+	let [negative false]
+	if(:value < 0) [let [negative true]]
+	let [ value ( int :value ) ]
+	loop
+	[
+		ifelse(( :value % :target ) = 0 )
+		[ 	if(:negative = true) 
+			[				
+				let [value :value - :target ]
+			]
+			output :value 
+		]
+		[ let [value :value - 1 ] ]
+	]
+end
