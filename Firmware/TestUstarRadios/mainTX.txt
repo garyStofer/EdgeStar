@@ -65,10 +65,12 @@ to test-send-one_paket :p_num :radio
 	fprint :p_num
 	fprint $aaaa  ; = decimal 43690
 
-	repeat 5
-	[
-	  fprint $1092  ; = decimal 4242
-	]
+ 
+	fprint readADC 2  ; battery temp ADU
+	fprint readADC 3  ; current from solar panel
+    fprint readADC 4  ; battery voltage divided by 2
+    fprint readADC 5  ; temp of ustar board
+    fprint readADC 7  ; current used from battery
 	
 	fprint $5555  ; = decimal 21845
 		

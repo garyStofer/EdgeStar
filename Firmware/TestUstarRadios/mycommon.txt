@@ -179,7 +179,7 @@ end
 ; This section defines the register names as per the msp430f2410
 ; datasheet available at:
 ;
-; A breif explaination of the msp430 i/o pin nomenclature can
+; A brief explaination of the msp430 i/o pin nomenclature can
 ; seen at:
 ;
 ; http://processors.wiki.ti.com/index.php/Digital_I/O_(MSP430)
@@ -192,8 +192,8 @@ end
 ;*******************************************************************************
 ; 2A) Input Mode
 ;*******************************************************************************
-; Each of the following words in this section individually sets each digial pin
-; as an input. It first eanbles GPIO operation, and thes sets the operationn to
+; Each of the following words in this section individually sets each digital pin
+; as an input. It first eanbles GPIO operation, and then sets the operationn to
 ; input
 ;
 define dp0input [][ bclr p5sel channel7       ; Enable GPIO
@@ -261,7 +261,7 @@ define dp8on [][ bset p5out channel3 ]
 ;*******************************************************************************
 ; 3B) Off Command Word
 ;*******************************************************************************
-; Each of the following words in this section individually sets each digial pin
+; Each of the following words in this section individually sets each digital pin
 ; off. it does this by setting the appropriate MSP430 register.
 ;
 ;     ****** Each pin must be set to output mode ******
@@ -404,7 +404,7 @@ to init-packet :packet-type		; formulate an empty packet buffer with a type and 
 
   write rpacket 0				; init packet length and packet type to 0
   writeb rpacket + 1 :packet-type ; stuff the packet type as the second byte
-  fprint read $be00  			; ?? What is this magic # 
+  fprint read $be00  			; Address where the reboot counter is stored 
   fprint tstamph				; stuff the 2 timestamp words into the buffer
   fprint tstampl
 								; Packet length is now 6 bytes (+ 2 bytes of header data)
